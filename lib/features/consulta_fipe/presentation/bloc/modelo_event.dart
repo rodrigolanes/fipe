@@ -14,11 +14,16 @@ abstract class ModeloEvent extends Equatable {
 class LoadModelosPorMarcaEvent extends ModeloEvent {
   final int marcaId;
   final TipoVeiculo tipo;
+  final String? ano;
 
-  const LoadModelosPorMarcaEvent({required this.marcaId, required this.tipo});
+  const LoadModelosPorMarcaEvent({
+    required this.marcaId,
+    required this.tipo,
+    this.ano,
+  });
 
   @override
-  List<Object?> get props => [marcaId, tipo];
+  List<Object?> get props => [marcaId, tipo, ano];
 }
 
 /// Evento para buscar modelos por nome

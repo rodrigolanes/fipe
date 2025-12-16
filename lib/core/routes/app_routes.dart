@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/consulta_fipe/presentation/pages/ano_combustivel_page.dart';
+import '../../features/consulta_fipe/presentation/pages/ano_selecao_page.dart';
 import '../../features/consulta_fipe/presentation/pages/home_page.dart';
 import '../../features/consulta_fipe/presentation/pages/marca_list_page.dart';
 import '../../features/consulta_fipe/presentation/pages/modelo_list_page.dart';
@@ -12,6 +13,7 @@ class AppRoutes {
   static const String splash = '/';
   static const String home = '/home';
   static const String marcas = '/marcas';
+  static const String anosSelecao = '/anos-selecao';
   static const String modelos = '/modelos';
   static const String anosCombustiveis = '/anos-combustiveis';
   static const String valorDetalhes = '/valor-detalhes';
@@ -29,6 +31,18 @@ class AppRoutes {
         if (tipo != null) {
           return MaterialPageRoute(
             builder: (_) => MarcaListPage(tipo: tipo as dynamic),
+          );
+        }
+        return _errorRoute();
+
+      case anosSelecao:
+        final args = settings.arguments as Map<String, dynamic>?;
+        if (args != null) {
+          return MaterialPageRoute(
+            builder: (_) => AnoSelecaoPage(
+              marcaId: args['marcaId'] as int,
+              tipo: args['tipo'],
+            ),
           );
         }
         return _errorRoute();

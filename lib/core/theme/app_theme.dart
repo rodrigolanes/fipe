@@ -5,23 +5,26 @@ class AppTheme {
   AppTheme._();
 
   // =========================================================================
-  // Cores
+  // Cores - Paleta baseada no ícone da aplicação
   // =========================================================================
 
-  /// Cor primária - Azul FIPE
+  /// Cor primária - Azul do ícone
   static const Color primaryColor = Color(0xFF1976D2);
 
   /// Cor primária escura
   static const Color primaryDarkColor = Color(0xFF0D47A1);
 
   /// Cor primária clara
-  static const Color primaryLightColor = Color(0xFF42A5F5);
+  static const Color primaryLightColor = Color(0xFF64B5F6);
 
-  /// Cor secundária - Verde Sucesso
-  static const Color secondaryColor = Color(0xFF4CAF50);
+  /// Cor secundária - Laranja complementar
+  static const Color secondaryColor = Color(0xFFFF9800);
+
+  /// Cor de acento - Verde para status positivo
+  static const Color accentGreenColor = Color(0xFF4CAF50);
 
   /// Cor de erro
-  static const Color errorColor = Color(0xFFD32F2F);
+  static const Color errorColor = Color(0xFFF44336);
 
   /// Cor de fundo
   static const Color backgroundColor = Color(0xFFF5F5F5);

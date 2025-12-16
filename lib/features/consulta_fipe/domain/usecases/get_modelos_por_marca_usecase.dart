@@ -32,7 +32,11 @@ class GetModelosPorMarcaUseCase
   Future<Either<Failure, List<ModeloEntity>>> call(
     GetModelosPorMarcaParams params,
   ) async {
-    return await repository.getModelosPorMarca(params.marcaId, params.tipo);
+    return await repository.getModelosPorMarca(
+      params.marcaId,
+      params.tipo,
+      ano: params.ano,
+    );
   }
 }
 
@@ -40,8 +44,13 @@ class GetModelosPorMarcaUseCase
 class GetModelosPorMarcaParams {
   final int marcaId;
   final TipoVeiculo tipo;
+  final String? ano;
 
-  const GetModelosPorMarcaParams({required this.marcaId, required this.tipo});
+  const GetModelosPorMarcaParams({
+    required this.marcaId,
+    required this.tipo,
+    this.ano,
+  });
 
   @override
   bool operator ==(Object other) {

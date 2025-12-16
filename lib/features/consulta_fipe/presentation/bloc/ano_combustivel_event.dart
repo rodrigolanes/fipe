@@ -23,3 +23,14 @@ class LoadAnosCombustiveisPorModeloEvent extends AnoCombustivelEvent {
   @override
   List<Object?> get props => [modeloId, tipo];
 }
+
+/// Evento para carregar anos disponíveis por marca
+class LoadAnosPorMarcaEvent extends AnoCombustivelEvent {
+  final int marcaId;
+  final TipoVeiculo tipo;
+
+  const LoadAnosPorMarcaEvent({required this.marcaId, required this.tipo});
+
+  @override
+  List<Object?> get props => [marcaId, tipo];
+}

@@ -80,13 +80,33 @@ class _SplashScreenState extends State<SplashScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.directions_car, size: 100, color: Colors.white),
-              const SizedBox(height: 24),
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Image.asset(
+                  'assets/icons/icon.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(height: 32),
               Text(
                 AppConstants.appName,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
                 ),
               ),
               const SizedBox(height: 8),

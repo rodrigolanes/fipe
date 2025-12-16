@@ -15,12 +15,19 @@ abstract class FipeRepository {
   /// Busca modelos por marca
   Future<Either<Failure, List<ModeloEntity>>> getModelosPorMarca(
     int marcaId,
-    TipoVeiculo tipo,
-  );
+    TipoVeiculo tipo, {
+    String? ano,
+  });
 
   /// Busca anos e combustíveis disponíveis para um modelo
   Future<Either<Failure, List<AnoCombustivelEntity>>>
   getAnosCombustiveisPorModelo(int modeloId, TipoVeiculo tipo);
+
+  /// Busca anos disponíveis para uma marca (todos os modelos)
+  Future<Either<Failure, List<AnoCombustivelEntity>>> getAnosPorMarca(
+    int marcaId,
+    TipoVeiculo tipo,
+  );
 
   /// Busca o valor FIPE de um veículo específico
   Future<Either<Failure, ValorFipeEntity>> getValorFipe({

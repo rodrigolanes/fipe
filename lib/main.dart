@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,8 +20,12 @@ void main() async {
   // Inicializa dependências
   await di.initDependencies();
 
-  // Inicializa AdMob
-  await AdManager.initialize();
+  // Inicializa AdMob apenas em plataformas mobile (Android/iOS)
+  if (!kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS)) {
+    await AdManager.initialize();
+  }
 
   runApp(const FipeApp());
 }

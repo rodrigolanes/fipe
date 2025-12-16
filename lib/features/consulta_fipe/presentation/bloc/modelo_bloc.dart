@@ -23,7 +23,11 @@ class ModeloBloc extends Bloc<ModeloEvent, ModeloState> {
     emit(const ModeloLoading());
 
     final result = await getModelosPorMarca(
-      GetModelosPorMarcaParams(marcaId: event.marcaId, tipo: event.tipo),
+      GetModelosPorMarcaParams(
+        marcaId: event.marcaId,
+        tipo: event.tipo,
+        ano: event.ano,
+      ),
     );
 
     result.fold(

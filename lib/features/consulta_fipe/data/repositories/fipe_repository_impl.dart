@@ -57,27 +57,38 @@ class FipeRepositoryImpl implements FipeRepository {
   @override
   Future<Either<Failure, List<ModeloEntity>>> getModelosPorMarca(
     int marcaId,
-    TipoVeiculo tipo,
-  ) async {
+    TipoVeiculo tipo, {
+    String? ano,
+  }) async {
     try {
-      // Tenta buscar do cache primeiro
-      final cacheKey = 'modelos_$marcaId';
-      final isCacheValid = await localDataSource.isCacheValid(cacheKey);
+      // Tenta buscar do cache primeiro (apenas se não houver filtro de ano)
+      if (ano == null) {
+        final cacheKey = 'modelos_$marcaId';
+        final isCacheValid = await localDataSource.isCacheValid(cacheKey);
 
-      if (isCacheValid) {
-        try {
-          final cachedModelos = await localDataSource.getCachedModelos(marcaId);
-          return Right(cachedModelos);
-        } on CacheException {
-          // Se falhar, continua para buscar remotamente
+        if (isCacheValid) {
+          try {
+            final cachedModelos = await localDataSource.getCachedModelos(
+              marcaId,
+            );
+            return Right(cachedModelos);
+          } on CacheException {
+            // Se falhar, continua para buscar remotamente
+          }
         }
       }
 
       // Busca remota
-      final modelos = await remoteDataSource.getModelosByMarca(marcaId, tipo);
+      final modelos = await remoteDataSource.getModelosByMarca(
+        marcaId,
+        tipo,
+        ano: ano,
+      );
 
-      // Salva em cache
-      await localDataSource.cacheModelos(modelos, marcaId);
+      // Salva em cache (apenas se não houver filtro de ano)
+      if (ano == null) {
+        await localDataSource.cacheModelos(modelos, marcaId);
+      }
 
       return Right(modelos);
     } on ServerException catch (e) {
@@ -96,6 +107,28 @@ class FipeRepositoryImpl implements FipeRepository {
       // Anos e combustíveis são buscados sempre remotamente (dados mais dinâmicos)
       final anosCombustiveis = await remoteDataSource
           .getAnosCombustiveisByModelo(modeloId, tipo);
+
+      return Right(anosCombustiveis);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AnoCombustivelEntity>>> getAnosPorMarca(
+    int marcaId,
+    TipoVeiculo tipo,
+  ) async {
+    try {
+      // Busca anos disponíveis para a marca
+      final anosCombustiveis = await remoteDataSource.getAnosPorMarca(
+        marcaId,
+        tipo,
+      );
 
       return Right(anosCombustiveis);
     } on ServerException catch (e) {

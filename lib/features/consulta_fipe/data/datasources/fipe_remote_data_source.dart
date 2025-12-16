@@ -10,11 +10,21 @@ abstract class FipeRemoteDataSource {
   Future<List<MarcaModel>> getMarcasByTipo(TipoVeiculo tipo);
 
   /// Busca modelos por marca
-  Future<List<ModeloModel>> getModelosByMarca(int marcaId, TipoVeiculo tipo);
+  Future<List<ModeloModel>> getModelosByMarca(
+    int marcaId,
+    TipoVeiculo tipo, {
+    String? ano,
+  });
 
   /// Busca anos e combustíveis disponíveis para um modelo
   Future<List<AnoCombustivelModel>> getAnosCombustiveisByModelo(
     int modeloId,
+    TipoVeiculo tipo,
+  );
+
+  /// Busca anos disponíveis para uma marca (todos os modelos)
+  Future<List<AnoCombustivelModel>> getAnosPorMarca(
+    int marcaId,
     TipoVeiculo tipo,
   );
 

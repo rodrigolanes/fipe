@@ -14,6 +14,7 @@ import 'features/consulta_fipe/data/models/valor_fipe_model.dart';
 import 'features/consulta_fipe/data/repositories/fipe_repository_impl.dart';
 import 'features/consulta_fipe/domain/repositories/fipe_repository.dart';
 import 'features/consulta_fipe/domain/usecases/get_anos_combustiveis_por_modelo_usecase.dart';
+import 'features/consulta_fipe/domain/usecases/get_anos_por_marca_usecase.dart';
 import 'features/consulta_fipe/domain/usecases/get_marcas_por_tipo_usecase.dart';
 import 'features/consulta_fipe/domain/usecases/get_modelos_por_marca_usecase.dart';
 import 'features/consulta_fipe/domain/usecases/get_valor_fipe_usecase.dart';
@@ -61,7 +62,10 @@ Future<void> initDependencies() async {
   sl.registerFactory(() => MarcaBloc(getMarcasPorTipo: sl()));
   sl.registerFactory(() => ModeloBloc(getModelosPorMarca: sl()));
   sl.registerFactory(
-    () => AnoCombustivelBloc(getAnosCombustiveisPorModelo: sl()),
+    () => AnoCombustivelBloc(
+      getAnosCombustiveisPorModelo: sl(),
+      getAnosPorMarca: sl(),
+    ),
   );
   sl.registerFactory(() => ValorFipeBloc(getValorFipe: sl()));
 
@@ -69,6 +73,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => GetMarcasPorTipoUseCase(sl()));
   sl.registerLazySingleton(() => GetModelosPorMarcaUseCase(sl()));
   sl.registerLazySingleton(() => GetAnosCombustiveisPorModeloUseCase(sl()));
+  sl.registerLazySingleton(() => GetAnosPorMarcaUseCase(sl()));
   sl.registerLazySingleton(() => GetValorFipeUseCase(sl()));
 
   // ! Repositories - Lazy Singleton
