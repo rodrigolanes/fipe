@@ -16,7 +16,7 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   @override
   Future<void> cacheMarcas(List<MarcaModel> marcas, TipoVeiculo tipo) async {
     try {
-      final box = await Hive.openBox<MarcaModel>(marcasBoxName);
+      final box = await Hive.openBox<List<dynamic>>(marcasBoxName);
       await box.put(tipo.nome, marcas);
 
       // Salva timestamp do cache
@@ -33,14 +33,14 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   @override
   Future<List<MarcaModel>> getCachedMarcas(TipoVeiculo tipo) async {
     try {
-      final box = await Hive.openBox<MarcaModel>(marcasBoxName);
+      final box = await Hive.openBox<List<dynamic>>(marcasBoxName);
       final marcas = box.get(tipo.nome);
 
       if (marcas == null || marcas.isEmpty) {
         throw CacheException('Nenhuma marca encontrada no cache');
       }
 
-      return marcas as List<MarcaModel>;
+      return marcas.cast<MarcaModel>();
     } catch (e) {
       throw CacheException(
         'Erro ao recuperar marcas do cache: ${e.toString()}',
@@ -51,7 +51,7 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   @override
   Future<void> cacheModelos(List<ModeloModel> modelos, int marcaId) async {
     try {
-      final box = await Hive.openBox<ModeloModel>(modelosBoxName);
+      final box = await Hive.openBox<List<dynamic>>(modelosBoxName);
       await box.put('marca_$marcaId', modelos);
 
       // Salva timestamp do cache
@@ -68,14 +68,14 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   @override
   Future<List<ModeloModel>> getCachedModelos(int marcaId) async {
     try {
-      final box = await Hive.openBox<ModeloModel>(modelosBoxName);
+      final box = await Hive.openBox<List<dynamic>>(modelosBoxName);
       final modelos = box.get('marca_$marcaId');
 
       if (modelos == null || modelos.isEmpty) {
         throw CacheException('Nenhum modelo encontrado no cache');
       }
 
-      return modelos as List<ModeloModel>;
+      return modelos.cast<ModeloModel>();
     } catch (e) {
       throw CacheException(
         'Erro ao recuperar modelos do cache: ${e.toString()}',

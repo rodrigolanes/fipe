@@ -66,7 +66,7 @@ class AppTheme {
       ),
 
       // Card
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: surfaceColor,
@@ -119,7 +119,7 @@ class AppTheme {
 
       // Chip
       chipTheme: ChipThemeData(
-        backgroundColor: primaryLightColor.withOpacity(0.1),
+        backgroundColor: primaryLightColor.withValues(alpha: 0.1),
         selectedColor: primaryColor,
         labelStyle: const TextStyle(color: primaryColor),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

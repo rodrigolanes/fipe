@@ -219,37 +219,42 @@ lib/
 
 ### 🎯 Marco 4: Camada de Domínio (Domain Layer) (Semana 3-4)
 
-#### Status: 🔴 Não Iniciado
+#### Status: � Concluído
 
 #### Tarefas:
 
-- [ ] **4.1** Criar Entities
+- [x] **4.1** Criar Entities
 
-  - [ ] `marca_entity.dart`
-  - [ ] `modelo_entity.dart`
-  - [ ] `ano_combustivel_entity.dart`
-  - [ ] `valor_fipe_entity.dart`
-  - [ ] Implementar Equatable para comparação
+  - [x] `marca_entity.dart`
+  - [x] `modelo_entity.dart`
+  - [x] `ano_combustivel_entity.dart`
+  - [x] `valor_fipe_entity.dart`
+  - [x] Implementar Equatable para comparação
 
-- [ ] **4.2** Definir Repository Abstracts
+- [x] **4.2** Definir Repository Abstracts
 
-  - [ ] `fipe_repository.dart` (contratos)
-  - [ ] Retornar `Either<Failure, Success>` (dartz ou similar)
+  - [x] `fipe_repository.dart` (contratos)
+  - [x] Retornar `Either<Failure, Success>` (dartz ou similar)
 
-- [ ] **4.3** Criar Use Cases
+- [x] **4.3** Criar Use Cases
 
-  - [ ] `get_tipos_veiculo_usecase.dart`
-  - [ ] `get_marcas_por_tipo_usecase.dart`
-  - [ ] `get_modelos_por_marca_usecase.dart`
-  - [ ] `get_anos_por_modelo_usecase.dart`
-  - [ ] `get_valor_fipe_usecase.dart`
-  - [ ] `get_historico_precos_usecase.dart`
-  - [ ] Cada UseCase com single responsibility
+  - [x] `get_marcas_por_tipo_usecase.dart`
+  - [x] `get_modelos_por_marca_usecase.dart`
+  - [x] `get_anos_combustiveis_por_modelo_usecase.dart`
+  - [x] `get_valor_fipe_usecase.dart`
+  - [x] Cada UseCase com single responsibility
+  - [x] Params classes com equality operators
 
-- [ ] **4.4** Criar Failures e Exceptions
-  - [ ] `lib/core/error/failures.dart`
-  - [ ] `ServerFailure`, `CacheFailure`, `NetworkFailure`
-  - [ ] `lib/core/error/exceptions.dart`
+- [x] **4.4** Criar Failures e Exceptions
+
+  - [x] `lib/core/error/failures.dart`
+  - [x] `ServerFailure`, `CacheFailure`, `NetworkFailure`
+  - [x] `lib/core/error/exceptions.dart`
+
+- [x] **4.5** Atualizar Injection Container
+  - [x] Registrar todos os UseCases
+  - [x] Registrar Repository e DataSources
+  - [x] Configurar Hive adapters
 
 ---
 
@@ -740,7 +745,7 @@ Para dúvidas ou sugestões:
 | 1. Configuração Inicial   | �      | 100%      |
 | 2. Dependências           | 🟢     | 100%      |
 | 3. Camada de Dados        | 🟢     | 100%      |
-| 4. Camada de Domínio      | 🔴     | 0%        |
+| 4. Camada de Domínio      | 🟢     | 100%      |
 | 5. Camada de Apresentação | 🔴     | 0%        |
 | 6. Features Avançadas     | 🔴     | 0%        |
 | 7. Testes                 | 🔴     | 0%        |
