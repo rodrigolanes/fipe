@@ -172,38 +172,48 @@ lib/
 
 ### 💾 Marco 3: Camada de Dados (Data Layer) (Semana 2-3)
 
-#### Status: 🔴 Não Iniciado
+#### Status: � Concluído
 
 #### Tarefas:
 
-- [ ] **3.1** Criar Models de Dados
+- [x] **3.1** Criar Models de Dados
 
-  - [ ] `marca_model.dart` (extends MarcaEntity)
-  - [ ] `modelo_model.dart` (extends ModeloEntity)
-  - [ ] `ano_combustivel_model.dart`
-  - [ ] `modelo_ano_model.dart`
-  - [ ] `valor_fipe_model.dart`
-  - [ ] Implementar `fromJson()` e `toJson()` para cada model
+  - [x] `marca_model.dart` (extends MarcaEntity)
+  - [x] `modelo_model.dart` (extends ModeloEntity)
+  - [x] `ano_combustivel_model.dart`
+  - [x] `valor_fipe_model.dart`
+  - [x] Implementar `fromJson()` e `toJson()` para cada model
+  - [x] Anotações Hive com TypeAdapter
 
-- [ ] **3.2** Criar DataSources
+- [x] **3.2** Criar DataSources
 
-  - [ ] `supabase_data_source.dart` (interface abstrata)
-  - [ ] `supabase_data_source_impl.dart` (implementação)
-  - [ ] Métodos: `getMarcasByTipo()`, `getModelosByMarca()`, etc.
-  - [ ] Tratamento de erros e exceptions
+  - [x] `fipe_remote_data_source.dart` (interface abstrata)
+  - [x] `fipe_remote_data_source_impl.dart` (implementação Supabase)
+  - [x] `fipe_local_data_source.dart` (interface abstrata)
+  - [x] `fipe_local_data_source_impl.dart` (implementação Hive)
+  - [x] Métodos: `getMarcasByTipo()`, `getModelosByMarca()`, etc.
+  - [x] Tratamento de erros e exceptions
 
-- [ ] **3.3** Implementar Repositories
+- [x] **3.3** Implementar Repositories
 
-  - [ ] `fipe_repository.dart` (interface no domain)
-  - [ ] `fipe_repository_impl.dart` (implementação no data)
-  - [ ] Converter Models em Entities
-  - [ ] Implementar cache local (opcional)
+  - [x] `fipe_repository.dart` (interface no domain)
+  - [x] `fipe_repository_impl.dart` (implementação no data)
+  - [x] Converter Models em Entities
+  - [x] Implementar cache local com Hive
 
-- [ ] **3.4** Criar sistema de Cache Local
-  - [ ] Adicionar dependência `hive` ou `shared_preferences`
-  - [ ] `local_data_source.dart`
-  - [ ] Estratégia de invalidação de cache
-  - [ ] Cache de marcas, modelos e últimas consultas
+- [x] **3.4** Criar sistema de Cache Local
+
+  - [x] Adicionar dependência `hive: ^2.2.3` e `hive_flutter: ^1.1.0`
+  - [x] `fipe_local_data_source.dart` e implementação
+  - [x] Estratégia de invalidação de cache (1 hora)
+  - [x] Cache de marcas, modelos e valores FIPE
+  - [x] Gerar arquivos TypeAdapter com build_runner
+
+- [x] **3.5** Criar Failures e Exceptions
+  - [x] `lib/core/error/failures.dart`
+  - [x] `lib/core/error/exceptions.dart`
+  - [x] ServerFailure, CacheFailure, NetworkFailure
+  - [x] UseCase abstrato
 
 ---
 
@@ -729,7 +739,7 @@ Para dúvidas ou sugestões:
 | ------------------------- | ------ | --------- |
 | 1. Configuração Inicial   | �      | 100%      |
 | 2. Dependências           | 🟢     | 100%      |
-| 3. Camada de Dados        | 🔴     | 0%        |
+| 3. Camada de Dados        | 🟢     | 100%      |
 | 4. Camada de Domínio      | 🔴     | 0%        |
 | 5. Camada de Apresentação | 🔴     | 0%        |
 | 6. Features Avançadas     | 🔴     | 0%        |
