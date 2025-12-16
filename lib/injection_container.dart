@@ -17,6 +17,10 @@ import 'features/consulta_fipe/domain/usecases/get_anos_combustiveis_por_modelo_
 import 'features/consulta_fipe/domain/usecases/get_marcas_por_tipo_usecase.dart';
 import 'features/consulta_fipe/domain/usecases/get_modelos_por_marca_usecase.dart';
 import 'features/consulta_fipe/domain/usecases/get_valor_fipe_usecase.dart';
+import 'features/consulta_fipe/presentation/bloc/ano_combustivel_bloc.dart';
+import 'features/consulta_fipe/presentation/bloc/marca_bloc.dart';
+import 'features/consulta_fipe/presentation/bloc/modelo_bloc.dart';
+import 'features/consulta_fipe/presentation/bloc/valor_fipe_bloc.dart';
 
 /// Service Locator global
 final sl = GetIt.instance;
@@ -54,9 +58,12 @@ Future<void> initDependencies() async {
   // =========================================================================
 
   // ! BLoCs/Cubits - Factory (nova instância a cada chamada)
-  // sl.registerFactory(
-  //   () => MarcaBloc(getMarcasPorTipo: sl()),
-  // );
+  sl.registerFactory(() => MarcaBloc(getMarcasPorTipo: sl()));
+  sl.registerFactory(() => ModeloBloc(getModelosPorMarca: sl()));
+  sl.registerFactory(
+    () => AnoCombustivelBloc(getAnosCombustiveisPorModelo: sl()),
+  );
+  sl.registerFactory(() => ValorFipeBloc(getValorFipe: sl()));
 
   // ! UseCases - Lazy Singleton
   sl.registerLazySingleton(() => GetMarcasPorTipoUseCase(sl()));

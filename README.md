@@ -260,52 +260,58 @@ lib/
 
 ### 🎨 Marco 5: Camada de Apresentação (Presentation Layer) (Semana 4-6)
 
-#### Status: 🔴 Não Iniciado
+#### Status: � Concluído
 
 #### Tarefas:
 
-- [ ] **5.1** Criar BLoCs/Cubits
+- [x] **5.1** Criar BLoCs/Cubits
 
-  - [ ] `tipo_veiculo_cubit.dart`
-  - [ ] `marca_bloc.dart` (eventos e estados)
-  - [ ] `modelo_bloc.dart`
-  - [ ] `ano_combustivel_bloc.dart`
-  - [ ] `valor_fipe_bloc.dart`
-  - [ ] `historico_bloc.dart`
+  - [x] `marca_bloc.dart` (eventos e estados)
+  - [x] `modelo_bloc.dart`
+  - [x] `ano_combustivel_bloc.dart`
+  - [x] `valor_fipe_bloc.dart`
+  - [x] Sistema de busca integrado aos BLoCs
+  - [x] Tratamento de erros e estados de loading
 
-- [ ] **5.2** Desenvolver Telas Principais
+- [x] **5.2** Desenvolver Telas Principais
 
-  - [ ] `splash_screen.dart` (com animação)
-  - [ ] `home_page.dart` (seleção de tipo de veículo)
-  - [ ] `marca_list_page.dart` (lista com busca)
-  - [ ] `modelo_list_page.dart` (lista com busca)
-  - [ ] `ano_combustivel_page.dart` (grid ou lista)
-  - [ ] `valor_detalhes_page.dart` (detalhes do valor FIPE)
+  - [x] `splash_screen.dart` (com animação)
+  - [x] `home_page.dart` (seleção de tipo de veículo)
+  - [x] `marca_list_page.dart` (lista com busca)
+  - [x] `modelo_list_page.dart` (lista com busca)
+  - [x] `ano_combustivel_page.dart` (grid)
+  - [x] `valor_detalhes_page.dart` (detalhes do valor FIPE)
 
-- [ ] **5.3** Criar Widgets Reutilizáveis
+- [x] **5.3** Criar Widgets Reutilizáveis
 
-  - [ ] `veiculo_type_card.dart` (card de tipo de veículo)
-  - [ ] `marca_item_widget.dart`
-  - [ ] `modelo_item_widget.dart`
-  - [ ] `ano_combustivel_chip.dart`
-  - [ ] `valor_card_widget.dart`
-  - [ ] `loading_widget.dart` (com shimmer)
-  - [ ] `error_widget.dart`
-  - [ ] `empty_state_widget.dart`
-  - [ ] `search_bar_widget.dart`
+  - [x] `veiculo_type_card.dart` (card de tipo de veículo)
+  - [x] `marca_item_widget.dart`
+  - [x] `modelo_item_widget.dart`
+  - [x] `ano_combustivel_chip.dart`
+  - [x] `valor_card_widget.dart`
+  - [x] `loading_widget.dart` (com shimmer)
+  - [x] `error_widget.dart`
+  - [x] `search_bar_widget.dart`
 
-- [ ] **5.4** Implementar Navegação
+- [x] **5.4** Implementar Navegação
 
-  - [ ] Configurar `GoRouter` ou Navigator 2.0
-  - [ ] Rotas nomeadas
-  - [ ] Animações de transição
-  - [ ] Deep linking (opcional)
+  - [x] Configurar Navigator com rotas nomeadas
+  - [x] AppRoutes com geração de rotas
+  - [x] Passagem de argumentos entre telas
+  - [x] Tratamento de rotas não encontradas
 
-- [ ] **5.5** Integrar AdMob
-  - [ ] Banner inferior em todas as telas (exceto splash)
-  - [ ] Anúncio intersticial (opcional, após X consultas)
-  - [ ] Testar com Test Ads IDs
-  - [ ] Implementar tratamento de erros de ads
+- [x] **5.5** Integrar AdMob
+
+  - [x] AdManager para gerenciar anúncios
+  - [x] AdBannerWidget widget reutilizável
+  - [x] Inicialização do SDK no main
+  - [x] Tratamento de erros de ads
+
+- [x] **5.6** Atualizar Dependências
+  - [x] Registrar todos os BLoCs no injection_container
+  - [x] Atualizar main.dart com configurações completas
+  - [x] Configurar orientação de tela
+  - [x] Temas light e dark
 
 ---
 
@@ -746,7 +752,7 @@ Para dúvidas ou sugestões:
 | 2. Dependências           | 🟢     | 100%      |
 | 3. Camada de Dados        | 🟢     | 100%      |
 | 4. Camada de Domínio      | 🟢     | 100%      |
-| 5. Camada de Apresentação | 🔴     | 0%        |
+| 5. Camada de Apresentação | 🟢     | 100%      |
 | 6. Features Avançadas     | 🔴     | 0%        |
 | 7. Testes                 | 🔴     | 0%        |
 | 8. Preparação Produção    | 🔴     | 0%        |
