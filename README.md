@@ -133,38 +133,40 @@ lib/
 
 ### 📦 Marco 2: Dependências e Configurações Base (Semana 1-2)
 
-#### Status: 🔴 Não Iniciado
+#### Status: � Concluído
 
 #### Tarefas:
 
-- [ ] **2.1** Configurar `pubspec.yaml`
+- [x] **2.1** Configurar `pubspec.yaml`
 
-  - [ ] Adicionar `supabase_flutter: ^2.0.0`
-  - [ ] Adicionar `flutter_bloc: ^8.1.3`
-  - [ ] Adicionar `get_it: ^7.6.4`
-  - [ ] Adicionar `equatable: ^2.0.5`
-  - [ ] Adicionar `google_mobile_ads: ^4.0.0`
-  - [ ] Adicionar `intl: ^0.18.1`
-  - [ ] Adicionar `cached_network_image: ^3.3.0`
-  - [ ] Adicionar `shimmer: ^3.0.0`
+  - [x] Adicionar `supabase_flutter: ^2.9.1`
+  - [x] Adicionar `flutter_bloc: ^8.1.6`
+  - [x] Adicionar `get_it: ^8.0.3`
+  - [x] Adicionar `equatable: ^2.0.7`
+  - [x] Adicionar `google_mobile_ads: ^5.3.0`
+  - [x] Adicionar `intl: ^0.20.1`
+  - [x] Adicionar `cached_network_image: ^3.4.1`
+  - [x] Adicionar `shimmer: ^3.0.0`
+  - [x] Adicionar `dartz: ^0.10.1` (Either para tratamento de erros)
+  - [x] Adicionar dev dependencies: `mockito`, `build_runner`, `bloc_test`
 
-- [ ] **2.2** Criar arquivos de configuração
+- [x] **2.2** Criar arquivos de configuração
 
-  - [ ] `lib/config/supabase_config.dart`
-  - [ ] `lib/config/admob_config.dart`
-  - [ ] `lib/core/constants/app_constants.dart`
+  - [x] `lib/config/supabase_config.dart`
+  - [x] `lib/config/admob_config.dart`
+  - [x] `lib/core/constants/app_constants.dart`
 
-- [ ] **2.3** Configurar injeção de dependências
+- [x] **2.3** Configurar injeção de dependências
 
-  - [ ] Criar `lib/injection_container.dart`
-  - [ ] Configurar GetIt
-  - [ ] Registrar dependências singleton e factory
+  - [x] Criar `lib/injection_container.dart`
+  - [x] Configurar GetIt
+  - [x] Registrar dependências singleton e factory
 
-- [ ] **2.4** Configurar temas e estilos
-  - [ ] Criar `lib/core/theme/app_theme.dart`
-  - [ ] Definir cores primárias e secundárias
-  - [ ] Configurar tipografia
-  - [ ] Criar tema dark (opcional)
+- [x] **2.4** Configurar temas e estilos
+  - [x] Criar `lib/core/theme/app_theme.dart`
+  - [x] Definir cores primárias e secundárias
+  - [x] Configurar tipografia
+  - [x] Criar tema dark (estrutura básica)
 
 ---
 
@@ -726,7 +728,7 @@ Para dúvidas ou sugestões:
 | Marco                     | Status | Progresso |
 | ------------------------- | ------ | --------- |
 | 1. Configuração Inicial   | �      | 100%      |
-| 2. Dependências           | 🔴     | 0%        |
+| 2. Dependências           | 🟢     | 100%      |
 | 3. Camada de Dados        | 🔴     | 0%        |
 | 4. Camada de Domínio      | 🔴     | 0%        |
 | 5. Camada de Apresentação | 🔴     | 0%        |

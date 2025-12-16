@@ -1,5 +1,5 @@
 name: fipe
-description: "A new Flutter project."
+description: "Aplicação Android para consulta de preços médios de veículos com base na Tabela FIPE"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -31,6 +31,29 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Supabase - Backend as a Service
+  supabase_flutter: ^2.9.1
+  
+  # State Management
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.7
+  
+  # Dependency Injection
+  get_it: ^8.0.3
+  
+  # Functional Programming
+  dartz: ^0.10.1
+  
+  # AdMob - Monetização
+  google_mobile_ads: ^5.3.0
+  
+  # UI Components
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  
+  # Utilities
+  intl: ^0.20.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -38,6 +61,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Testing
+  mockito: ^5.4.4
+  build_runner: ^2.4.15
+  bloc_test: ^9.1.7
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
