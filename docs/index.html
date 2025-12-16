@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Consulta FIPE - Aplicativo Android para consulta de preços médios de veículos">
+    <title>Consulta FIPE - Preços de Veículos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 24px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 16px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .privacy-link {
+            display: block;
+            text-align: center;
+            margin: 40px 0;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+
+        .privacy-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="app-icon">🚗</div>
+            <h1>Consulta FIPE</h1>
+            <p class="subtitle">Consulte preços médios de veículos de forma rápida e gratuita</p>
+        </header>
+
+        <div class="main-content">
+            <h2 style="text-align: center; margin-bottom: 40px; color: #667eea;">Recursos do Aplicativo</h2>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🚙</div>
+                    <h3>Carros</h3>
+                    <p>Consulte preços de carros de todas as marcas e modelos</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🏍️</div>
+                    <h3>Motos</h3>
+                    <p>Valores atualizados de motocicletas nacionais e importadas</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🚛</div>
+                    <h3>Caminhões</h3>
+                    <p>Preços médios de caminhões e veículos pesados</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Busca Rápida</h3>
+                    <p>Encontre facilmente a marca e modelo que procura</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">💾</div>
+                    <h3>Favoritos</h3>
+                    <p>Salve suas consultas para acesso rápido</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Dados Oficiais</h3>
+                    <p>Informações direto da Tabela FIPE oficial</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Baixe Agora</h2>
+                <p style="margin-bottom: 30px;">Disponível gratuitamente para Android</p>
+                <a href="#" class="cta-button">📱 Google Play</a>
+                <a href="https://github.com/rodrigolanes/fipe" class="cta-button" style="background: #333;">💻 GitHub</a>
+            </div>
+
+            <a href="privacy-policy.html" class="privacy-link">📋 Política de Privacidade</a>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Consulta FIPE. Todos os direitos reservados.</p>
+            <p style="margin-top: 10px;">Desenvolvido por Rodrigo Lanes</p>
+        </footer>
+    </div>
+</body>
+</html>
