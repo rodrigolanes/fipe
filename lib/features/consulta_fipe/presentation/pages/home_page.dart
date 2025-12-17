@@ -95,37 +95,6 @@ class HomePage extends StatelessWidget {
   }
 
   void _navigateToMarcas(BuildContext context, TipoVeiculo tipo) {
-    // Verificar se é moto ou caminhão (em desenvolvimento)
-    if (tipo == TipoVeiculo.moto || tipo == TipoVeiculo.caminhao) {
-      final tipoNome = tipo == TipoVeiculo.moto ? 'Motos' : 'Caminhões';
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Row(
-            children: [
-              Icon(
-                Icons.construction,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              const SizedBox(width: 8),
-              const Text('Em Desenvolvimento'),
-            ],
-          ),
-          content: Text(
-            'A consulta de $tipoNome ainda está em desenvolvimento.\n\n'
-            'Em breve você poderá consultar preços de ${tipoNome.toLowerCase()} pela tabela FIPE.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-      return;
-    }
-
     Navigator.of(context).pushNamed('/marcas', arguments: tipo);
   }
 }

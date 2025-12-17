@@ -22,6 +22,10 @@ class ModeloBloc extends Bloc<ModeloEvent, ModeloState> {
   ) async {
     emit(const ModeloLoading());
 
+    print(
+      '🔍 ModeloBloc: Carregando modelos para marca ${event.marcaId} (tipo: ${event.tipo}${event.ano != null ? ', ano: ${event.ano}' : ''})',
+    );
+
     final result = await getModelosPorMarca(
       GetModelosPorMarcaParams(
         marcaId: event.marcaId,
@@ -31,9 +35,14 @@ class ModeloBloc extends Bloc<ModeloEvent, ModeloState> {
     );
 
     result.fold(
-      (failure) => emit(ModeloError(_mapFailureToMessage(failure))),
-      (modelos) =>
-          emit(ModeloLoaded(modelos: modelos, filteredModelos: modelos)),
+      (failure) {
+        print('❌ ModeloBloc: Erro ao carregar modelos: $failure');
+        emit(ModeloError(_mapFailureToMessage(failure)));
+      },
+      (modelos) {
+        print('✅ ModeloBloc: ${modelos.length} modelos carregados');
+        emit(ModeloLoaded(modelos: modelos, filteredModelos: modelos));
+      },
     );
   }
 

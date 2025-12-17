@@ -21,13 +21,21 @@ class MarcaBloc extends Bloc<MarcaEvent, MarcaState> {
   ) async {
     emit(const MarcaLoading());
 
+    print('🔍 MarcaBloc: Carregando marcas para tipo: ${event.tipo}');
+
     final result = await getMarcasPorTipo(
       GetMarcasPorTipoParams(tipo: event.tipo),
     );
 
     result.fold(
-      (failure) => emit(MarcaError(_mapFailureToMessage(failure))),
-      (marcas) => emit(MarcaLoaded(marcas: marcas, filteredMarcas: marcas)),
+      (failure) {
+        print('❌ MarcaBloc: Erro ao carregar marcas: $failure');
+        emit(MarcaError(_mapFailureToMessage(failure)));
+      },
+      (marcas) {
+        print('✅ MarcaBloc: ${marcas.length} marcas carregadas');
+        emit(MarcaLoaded(marcas: marcas, filteredMarcas: marcas));
+      },
     );
   }
 

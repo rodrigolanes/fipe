@@ -1,9 +1,15 @@
-🚗 Versão 0.1.0 - Lançamento Inicial
+🚗 Versão 0.1.2 - Melhorias e Correções
 
 Consulte preços de veículos pela Tabela FIPE oficial!
 
 ✨ Novidades:
-• Consulta FIPE para carros
+• Suporte completo para Carros, Motos e Caminhões
+• Melhorias de logs para debug
+• Correções de bugs na consulta de valores
+• Otimizações de performance
+
+✨ Recursos principais:
+• Consulta FIPE para carros, motos e caminhões
 • Busca inteligente de marcas e modelos
 • Filtros por ano e combustível
 • Tema claro e escuro
