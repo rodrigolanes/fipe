@@ -317,7 +317,7 @@ lib/
 
 ### 🔍 Marco 6: Features Avançadas (Semana 6-7)
 
-#### Status: 🔴 Não Iniciado
+#### Status: � Em Desenvolvimento
 
 #### Tarefas:
 
@@ -342,17 +342,11 @@ lib/
   - [ ] Comparar especificações
   - [ ] Exportar comparação (PDF ou imagem)
 
-- [ ] **6.4** Compartilhamento
+- [x] **6.4** Compartilhamento
 
-  - [ ] Compartilhar valor via WhatsApp, Telegram, etc.
-  - [ ] Gerar card de imagem com informações
-  - [ ] Usar `share_plus` package
-
-- [ ] **6.5** Notificações de Variação de Preço
-  - [ ] Adicionar `firebase_messaging`
-  - [ ] Permitir usuário "seguir" um veículo
-  - [ ] Notificar quando preço mudar > 5%
-  - [ ] Backend: Cloud Functions no Supabase
+  - [x] Compartilhar valor via WhatsApp, Telegram, etc.
+  - [x] Usar `share_plus` package
+  - [x] Integrar botão de compartilhar na tela de detalhes
 
 ---
 
@@ -533,7 +527,6 @@ lib/
 - 🆚 **Comparador de Veículos** - Comparar até 3 veículos lado a lado
 - 📈 **Insights de Mercado** - Maior/menor depreciação, melhores negócios
 - 🎨 **Tema Dark Mode** - Alternância entre tema claro e escuro
-- 🔔 **Notificações** - Alertas de variação de preço
 
 ### 🌐 Versão 2.0
 
@@ -753,7 +746,7 @@ Para dúvidas ou sugestões:
 | 3. Camada de Dados        | 🟢     | 100%      |
 | 4. Camada de Domínio      | 🟢     | 100%      |
 | 5. Camada de Apresentação | 🟢     | 100%      |
-| 6. Features Avançadas     | 🔴     | 0%        |
+| 6. Features Avançadas     | �     | 25%       |
 | 7. Testes                 | 🔴     | 0%        |
 | 8. Preparação Produção    | 🔴     | 0%        |
 | 9. CI/CD e Deploy         | 🔴     | 0%        |

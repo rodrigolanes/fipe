@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/share_service.dart';
 import '../../../../injection_container.dart';
 import '../bloc/valor_fipe_bloc.dart';
 import '../bloc/valor_fipe_event.dart';
@@ -84,14 +85,14 @@ class ValorDetalhesPage extends StatelessWidget {
                 return custom.ErrorWidget(
                   message: state.message,
                   onRetry: () => context.read<ValorFipeBloc>().add(
-                    LoadValorFipeEvent(
-                      marcaId: marcaId,
-                      modeloId: modeloId,
-                      ano: ano,
-                      combustivel: combustivel,
-                      tipo: tipo,
-                    ),
-                  ),
+                        LoadValorFipeEvent(
+                          marcaId: marcaId,
+                          modeloId: modeloId,
+                          ano: ano,
+                          combustivel: combustivel,
+                          tipo: tipo,
+                        ),
+                      ),
                 );
               }
 
@@ -204,12 +205,18 @@ class ValorDetalhesPage extends StatelessWidget {
   void _shareValue(BuildContext context) {
     final state = context.read<ValorFipeBloc>().state;
     if (state is ValorFipeLoaded) {
-      // TODO: Implementar compartilhamento
+      ShareService.compartilharValorFipe(state.valorFipe);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Função de compartilhamento será implementada em breve',
+          content: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.white),
+              SizedBox(width: 12),
+              Text('Compartilhamento aberto'),
+            ],
           ),
+          duration: Duration(seconds: 2),
         ),
       );
     }
