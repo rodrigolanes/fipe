@@ -7,6 +7,7 @@ import '../../features/consulta_fipe/presentation/pages/marca_list_page.dart';
 import '../../features/consulta_fipe/presentation/pages/modelo_list_page.dart';
 import '../../features/consulta_fipe/presentation/pages/splash_screen.dart';
 import '../../features/consulta_fipe/presentation/pages/valor_detalhes_page.dart';
+import '../theme/theme_manager.dart';
 
 /// Configuração de rotas da aplicação
 class AppRoutes {
@@ -18,13 +19,18 @@ class AppRoutes {
   static const String anosCombustiveis = '/anos-combustiveis';
   static const String valorDetalhes = '/valor-detalhes';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic> generateRoute(
+    RouteSettings settings,
+    ThemeManager themeManager,
+  ) {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       case home:
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        return MaterialPageRoute(
+          builder: (_) => HomePage(themeManager: themeManager),
+        );
 
       case marcas:
         final tipo = settings.arguments;

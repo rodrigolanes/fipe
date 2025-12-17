@@ -29,10 +29,12 @@ class VeiculoTypeCard extends StatelessWidget {
   }
 
   Color _getGradientStart(BuildContext context, TipoVeiculo tipo) {
-    final primary = Theme.of(context).primaryColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     switch (tipo) {
       case TipoVeiculo.carro:
-        return primary;
+        return isDark
+            ? const Color(0xFF42A5F5)
+            : Theme.of(context).primaryColor;
       case TipoVeiculo.moto:
         return Colors.orange;
       case TipoVeiculo.caminhao:
@@ -41,10 +43,12 @@ class VeiculoTypeCard extends StatelessWidget {
   }
 
   Color _getGradientEnd(BuildContext context, TipoVeiculo tipo) {
-    final primary = Theme.of(context).primaryColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     switch (tipo) {
       case TipoVeiculo.carro:
-        return primary.withValues(alpha: 0.7);
+        return isDark
+            ? const Color(0xFF1976D2)
+            : Theme.of(context).primaryColor.withValues(alpha: 0.7);
       case TipoVeiculo.moto:
         return Colors.deepOrange;
       case TipoVeiculo.caminhao:

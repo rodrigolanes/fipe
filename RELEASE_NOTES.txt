@@ -1,0 +1,13 @@
+🚗 Versão 0.1.0 - Lançamento Inicial
+
+Consulte preços de veículos pela Tabela FIPE oficial!
+
+✨ Novidades:
+• Consulta FIPE para carros
+• Busca inteligente de marcas e modelos
+• Filtros por ano e combustível
+• Tema claro e escuro
+• Zero KM identificado automaticamente
+• Interface moderna e intuitiva
+
+📱 Totalmente gratuito e sem cadastro!

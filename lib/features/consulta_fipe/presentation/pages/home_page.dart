@@ -1,16 +1,39 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/theme_manager.dart';
 import '../widgets/veiculo_type_card.dart';
 
 /// Página inicial com seleção de tipo de veículo
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final ThemeManager themeManager;
+
+  const HomePage({super.key, required this.themeManager});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('FIPE Consulta'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('FIPE Consulta'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(themeManager.themeIcon),
+            tooltip: themeManager.themeLabel,
+            onPressed: () async {
+              await themeManager.toggleTheme();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${themeManager.themeLabel} ativado'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

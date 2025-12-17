@@ -43,7 +43,9 @@ class ValorCardWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  valorFipe.anoModelo.toString(),
+                  valorFipe.anoModelo == 32000
+                      ? 'Zero Km'
+                      : valorFipe.anoModelo.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.white.withValues(alpha: 0.9),
                   ),

@@ -57,6 +57,7 @@ lib/config/supabase_config.dart
 *.p12
 *.key
 *.pem
+key.properties
 
 # Local database
 *.db

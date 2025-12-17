@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const FipeApp());
+    await tester.pumpWidget(FipeApp());
 
     // Verify that splash screen is displayed
     expect(find.byType(MaterialApp), findsOneWidget);

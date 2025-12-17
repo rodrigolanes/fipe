@@ -29,12 +29,12 @@ class ModeloItemWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.directions_car,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   size: 32,
                 ),
               ),
@@ -57,20 +57,27 @@ class ModeloItemWidget extends StatelessWidget {
                         Icon(
                           Icons.info_outline,
                           size: 16,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           'Toque para ver anos disponíveis',
                           style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: Colors.grey[600]),
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: Theme.of(context).primaryColor),
+              Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),

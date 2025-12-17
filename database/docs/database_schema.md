@@ -50,12 +50,13 @@ Armazena todas as marcas de veículos disponíveis na tabela FIPE.
 
 | Coluna         | Tipo                     | Tamanho | Constraints      | Descrição                              |
 | -------------- | ------------------------ | ------- | ---------------- | -------------------------------------- |
-| `id`           | BIGSERIAL                | -       | PRIMARY KEY      | Identificador interno sequencial       |
-| `codigo`       | INTEGER                  | 4 bytes | NOT NULL, UNIQUE | Código da marca na FIPE (ex: 6 = Audi) |
+| `codigo`       | VARCHAR                  | 10      | NOT NULL, PK     | Código da marca na FIPE (ex: "6" = Audi) |
+| `tipo_veiculo` | INTEGER                  | 4 bytes | NOT NULL, PK     | 1=carro, 2=moto, 3=caminhão            |
 | `nome`         | VARCHAR                  | 255     | NOT NULL         | Nome da marca (ex: "Audi", "Fiat")     |
-| `tipo_veiculo` | INTEGER                  | 4 bytes | NOT NULL         | 1=carro, 2=moto, 3=caminhão            |
 | `created_at`   | TIMESTAMP WITH TIME ZONE | 8 bytes | DEFAULT NOW()    | Data de criação do registro            |
 | `updated_at`   | TIMESTAMP WITH TIME ZONE | 8 bytes | DEFAULT NOW()    | Data da última atualização             |
+
+**Chave Primária**: `(codigo, tipo_veiculo)` - Uma marca pode ter o mesmo código em diferentes tipos de veículo
 
 **Índices**:
 
@@ -80,12 +81,14 @@ Armazena todos os modelos de veículos por marca.
 
 | Coluna         | Tipo                     | Tamanho  | Constraints   | Descrição                           |
 | -------------- | ------------------------ | -------- | ------------- | ----------------------------------- |
-| `id`           | BIGSERIAL                | -        | PRIMARY KEY   | Identificador interno sequencial    |
-| `codigo`       | INTEGER                  | 4 bytes  | NOT NULL      | Código do modelo na FIPE (ex: 5496) |
+| `codigo`       | INTEGER                  | 4 bytes  | NOT NULL, PK  | Código do modelo na FIPE (ex: 5496) |
+| `codigo_marca` | VARCHAR                  | 10       | NOT NULL, PK, FK | Referência à marca                  |
+| `tipo_veiculo` | INTEGER                  | 4 bytes  | NOT NULL, PK  | 1=carro, 2=moto, 3=caminhão         |
 | `nome`         | TEXT                     | variável | NOT NULL      | Nome completo do modelo             |
-| `codigo_marca` | INTEGER                  | 4 bytes  | NOT NULL, FK  | Referência à marca                  |
 | `created_at`   | TIMESTAMP WITH TIME ZONE | 8 bytes  | DEFAULT NOW() | Data de criação do registro         |
 | `updated_at`   | TIMESTAMP WITH TIME ZONE | 8 bytes  | DEFAULT NOW() | Data da última atualização          |
+
+**Chave Primária**: `(codigo, codigo_marca, tipo_veiculo)` - Identificação única do modelo
 
 **Constraints**:
 

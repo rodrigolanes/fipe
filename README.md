@@ -126,7 +126,7 @@ lib/
 
 - [x] **1.4** Configurar Git
   - [x] Atualizar `.gitignore` para Flutter
-  - [x] Criar branches: `main`, `develop`
+  - [x] Criar branch: `main`
   - [x] Configurar `.copilot-instructions.md`
 
 ---

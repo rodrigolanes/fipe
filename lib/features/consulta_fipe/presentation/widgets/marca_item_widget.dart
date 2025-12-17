@@ -48,13 +48,15 @@ class MarcaItemWidget extends StatelessWidget {
                 height: 56,
                 decoration: BoxDecoration(
                   color: ativa
-                      ? theme.primaryColor.withValues(alpha: 0.1)
-                      : Colors.grey.withValues(alpha: 0.1),
+                      ? theme.colorScheme.primaryContainer
+                      : theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.directions_car,
-                  color: ativa ? theme.primaryColor : Colors.grey,
+                  color: ativa
+                      ? theme.colorScheme.onPrimaryContainer
+                      : theme.colorScheme.onSurfaceVariant,
                   size: 28,
                 ),
               ),
@@ -87,13 +89,13 @@ class MarcaItemWidget extends StatelessWidget {
                           Icon(
                             Icons.car_rental,
                             size: 14,
-                            color: theme.primaryColor.withValues(alpha: 0.7),
+                            color: theme.colorScheme.primary,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${marca.totalModelos} modelo${marca.totalModelos == 1 ? '' : 's'}',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.primaryColor.withValues(alpha: 0.7),
+                              color: theme.colorScheme.primary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -107,7 +109,7 @@ class MarcaItemWidget extends StatelessWidget {
               // Indicador de navegação
               Icon(
                 Icons.chevron_right,
-                color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.5),
+                color: theme.colorScheme.onSurfaceVariant,
               ),
             ],
           ),

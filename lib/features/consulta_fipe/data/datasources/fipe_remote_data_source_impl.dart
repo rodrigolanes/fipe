@@ -103,7 +103,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       // Buscar todos os modelos da marca (sem filtro de ano)
       final response = await client
           .from('modelos')
-          .select('id, codigo, nome, codigo_marca')
+          .select('codigo, nome, codigo_marca')
           .eq('codigo_marca', marcaId)
           .order('nome', ascending: true);
 

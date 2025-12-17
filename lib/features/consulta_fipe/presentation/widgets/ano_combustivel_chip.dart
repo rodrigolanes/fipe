@@ -26,10 +26,10 @@ class AnoCombustivelChip extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                anoCombustivel.ano,
+                anoCombustivel.ano == '32000' ? 'Zero Km' : anoCombustivel.ano,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 14,
                 ),
               ),
@@ -37,9 +37,10 @@ class AnoCombustivelChip extends StatelessWidget {
               Flexible(
                 child: Text(
                   anoCombustivel.combustivel,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(fontSize: 11),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 11,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

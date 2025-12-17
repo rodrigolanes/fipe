@@ -6,6 +6,7 @@ import 'core/ads/ad_manager.dart';
 import 'core/constants/app_constants.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_manager.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -27,23 +28,32 @@ void main() async {
     await AdManager.initialize();
   }
 
-  runApp(const FipeApp());
+  runApp(FipeApp());
 }
 
 /// Aplicação FIPE
 class FipeApp extends StatelessWidget {
-  const FipeApp({super.key});
+  FipeApp({super.key});
+
+  final ThemeManager _themeManager = ThemeManager();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConstants.appName,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      initialRoute: AppRoutes.splash,
-      onGenerateRoute: AppRoutes.generateRoute,
+    return AnimatedBuilder(
+      animation: _themeManager,
+      builder: (context, child) {
+        return MaterialApp(
+          title: AppConstants.appName,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: _themeManager.themeMode,
+          initialRoute: AppRoutes.splash,
+          onGenerateRoute: (settings) {
+            return AppRoutes.generateRoute(settings, _themeManager);
+          },
+        );
+      },
     );
   }
 }
