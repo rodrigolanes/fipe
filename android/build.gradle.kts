@@ -26,7 +26,7 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 
-    // Força Java 17 em todos os subprojetos para compatibilidade com Kotlin
+    // Força Java 17 e Kotlin JVM target 17 em todos os subprojetos
     afterEvaluate {
         if (project.hasProperty("android")) {
             extensions.configure<com.android.build.gradle.BaseExtension>("android") {
@@ -34,6 +34,13 @@ subprojects {
                     sourceCompatibility = JavaVersion.VERSION_17
                     targetCompatibility = JavaVersion.VERSION_17
                 }
+            }
+        }
+        
+        // Configura Kotlin JVM target para 17 em todos os módulos
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+            kotlinOptions {
+                jvmTarget = "17"
             }
         }
     }
