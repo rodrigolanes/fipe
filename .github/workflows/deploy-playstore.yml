@@ -29,6 +29,9 @@ jobs:
     - name: Instalar dependências
       run: flutter pub get
       
+    - name: Gerar arquivos do build_runner
+      run: flutter pub run build_runner build --delete-conflicting-outputs
+      
     - name: Criar supabase_config.dart
       run: |
         mkdir -p lib/config
