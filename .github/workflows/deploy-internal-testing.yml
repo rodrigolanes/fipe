@@ -27,9 +27,16 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     
+    # Permissões necessárias para o GITHUB_TOKEN
+    permissions:
+      contents: write  # Permite fazer push no repositório
+      
     steps:
     - name: Checkout código
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}  # Usa o token automático
+        fetch-depth: 0  # Necessário para push
       
     - name: Setup Java
       uses: actions/setup-java@v4
@@ -170,6 +177,15 @@ jobs:
         inAppUpdatePriority: 2  # Prioridade de atualização (0-5)
         whatsNewDirectory: .  # Lê as notas do arquivo
         mappingFile: build/app/outputs/mapping/release/mapping.txt
+        
+    - name: Commitar versão incrementada
+      if: success()
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+        git add pubspec.yaml
+        git commit -m "chore: incrementa build number para ${{ env.NEW_VERSION }} [skip ci]"
+        git push origin ${{ github.ref_name }}
         
     - name: Notificar sucesso
       if: success()
