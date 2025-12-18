@@ -52,17 +52,7 @@ android {
         release {
             signingConfig = signingConfigs.getByName("release")
             
-            // Habilita minificação e ofuscação
-            isMinifyEnabled = true
-            isShrinkResources = true
-            
-            // Usa o ProGuard/R8 do Flutter
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            
-            // Gera símbolos de debug nativos
+            // Gera símbolos de debug nativos para o Google Play Console
             ndk {
                 debugSymbolLevel = "FULL"
             }
