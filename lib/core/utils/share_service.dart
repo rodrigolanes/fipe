@@ -14,12 +14,12 @@ class ShareService {
     try {
       print('🔄 Iniciando compartilhamento...');
       print('📝 Mensagem: $mensagem');
-      
+
       final result = await Share.share(
         mensagem,
         subject: 'Valor FIPE - ${valorFipe.modelo}',
       );
-      
+
       print('✅ Resultado do compartilhamento: $result');
     } catch (e, stackTrace) {
       print('❌ Erro ao compartilhar: $e');
