@@ -75,7 +75,7 @@ flutter {
 }
 
 dependencies {
-    // Google Play Core para deferred components do Flutter
-    implementation("com.google.android.play:core:1.10.3")
-    implementation("com.google.android.play:core-ktx:1.8.1")
+    // Google Play Feature Delivery (substitui play:core deprecated)
+    implementation("com.google.android.play:feature-delivery:2.1.0")
+    implementation("com.google.android.play:feature-delivery-ktx:2.1.0")
 }

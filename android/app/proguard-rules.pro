@@ -9,7 +9,9 @@
 
 ## Google Play Core (deferred components)
 -keep class com.google.android.play.core.** { *; }
+-keep class com.google.android.play.** { *; }
 -dontwarn com.google.android.play.core.**
+-dontwarn com.google.android.play.**
 
 ## Google Mobile Ads
 -keep class com.google.android.gms.** { *; }
