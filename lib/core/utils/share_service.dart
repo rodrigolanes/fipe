@@ -12,13 +12,19 @@ class ShareService {
     final mensagem = _formatarMensagemValorFipe(valorFipe);
 
     try {
-      await Share.share(
+      print('🔄 Iniciando compartilhamento...');
+      print('📝 Mensagem: $mensagem');
+      
+      final result = await Share.share(
         mensagem,
         subject: 'Valor FIPE - ${valorFipe.modelo}',
       );
-    } catch (e) {
-      // Erro ao compartilhar - pode ser ignorado ou logado
+      
+      print('✅ Resultado do compartilhamento: $result');
+    } catch (e, stackTrace) {
       print('❌ Erro ao compartilhar: $e');
+      print('Stack trace: $stackTrace');
+      rethrow; // Propaga o erro para ser capturado na UI
     }
   }
 

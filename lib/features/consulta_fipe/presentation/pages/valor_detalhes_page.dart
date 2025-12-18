@@ -41,19 +41,20 @@ class ValorDetalhesPage extends StatelessWidget {
             tipo: tipo,
           ),
         ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Valor FIPE'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: () => _shareValue(context),
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: BlocBuilder<ValorFipeBloc, ValorFipeState>(
-            builder: (context, state) {
+      child: Builder(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: const Text('Valor FIPE'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.share),
+                onPressed: () => _shareValue(context),
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: BlocBuilder<ValorFipeBloc, ValorFipeState>(
+              builder: (context, state) {
               if (state is ValorFipeLoading) {
                 return const LoadingWidget();
               } else if (state is ValorFipeLoaded) {
@@ -100,6 +101,7 @@ class ValorDetalhesPage extends StatelessWidget {
             },
           ),
         ),
+      ),
       ),
     );
   }
@@ -202,23 +204,59 @@ class ValorDetalhesPage extends StatelessWidget {
         '${date.year}';
   }
 
-  void _shareValue(BuildContext context) {
+  void _shareValue(BuildContext context) async {
     final state = context.read<ValorFipeBloc>().state;
     if (state is ValorFipeLoaded) {
-      ShareService.compartilharValorFipe(state.valorFipe);
+      try {
+        await ShareService.compartilharValorFipe(state.valorFipe);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.white),
-              SizedBox(width: 12),
-              Text('Compartilhamento aberto'),
-            ],
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Row(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.white),
+                  SizedBox(width: 12),
+                  Text('Compartilhamento aberto'),
+                ],
+              ),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.error, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text('Erro ao compartilhar: $e')),
+                ],
+              ),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.warning, color: Colors.white),
+                SizedBox(width: 12),
+                Text('Aguarde o carregamento dos dados'),
+              ],
+            ),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 2),
           ),
-          duration: Duration(seconds: 2),
-        ),
-      );
+        );
+      }
     }
   }
 }

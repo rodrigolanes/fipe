@@ -1,0 +1,193 @@
+name: Deploy to Internal Testing
+
+# Melhor estratégia para testes internos:
+# 1. Push em branch develop - builds automáticos para testes contínuos
+# 2. Tags prefixadas com 'internal-' - builds controlados
+# 3. Manual dispatch - controle total quando necessário
+on:
+  push:
+    branches:
+      - develop  # Dispara automaticamente em commits na develop
+    tags:
+      - 'internal-v*.*.*'  # Tags como internal-v0.1.0, internal-v0.2.0
+  pull_request:
+    branches:
+      - develop  # Testa PRs antes de mesclar
+    types: [closed]  # Só quando o PR for mesclado
+  workflow_dispatch:  # Permite executar manualmente
+    inputs:
+      version_notes:
+        description: 'Notas desta versão (opcional)'
+        required: false
+        default: 'Build de teste interno'
+
+jobs:
+  deploy-internal:
+    # Só executa se for push/tag ou PR mesclado (não cancelado)
+    if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.1'
+        channel: 'stable'
+        
+    - name: Cache dependências
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.pub-cache
+          ${{ github.workspace }}/.dart_tool
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pub-
+        
+    - name: Instalar dependências
+      run: flutter pub get
+      
+    - name: Gerar arquivos do build_runner
+      run: flutter pub run build_runner build --delete-conflicting-outputs
+      
+    - name: Criar supabase_config.dart
+      run: |
+        mkdir -p lib/config
+        cat > lib/config/supabase_config.dart << 'EOF'
+        /// Configurações do Supabase (gerado automaticamente pelo CI)
+        class SupabaseConfig {
+          /// URL do projeto Supabase
+          static const String supabaseUrl = '${{ secrets.SUPABASE_URL }}';
+          
+          /// Chave anônima (pública) do Supabase
+          static const String supabaseAnonKey = '${{ secrets.SUPABASE_ANON_KEY }}';
+        }
+        EOF
+    
+    - name: Verificar supabase_config.dart criado
+      run: |
+        echo "Verificando arquivo supabase_config.dart..."
+        if [ ! -f lib/config/supabase_config.dart ]; then
+          echo "❌ ERRO: Arquivo não foi criado!"
+          exit 1
+        fi
+        echo "✅ Arquivo criado. Conteúdo (secrets mascaradas):"
+        cat lib/config/supabase_config.dart | sed 's/\(supabaseUrl = \).*/\1"[MASKED]"/g' | sed 's/\(supabaseAnonKey = \).*/\1"[MASKED]"/g'
+        
+        # Verifica se URL não está vazia
+        if grep -q "supabaseUrl = '';" lib/config/supabase_config.dart; then
+          echo "❌ ERRO: SUPABASE_URL está vazia! Configure a secret no GitHub."
+          exit 1
+        fi
+        
+        # Verifica se anonKey não está vazia
+        if grep -q "supabaseAnonKey = '';" lib/config/supabase_config.dart; then
+          echo "❌ ERRO: SUPABASE_ANON_KEY está vazia! Configure a secret no GitHub."
+          exit 1
+        fi
+        
+        echo "✅ Secrets do Supabase configuradas corretamente!"
+      
+    - name: Decode Keystore
+      run: |
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+        
+    - name: Criar key.properties
+      run: |
+        cat > android/key.properties << EOF
+        storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+        keyPassword=${{ secrets.KEY_PASSWORD }}
+        keyAlias=${{ secrets.KEY_ALIAS }}
+        storeFile=upload-keystore.jks
+        EOF
+        
+    - name: Incrementar build number automaticamente
+      run: |
+        # Incrementa automaticamente o build number
+        CURRENT_VERSION=$(grep "version:" pubspec.yaml | sed 's/version: //')
+        VERSION_NAME=$(echo $CURRENT_VERSION | cut -d'+' -f1)
+        BUILD_NUMBER=$(echo $CURRENT_VERSION | cut -d'+' -f2)
+        NEW_BUILD=$((BUILD_NUMBER + 1))
+        
+        echo "📦 Versão atual: $VERSION_NAME+$BUILD_NUMBER"
+        echo "🚀 Nova versão: $VERSION_NAME+$NEW_BUILD"
+        
+        # Atualiza pubspec.yaml
+        sed -i "s/version: .*/version: $VERSION_NAME+$NEW_BUILD/" pubspec.yaml
+        
+        # Exibe confirmação
+        echo "✅ Build number incrementado com sucesso!"
+        echo "CURRENT_VERSION=$VERSION_NAME+$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "NEW_VERSION=$VERSION_NAME+$NEW_BUILD" >> $GITHUB_ENV
+        
+    - name: Build App Bundle
+      run: flutter build appbundle --release
+      
+    - name: Criar notas de versão
+      id: release_notes
+      run: |
+        NOTES=""
+        
+        # Se foi manual e tem notas customizadas
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.version_notes }}" ]; then
+          NOTES="${{ github.event.inputs.version_notes }}"
+        
+        # Se tem arquivo de release notes
+        elif [ -f "RELEASE_NOTES.txt" ]; then
+          NOTES=$(cat RELEASE_NOTES.txt)
+        
+        # Senão, cria nota padrão
+        else
+          NOTES="🧪 Build de teste interno - $(date +'%Y-%m-%d %H:%M')
+          
+Branch: ${GITHUB_REF_NAME}
+Commit: ${GITHUB_SHA:0:7}
+          
+Para testadores internos."
+        fi
+        
+        echo "$NOTES" > release_notes.txt
+        echo "📝 Notas da versão:"
+        cat release_notes.txt
+        
+    - name: Upload para Google Play Internal Testing
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        packageName: br.com.rodrigolanes.fipe
+        releaseFiles: build/app/outputs/bundle/release/app-release.aab
+        track: internal  # 🔑 TESTE INTERNO
+        status: completed
+        inAppUpdatePriority: 2  # Prioridade de atualização (0-5)
+        whatsNewDirectory: .  # Lê as notas do arquivo
+        mappingFile: build/app/outputs/mapping/release/mapping.txt
+        
+    - name: Notificar sucesso
+      if: success()
+      run: |
+        echo "✅ Deploy para Internal Testing concluído com sucesso!"
+        echo ""
+        echo "📦 Versão anterior: ${{ env.CURRENT_VERSION }}"
+        echo "🚀 Versão publicada: ${{ env.NEW_VERSION }}"
+        echo ""
+        echo "🔗 Acesse: https://play.google.com/console"
+        echo "📱 Os testadores internos receberão a atualização em breve"
+        
+    - name: Upload artifacts em caso de falha
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: |
+          build/app/outputs/
+          *.log
+        retention-days: 7
