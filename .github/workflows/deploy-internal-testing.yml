@@ -148,11 +148,11 @@ jobs:
         # Senão, cria nota padrão
         else
           NOTES="🧪 Build de teste interno - $(date +'%Y-%m-%d %H:%M')
-          
-Branch: ${GITHUB_REF_NAME}
-Commit: ${GITHUB_SHA:0:7}
-          
-Para testadores internos."
+        
+        Branch: ${GITHUB_REF_NAME}
+        Commit: ${GITHUB_SHA:0:7}
+        
+        Para testadores internos."
         fi
         
         echo "$NOTES" > release_notes.txt
