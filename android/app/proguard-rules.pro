@@ -5,6 +5,15 @@
 -keep class io.flutter.view.**  { *; }
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
+-keep class io.flutter.embedding.** { *; }
+
+## Google Play Core (deferred components)
+-keep class com.google.android.play.core.** { *; }
+-dontwarn com.google.android.play.core.**
+
+## Google Mobile Ads
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
 
 ## Gson rules (caso use)
 -keepattributes Signature

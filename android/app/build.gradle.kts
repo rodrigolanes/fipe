@@ -73,3 +73,9 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Google Play Core para deferred components do Flutter
+    implementation("com.google.android.play:core:1.10.3")
+    implementation("com.google.android.play:core-ktx:1.8.1")
+}
