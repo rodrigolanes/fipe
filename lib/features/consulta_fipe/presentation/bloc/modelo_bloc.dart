@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/error/failures.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../../domain/usecases/get_modelos_por_marca_usecase.dart';
 import 'modelo_event.dart';
 import 'modelo_state.dart';
@@ -10,7 +11,7 @@ class ModeloBloc extends Bloc<ModeloEvent, ModeloState> {
   final GetModelosPorMarcaUseCase getModelosPorMarca;
 
   ModeloBloc({required this.getModelosPorMarca})
-    : super(const ModeloInitial()) {
+      : super(const ModeloInitial()) {
     on<LoadModelosPorMarcaEvent>(_onLoadModelosPorMarca);
     on<SearchModelosEvent>(_onSearchModelos);
     on<ClearSearchModelosEvent>(_onClearSearch);
@@ -22,8 +23,8 @@ class ModeloBloc extends Bloc<ModeloEvent, ModeloState> {
   ) async {
     emit(const ModeloLoading());
 
-    print(
-      '🔍 ModeloBloc: Carregando modelos para marca ${event.marcaId} (tipo: ${event.tipo}${event.ano != null ? ', ano: ${event.ano}' : ''})',
+    AppLogger.d(
+      'Carregando modelos para marca ${event.marcaId} (tipo: ${event.tipo}${event.ano != null ? ', ano: ${event.ano}' : ''})',
     );
 
     final result = await getModelosPorMarca(
@@ -36,11 +37,11 @@ class ModeloBloc extends Bloc<ModeloEvent, ModeloState> {
 
     result.fold(
       (failure) {
-        print('❌ ModeloBloc: Erro ao carregar modelos: $failure');
+        AppLogger.e('Erro ao carregar modelos', failure);
         emit(ModeloError(_mapFailureToMessage(failure)));
       },
       (modelos) {
-        print('✅ ModeloBloc: ${modelos.length} modelos carregados');
+        AppLogger.i('${modelos.length} modelos carregados com sucesso');
         emit(ModeloLoaded(modelos: modelos, filteredModelos: modelos));
       },
     );

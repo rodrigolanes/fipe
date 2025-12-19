@@ -1,6 +1,7 @@
 import 'package:share_plus/share_plus.dart';
 
 import '../../features/consulta_fipe/domain/entities/valor_fipe_entity.dart';
+import 'app_logger.dart';
 
 /// Serviço para compartilhar informações de veículos e valores FIPE
 class ShareService {
@@ -12,18 +13,17 @@ class ShareService {
     final mensagem = _formatarMensagemValorFipe(valorFipe);
 
     try {
-      print('🔄 Iniciando compartilhamento...');
-      print('📝 Mensagem: $mensagem');
+      AppLogger.i('Iniciando compartilhamento de valor FIPE');
+      AppLogger.d('Mensagem a ser compartilhada: $mensagem');
 
       final result = await Share.share(
         mensagem,
         subject: 'Valor FIPE - ${valorFipe.modelo}',
       );
 
-      print('✅ Resultado do compartilhamento: $result');
+      AppLogger.i('Compartilhamento concluído', result);
     } catch (e, stackTrace) {
-      print('❌ Erro ao compartilhar: $e');
-      print('Stack trace: $stackTrace');
+      AppLogger.e('Erro ao compartilhar valor FIPE', e, stackTrace);
       rethrow; // Propaga o erro para ser capturado na UI
     }
   }
@@ -51,8 +51,9 @@ class ShareService {
         mensagem,
         subject: 'Veículo - $marca $modelo',
       );
+      AppLogger.i('Veículo compartilhado: $marca $modelo');
     } catch (e) {
-      print('❌ Erro ao compartilhar: $e');
+      AppLogger.e('Erro ao compartilhar veículo', e);
     }
   }
 
@@ -90,8 +91,9 @@ class ShareService {
         mensagem,
         subject: 'Comparação FIPE - ${veiculos.length} veículos',
       );
+      AppLogger.i('Comparação compartilhada: ${veiculos.length} veículos');
     } catch (e) {
-      print('❌ Erro ao compartilhar: $e');
+      AppLogger.e('Erro ao compartilhar comparação', e);
     }
   }
 

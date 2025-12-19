@@ -1,4 +1,5 @@
 name: fipe
+
 description: "Aplicação Android para consulta de preços médios de veículos com base na Tabela FIPE"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -60,10 +61,12 @@ dependencies:
   # Utilities
   intl: ^0.20.1
   share_plus: ^10.1.4
+  logger: ^2.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  
 
 dev_dependencies:
   flutter_test:

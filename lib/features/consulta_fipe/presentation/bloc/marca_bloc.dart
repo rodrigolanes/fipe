@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/error/failures.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../../domain/usecases/get_marcas_por_tipo_usecase.dart';
 import 'marca_event.dart';
 import 'marca_state.dart';
@@ -21,7 +22,7 @@ class MarcaBloc extends Bloc<MarcaEvent, MarcaState> {
   ) async {
     emit(const MarcaLoading());
 
-    print('🔍 MarcaBloc: Carregando marcas para tipo: ${event.tipo}');
+    AppLogger.d('Carregando marcas para tipo: ${event.tipo}');
 
     final result = await getMarcasPorTipo(
       GetMarcasPorTipoParams(tipo: event.tipo),
@@ -29,11 +30,11 @@ class MarcaBloc extends Bloc<MarcaEvent, MarcaState> {
 
     result.fold(
       (failure) {
-        print('❌ MarcaBloc: Erro ao carregar marcas: $failure');
+        AppLogger.e('Erro ao carregar marcas', failure);
         emit(MarcaError(_mapFailureToMessage(failure)));
       },
       (marcas) {
-        print('✅ MarcaBloc: ${marcas.length} marcas carregadas');
+        AppLogger.i('${marcas.length} marcas carregadas com sucesso');
         emit(MarcaLoaded(marcas: marcas, filteredMarcas: marcas));
       },
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../utils/app_logger.dart';
 import 'ad_manager.dart';
 
 /// Widget para exibir banner ads
@@ -30,7 +31,7 @@ class _AdBannerWidgetState extends State<AdBannerWidget> {
         });
       },
       onAdFailedToLoad: (ad, error) {
-        debugPrint('Banner ad failed to load: $error');
+        AppLogger.w('Banner ad failed to load', error);
         setState(() {
           _isAdLoaded = false;
         });

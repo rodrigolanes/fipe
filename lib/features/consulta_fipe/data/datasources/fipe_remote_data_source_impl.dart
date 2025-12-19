@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../models/ano_combustivel_model.dart';
 import '../models/marca_model.dart';
 import '../models/modelo_model.dart';
@@ -29,12 +30,16 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
   int _getCombustivelCodigo(String combustivel) {
     final combustivelLower = combustivel.toLowerCase();
     if (combustivelLower.contains('gasolina')) return 1;
-    if (combustivelLower.contains('álcool') || combustivelLower.contains('etanol')) return 2;
+    if (combustivelLower.contains('álcool') ||
+        combustivelLower.contains('etanol')) return 2;
     if (combustivelLower.contains('diesel')) return 3;
-    if (combustivelLower.contains('elétrico') || combustivelLower.contains('eletrico')) return 4;
+    if (combustivelLower.contains('elétrico') ||
+        combustivelLower.contains('eletrico')) return 4;
     if (combustivelLower.contains('flex')) return 5;
-    if (combustivelLower.contains('híbrido') || combustivelLower.contains('hibrido')) return 6;
-    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv')) return 7;
+    if (combustivelLower.contains('híbrido') ||
+        combustivelLower.contains('hibrido')) return 6;
+    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv'))
+      return 7;
     return 1; // Default: Gasolina
   }
 
@@ -43,8 +48,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
     try {
       final tipoVeiculoCodigo = _getTipoVeiculoCodigo(tipo);
 
-      print(
-        '🔍 FipeRemoteDataSource: Buscando marcas para tipo $tipo (código: $tipoVeiculoCodigo)',
+      AppLogger.d(
+        'Buscando marcas para tipo $tipo (código: $tipoVeiculoCodigo)',
       );
 
       // Buscar marcas com estatísticas
@@ -53,8 +58,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
         params: {'p_tipo_veiculo': tipoVeiculoCodigo},
       );
 
-      print(
-        '✅ FipeRemoteDataSource: Resposta recebida: ${response.length} marcas',
+      AppLogger.i(
+        'Resposta recebida: ${response.length} marcas',
       );
 
       return response
@@ -70,7 +75,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
           )
           .toList();
     } catch (e) {
-      print('❌ FipeRemoteDataSource: Erro ao buscar marcas: $e');
+      AppLogger.e('Erro ao buscar marcas', e);
       throw ServerException('Erro ao buscar marcas: ${e.toString()}');
     }
   }
@@ -82,8 +87,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
     String? ano,
   }) async {
     try {
-      print(
-        '🔍 FipeRemoteDataSource: Buscando modelos para marca $marcaId (tipo: $tipo${ano != null ? ', ano: $ano' : ''})',
+      AppLogger.d(
+        'Buscando modelos para marca $marcaId (tipo: $tipo${ano != null ? ', ano: $ano' : ''})',
       );
 
       if (ano != null) {
@@ -103,8 +108,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
             .eq('codigo_marca', marcaId.toString())
             .eq('anos_combustivel.ano', ano);
 
-        print(
-          '✅ FipeRemoteDataSource: Resposta recebida com ${response.length} registros',
+        AppLogger.i(
+          'Resposta recebida com ${response.length} registros',
         );
 
         // Remover duplicatas (mesmo modelo pode ter vários combustíveis)
@@ -128,8 +133,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
         final modelos = modelosUnicos.values.toList()
           ..sort((a, b) => a.nome.compareTo(b.nome));
 
-        print(
-          '✅ FipeRemoteDataSource: ${modelos.length} modelos únicos encontrados',
+        AppLogger.i(
+          '${modelos.length} modelos únicos encontrados',
         );
         return modelos;
       }
@@ -143,8 +148,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
           .eq('tipo_veiculo', tipoVeiculoCodigo)
           .order('nome', ascending: true);
 
-      print(
-        '✅ FipeRemoteDataSource: Resposta recebida: ${response.length} modelos',
+      AppLogger.i(
+        'Resposta recebida: ${response.length} modelos',
       );
 
       return response
@@ -158,7 +163,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
           )
           .toList();
     } catch (e) {
-      print('❌ FipeRemoteDataSource: Erro ao buscar modelos: $e');
+      AppLogger.e('Erro ao buscar modelos', e);
       throw ServerException('Erro ao buscar modelos: ${e.toString()}');
     }
   }
@@ -203,17 +208,14 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
     TipoVeiculo tipo,
   ) async {
     try {
-      final response = await client
-          .from('modelos_anos')
-          .select('''
+      final response = await client.from('modelos_anos').select('''
             codigo_ano_combustivel,
             anos_combustivel!inner(
               ano,
               combustivel,
               codigo
             )
-          ''')
-          .eq('codigo_marca', marcaId.toString());
+          ''').eq('codigo_marca', marcaId.toString());
 
       // Remover duplicatas usando Set
       final anosUnicos = <String, AnoCombustivelModel>{};
@@ -249,8 +251,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       final tipoVeiculoCodigo = _getTipoVeiculoCodigo(tipo);
       final codigoCombustivel = _getCombustivelCodigo(combustivel);
 
-      print(
-        '🔍 FipeRemoteDataSource: Buscando valor FIPE - Marca: $marcaId, Modelo: $modeloId, Ano: $ano, Combustível: $combustivel (código: $codigoCombustivel), Tipo: $tipo',
+      AppLogger.d(
+        'Buscando valor FIPE - Marca: $marcaId, Modelo: $modeloId, Ano: $ano, Combustível: $combustivel (código: $codigoCombustivel), Tipo: $tipo',
       );
 
       final response = await client
@@ -275,18 +277,18 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
           .maybeSingle();
 
       if (response == null) {
-        print(
-          '⚠️ FipeRemoteDataSource: Nenhum valor encontrado, pode ser necessário consultar API externa',
+        AppLogger.w(
+          'Nenhum valor encontrado, pode ser necessário consultar API externa',
         );
         throw ServerException('Valor FIPE não encontrado para este veículo');
       }
 
-      print(
-        '✅ FipeRemoteDataSource: Valor FIPE encontrado: ${response['valor']}',
+      AppLogger.i(
+        'Valor FIPE encontrado: ${response['valor']}',
       );
       return ValorFipeModel.fromJson(response);
     } catch (e) {
-      print('❌ FipeRemoteDataSource: Erro ao buscar valor FIPE: $e');
+      AppLogger.e('Erro ao buscar valor FIPE', e);
       throw ServerException('Erro ao buscar valor FIPE: ${e.toString()}');
     }
   }
