@@ -18,7 +18,7 @@ class AdManager {
     required Function(Ad ad, LoadAdError error) onAdFailedToLoad,
   }) {
     _bannerAd = BannerAd(
-      adUnitId: AdMobConfig.bannerId,
+      adUnitId: _getAdUnitId(),
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -35,6 +35,16 @@ class AdManager {
     );
 
     _bannerAd!.load();
+  }
+
+  static String _getAdUnitId() {
+    // Usa test ID em debug mode, production ID em release
+    if (const bool.fromEnvironment('dart.vm.product') == false) {
+      // Se não estiver em modo de produção, verifica kDebugMode
+      // kDebugMode é true apenas em debug
+      return AdMobConfig.testBannerAdUnitId;
+    }
+    return AdMobConfig.bannerAdUnitId;
   }
 
   /// Retorna se o banner está pronto
