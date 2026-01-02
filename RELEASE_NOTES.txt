@@ -1,12 +1,13 @@
-🚗 Versão 0.1.3 - Melhorias e Correções
+🚗 Versão 0.2.0 - Correções Importantes e Integração AdMob
 
 Consulte preços de veículos pela Tabela FIPE oficial!
 
-✨ Novidades:
-• Suporte completo para Carros, Motos e Caminhões
-• Melhorias de logs para debug
-• Correções de bugs na consulta de valores
-• Otimizações de performance
+✨ Novidades desta versão:
+• ✅ Integração com Google AdMob (banners nas telas principais)
+• ✅ Correção crítica: Filtro de anos agora exibe apenas anos realmente disponíveis
+• ✅ Correção: Modelos filtrados por ano mostram apenas veículos daquele ano específico
+• ✅ Melhorias na precisão das queries do banco de dados
+• ✅ Filtros de marca e tipo de veículo totalmente funcionais
 
 ✨ Recursos principais:
 • Consulta FIPE para carros, motos e caminhões

@@ -10,7 +10,7 @@ class ValorFipeBloc extends Bloc<ValorFipeEvent, ValorFipeState> {
   final GetValorFipeUseCase getValorFipe;
 
   ValorFipeBloc({required this.getValorFipe})
-    : super(const ValorFipeInitial()) {
+      : super(const ValorFipeInitial()) {
     on<LoadValorFipeEvent>(_onLoadValorFipe);
   }
 

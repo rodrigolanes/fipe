@@ -19,9 +19,8 @@ class AnoSelecaoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          sl<AnoCombustivelBloc>()
-            ..add(LoadAnosPorMarcaEvent(marcaId: marcaId, tipo: tipo)),
+      create: (_) => sl<AnoCombustivelBloc>()
+        ..add(LoadAnosPorMarcaEvent(marcaId: marcaId, tipo: tipo)),
       child: Scaffold(
         appBar: AppBar(title: const Text('Selecione o Ano')),
         body: SafeArea(
@@ -49,15 +48,16 @@ class AnoSelecaoPage extends StatelessWidget {
                       Text(
                         'Selecione o ano do veículo',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         '${anos.length} ano${anos.length == 1 ? '' : 's'} disponível${anos.length == 1 ? '' : 'eis'}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall?.color,
-                        ),
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                            ),
                       ),
                       const SizedBox(height: 16),
                       Expanded(
@@ -116,8 +116,8 @@ class AnoSelecaoPage extends StatelessWidget {
                 return custom.ErrorWidget(
                   message: state.message,
                   onRetry: () => context.read<AnoCombustivelBloc>().add(
-                    LoadAnosPorMarcaEvent(marcaId: marcaId, tipo: tipo),
-                  ),
+                        LoadAnosPorMarcaEvent(marcaId: marcaId, tipo: tipo),
+                      ),
                 );
               }
 

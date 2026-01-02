@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/ads/ad_banner_widget.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/share_service.dart';
 import '../../../../injection_container.dart';
@@ -52,54 +53,62 @@ class ValorDetalhesPage extends StatelessWidget {
               ),
             ],
           ),
-          body: SafeArea(
-            child: BlocBuilder<ValorFipeBloc, ValorFipeState>(
-              builder: (context, state) {
-                if (state is ValorFipeLoading) {
-                  return const LoadingWidget();
-                } else if (state is ValorFipeLoaded) {
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ValorCardWidget(valorFipe: state.valorFipe),
-                        const SizedBox(height: 24),
-                        _buildInfoCard(context, state),
-                        const SizedBox(height: 16),
-                        _buildDisclaimerCard(context),
-                        const SizedBox(height: 24),
-                        ElevatedButton.icon(
-                          onPressed: () => Navigator.of(
-                            context,
-                          ).popUntil((route) => route.isFirst),
-                          icon: const Icon(Icons.home),
-                          label: const Text('Nova Consulta'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+          body: Column(
+            children: [
+              Expanded(
+                child: SafeArea(
+                  child: BlocBuilder<ValorFipeBloc, ValorFipeState>(
+                    builder: (context, state) {
+                      if (state is ValorFipeLoading) {
+                        return const LoadingWidget();
+                      } else if (state is ValorFipeLoaded) {
+                        return SingleChildScrollView(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              ValorCardWidget(valorFipe: state.valorFipe),
+                              const SizedBox(height: 24),
+                              _buildInfoCard(context, state),
+                              const SizedBox(height: 16),
+                              _buildDisclaimerCard(context),
+                              const SizedBox(height: 24),
+                              ElevatedButton.icon(
+                                onPressed: () => Navigator.of(
+                                  context,
+                                ).popUntil((route) => route.isFirst),
+                                icon: const Icon(Icons.home),
+                                label: const Text('Nova Consulta'),
+                                style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (state is ValorFipeError) {
-                  return custom.ErrorWidget(
-                    message: state.message,
-                    onRetry: () => context.read<ValorFipeBloc>().add(
-                          LoadValorFipeEvent(
-                            marcaId: marcaId,
-                            modeloId: modeloId,
-                            ano: ano,
-                            combustivel: combustivel,
-                            tipo: tipo,
-                          ),
-                        ),
-                  );
-                }
+                        );
+                      } else if (state is ValorFipeError) {
+                        return custom.ErrorWidget(
+                          message: state.message,
+                          onRetry: () => context.read<ValorFipeBloc>().add(
+                                LoadValorFipeEvent(
+                                  marcaId: marcaId,
+                                  modeloId: modeloId,
+                                  ano: ano,
+                                  combustivel: combustivel,
+                                  tipo: tipo,
+                                ),
+                              ),
+                        );
+                      }
 
-                return const SizedBox.shrink();
-              },
-            ),
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+              ),
+              const AdBannerWidget(),
+            ],
           ),
         ),
       ),

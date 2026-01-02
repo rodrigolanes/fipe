@@ -21,17 +21,17 @@ class ValorCardWidget extends StatelessWidget {
             Text(
               valorFipe.marca,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
             const SizedBox(height: 4),
             Text(
               valorFipe.modelo,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 16),
             Row(
@@ -47,8 +47,8 @@ class ValorCardWidget extends StatelessWidget {
                       ? 'Zero Km'
                       : valorFipe.anoModelo.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
-                  ),
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
                 ),
                 const SizedBox(width: 16),
                 Icon(
@@ -60,8 +60,8 @@ class ValorCardWidget extends StatelessWidget {
                 Text(
                   valorFipe.combustivel,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
-                  ),
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
                 ),
               ],
             ),
@@ -69,16 +69,16 @@ class ValorCardWidget extends StatelessWidget {
             Text(
               'Valor FIPE',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.white.withValues(alpha: 0.9),
-              ),
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               valorFipe.valor,
               style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ],
         ),

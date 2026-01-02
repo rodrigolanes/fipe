@@ -1,11 +1,11 @@
 class AdMobConfig {
   // Application ID do AdMob (obtido no console do AdMob)
   // Formato: ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY
-  static const String androidAppId = 'ca-app-pub-0748346709668865~5472216894';
+  static const String androidAppId = 'ca-app-pub-0748346709668865~1750138230';
 
   // Banner Ad Unit ID para tela principal
   // Formato: ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ
-  static const String bannerAdUnitId = 'ca-app-pub-0748346709668865/4905240686';
+  static const String bannerAdUnitId = 'ca-app-pub-0748346709668865/3046730429';
 
   // Test Ad Unit IDs do Google (não modificar)
   static const String testAppId = 'ca-app-pub-3940256099942544~3347511713';

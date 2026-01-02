@@ -15,8 +15,7 @@ class MarcaItemWidget extends StatelessWidget {
     }
 
     final ano = DateTime.now().year;
-    final ativa =
-        marca.ultimoAno! >=
+    final ativa = marca.ultimoAno! >=
         ano - 1; // Considera ativa se teve modelo no ano passado ou atual
 
     if (marca.primeiroAno == marca.ultimoAno) {

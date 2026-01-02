@@ -28,19 +28,19 @@ class AnoCombustivelChip extends StatelessWidget {
               Text(
                 anoCombustivel.ano == '32000' ? 'Zero Km' : anoCombustivel.ano,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 14,
-                ),
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 14,
+                    ),
               ),
               const SizedBox(height: 2),
               Flexible(
                 child: Text(
                   anoCombustivel.combustivel,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: 11,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                        fontSize: 11,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

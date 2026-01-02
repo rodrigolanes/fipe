@@ -100,19 +100,23 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
 
       if (ano != null) {
         // Buscar apenas modelos disponíveis no ano especificado
+        final tipoVeiculoCodigo = _getTipoVeiculoCodigo(tipo);
+        
         final response = await client
             .from('modelos_anos')
             .select('''
               modelos!inner(
                 codigo,
                 nome,
-                codigo_marca
+                codigo_marca,
+                tipo_veiculo
               ),
               anos_combustivel!inner(
                 ano
               )
             ''')
-            .eq('codigo_marca', marcaId.toString())
+            .eq('modelos.codigo_marca', marcaId.toString())
+            .eq('modelos.tipo_veiculo', tipoVeiculoCodigo)
             .eq('anos_combustivel.ano', ano);
 
         AppLogger.i(
@@ -215,27 +219,51 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
     TipoVeiculo tipo,
   ) async {
     try {
-      final response = await client.from('modelos_anos').select('''
+      final tipoVeiculoCodigo = _getTipoVeiculoCodigo(tipo);
+      
+      // Primeiro, buscar os códigos dos modelos da marca e tipo específicos
+      final modelosResponse = await client
+          .from('modelos')
+          .select('codigo')
+          .eq('codigo_marca', marcaId.toString())
+          .eq('tipo_veiculo', tipoVeiculoCodigo);
+
+      if (modelosResponse.isEmpty) {
+        return [];
+      }
+
+      // Extrair lista de códigos de modelos
+      final codigosModelos = modelosResponse
+          .map((m) => m['codigo'].toString())
+          .toList();
+
+      // Buscar anos/combustíveis apenas desses modelos específicos
+      final response = await client
+          .from('modelos_anos')
+          .select('''
             codigo_ano_combustivel,
             anos_combustivel!inner(
               ano,
               combustivel,
               codigo
             )
-          ''').eq('codigo_marca', marcaId.toString());
+          ''')
+          .inFilter('codigo_modelo', codigosModelos)
+          .order('anos_combustivel(ano)', ascending: false);
 
-      // Remover duplicatas usando Set
+      // Remover duplicatas usando Set (por ano único)
       final anosUnicos = <String, AnoCombustivelModel>{};
 
       for (var json in response) {
         final anoCombustivel = json['anos_combustivel'];
-        final codigo = anoCombustivel['codigo'] as String;
+        final ano = anoCombustivel['ano'] as String;
 
-        if (!anosUnicos.containsKey(codigo)) {
-          anosUnicos[codigo] = AnoCombustivelModel.fromJson({
-            'ano': anoCombustivel['ano'],
+        // Usar ano como chave para manter apenas um registro por ano
+        if (!anosUnicos.containsKey(ano)) {
+          anosUnicos[ano] = AnoCombustivelModel.fromJson({
+            'ano': ano,
             'combustivel': anoCombustivel['combustivel'],
-            'codigo_fipe': codigo,
+            'codigo_fipe': anoCombustivel['codigo'],
           });
         }
       }

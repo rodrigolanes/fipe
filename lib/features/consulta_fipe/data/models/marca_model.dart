@@ -38,13 +38,13 @@ class MarcaModel extends MarcaEntity {
     this.primeiroAno,
     this.ultimoAno,
   }) : super(
-         id: id,
-         nome: nome,
-         tipo: tipo,
-         totalModelos: totalModelos,
-         primeiroAno: primeiroAno,
-         ultimoAno: ultimoAno,
-       );
+          id: id,
+          nome: nome,
+          tipo: tipo,
+          totalModelos: totalModelos,
+          primeiroAno: primeiroAno,
+          ultimoAno: ultimoAno,
+        );
 
   /// Cria um MarcaModel a partir de JSON
   factory MarcaModel.fromJson(Map<String, dynamic> json) {

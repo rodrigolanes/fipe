@@ -24,13 +24,13 @@ class ValorFipeEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    marca,
-    modelo,
-    anoModelo,
-    combustivel,
-    codigoFipe,
-    mesReferencia,
-    valor,
-    dataConsulta,
-  ];
+        marca,
+        modelo,
+        anoModelo,
+        combustivel,
+        codigoFipe,
+        mesReferencia,
+        valor,
+        dataConsulta,
+      ];
 }
