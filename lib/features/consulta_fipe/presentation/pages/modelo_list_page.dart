@@ -60,16 +60,15 @@ class _ModeloListPageState extends State<ModeloListPage> {
                 builder: (context, state) {
                   if (state is AnoCombustivelLoaded) {
                     // Extrair anos únicos
-                    final anos =
-                        state.anosCombustiveis
-                            .map((ac) => ac.ano)
-                            .toSet()
-                            .toList()
-                          ..sort((a, b) {
-                            if (a == '32000') return -1;
-                            if (b == '32000') return 1;
-                            return int.parse(b).compareTo(int.parse(a));
-                          });
+                    final anos = state.anosCombustiveis
+                        .map((ac) => ac.ano)
+                        .toSet()
+                        .toList()
+                      ..sort((a, b) {
+                        if (a == '32000') return -1;
+                        if (b == '32000') return 1;
+                        return int.parse(b).compareTo(int.parse(a));
+                      });
 
                     if (anosDisponiveis.isEmpty && anos.isNotEmpty) {
                       anosDisponiveis = anos;
@@ -114,11 +113,11 @@ class _ModeloListPageState extends State<ModeloListPage> {
                                   if (selected) {
                                     setState(() => anoSelecionado = null);
                                     context.read<ModeloBloc>().add(
-                                      LoadModelosPorMarcaEvent(
-                                        marcaId: widget.marcaId,
-                                        tipo: widget.tipo,
-                                      ),
-                                    );
+                                          LoadModelosPorMarcaEvent(
+                                            marcaId: widget.marcaId,
+                                            tipo: widget.tipo,
+                                          ),
+                                        );
                                   }
                                 },
                               ),
@@ -138,7 +137,8 @@ class _ModeloListPageState extends State<ModeloListPage> {
                                   anosVisiveis = anos.take(10).toList();
                                 }
                                 return anosVisiveis;
-                              }().map((ano) {
+                              }()
+                                  .map((ano) {
                                 final isZeroKm = ano == '32000';
                                 final label = isZeroKm ? 'Zero Km' : ano;
                                 return FilterChip(
@@ -155,12 +155,12 @@ class _ModeloListPageState extends State<ModeloListPage> {
                                     if (selected) {
                                       setState(() => anoSelecionado = ano);
                                       context.read<ModeloBloc>().add(
-                                        LoadModelosPorMarcaEvent(
-                                          marcaId: widget.marcaId,
-                                          tipo: widget.tipo,
-                                          ano: ano,
-                                        ),
-                                      );
+                                            LoadModelosPorMarcaEvent(
+                                              marcaId: widget.marcaId,
+                                              tipo: widget.tipo,
+                                              ano: ano,
+                                            ),
+                                          );
                                     }
                                   },
                                 );
@@ -188,13 +188,13 @@ class _ModeloListPageState extends State<ModeloListPage> {
                       hintText: 'Buscar modelo...',
                       onChanged: (query) {
                         context.read<ModeloBloc>().add(
-                          SearchModelosEvent(query),
-                        );
+                              SearchModelosEvent(query),
+                            );
                       },
                       onClear: () {
                         context.read<ModeloBloc>().add(
-                          const ClearSearchModelosEvent(),
-                        );
+                              const ClearSearchModelosEvent(),
+                            );
                       },
                     );
                   }
@@ -229,11 +229,11 @@ class _ModeloListPageState extends State<ModeloListPage> {
                                   onPressed: () {
                                     setState(() => anoSelecionado = null);
                                     context.read<ModeloBloc>().add(
-                                      LoadModelosPorMarcaEvent(
-                                        marcaId: widget.marcaId,
-                                        tipo: widget.tipo,
-                                      ),
-                                    );
+                                          LoadModelosPorMarcaEvent(
+                                            marcaId: widget.marcaId,
+                                            tipo: widget.tipo,
+                                          ),
+                                        );
                                   },
                                   child: const Text('Limpar filtro'),
                                 ),
@@ -260,11 +260,11 @@ class _ModeloListPageState extends State<ModeloListPage> {
                       return custom.ErrorWidget(
                         message: state.message,
                         onRetry: () => context.read<ModeloBloc>().add(
-                          LoadModelosPorMarcaEvent(
-                            marcaId: widget.marcaId,
-                            tipo: widget.tipo,
-                          ),
-                        ),
+                              LoadModelosPorMarcaEvent(
+                                marcaId: widget.marcaId,
+                                tipo: widget.tipo,
+                              ),
+                            ),
                       );
                     }
 
@@ -312,12 +312,12 @@ class _ModeloListPageState extends State<ModeloListPage> {
                       Navigator.pop(modalContext);
                       setState(() => anoSelecionado = ano);
                       this.context.read<ModeloBloc>().add(
-                        LoadModelosPorMarcaEvent(
-                          marcaId: widget.marcaId,
-                          tipo: widget.tipo,
-                          ano: ano,
-                        ),
-                      );
+                            LoadModelosPorMarcaEvent(
+                              marcaId: widget.marcaId,
+                              tipo: widget.tipo,
+                              ano: ano,
+                            ),
+                          );
                     },
                   );
                 },
@@ -368,9 +368,8 @@ class _ModeloListPageState extends State<ModeloListPage> {
         },
         (anosCombustiveis) {
           // Filtrar apenas os combustíveis do ano selecionado
-          final combustiveisDoAno = anosCombustiveis
-              .where((ac) => ac.ano == anoSelecionado)
-              .toList();
+          final combustiveisDoAno =
+              anosCombustiveis.where((ac) => ac.ano == anoSelecionado).toList();
 
           if (combustiveisDoAno.isEmpty) {
             // Se não encontrou nenhum, navegar para tela normal
@@ -440,8 +439,8 @@ class _ModeloListPageState extends State<ModeloListPage> {
             Text(
               'Ano: $anoSelecionado',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).textTheme.bodySmall?.color,
-              ),
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                  ),
             ),
             const SizedBox(height: 16),
             ...combustiveis.map((anoCombustivel) {

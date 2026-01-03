@@ -86,9 +86,9 @@ class VeiculoTypeCard extends StatelessWidget {
                 Text(
                   label,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -98,8 +98,8 @@ class VeiculoTypeCard extends StatelessWidget {
                   child: Text(
                     _getDescription(tipo),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

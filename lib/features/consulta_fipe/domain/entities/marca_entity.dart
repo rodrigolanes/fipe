@@ -20,11 +20,11 @@ class MarcaEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
-    nome,
-    tipo,
-    totalModelos,
-    primeiroAno,
-    ultimoAno,
-  ];
+        id,
+        nome,
+        tipo,
+        totalModelos,
+        primeiroAno,
+        ultimoAno,
+      ];
 }

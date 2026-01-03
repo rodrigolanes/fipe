@@ -24,10 +24,8 @@ import '../repositories/fipe_repository.dart';
 /// ```
 class GetAnosCombustiveisPorModeloUseCase
     implements
-        UseCase<
-          List<AnoCombustivelEntity>,
-          GetAnosCombustiveisPorModeloParams
-        > {
+        UseCase<List<AnoCombustivelEntity>,
+            GetAnosCombustiveisPorModeloParams> {
   final FipeRepository repository;
 
   const GetAnosCombustiveisPorModeloUseCase(this.repository);

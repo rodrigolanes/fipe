@@ -102,11 +102,11 @@ class FipeRepositoryImpl implements FipeRepository {
 
   @override
   Future<Either<Failure, List<AnoCombustivelEntity>>>
-  getAnosCombustiveisPorModelo(int modeloId, TipoVeiculo tipo) async {
+      getAnosCombustiveisPorModelo(int modeloId, TipoVeiculo tipo) async {
     try {
       // Anos e combustíveis são buscados sempre remotamente (dados mais dinâmicos)
-      final anosCombustiveis = await remoteDataSource
-          .getAnosCombustiveisByModelo(modeloId, tipo);
+      final anosCombustiveis =
+          await remoteDataSource.getAnosCombustiveisByModelo(modeloId, tipo);
 
       return Right(anosCombustiveis);
     } on ServerException catch (e) {

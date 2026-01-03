@@ -21,7 +21,7 @@ abstract class FipeRepository {
 
   /// Busca anos e combustíveis disponíveis para um modelo
   Future<Either<Failure, List<AnoCombustivelEntity>>>
-  getAnosCombustiveisPorModelo(int modeloId, TipoVeiculo tipo);
+      getAnosCombustiveisPorModelo(int modeloId, TipoVeiculo tipo);
 
   /// Busca anos disponíveis para uma marca (todos os modelos)
   Future<Either<Failure, List<AnoCombustivelEntity>>> getAnosPorMarca(

@@ -104,17 +104,17 @@ class _SplashScreenState extends State<SplashScreen>
               Text(
                 AppConstants.appName,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Consulte o preço médio dos veículos',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
-                ),
+                      color: Colors.white.withValues(alpha: 0.9),
+                    ),
               ),
             ],
           ),

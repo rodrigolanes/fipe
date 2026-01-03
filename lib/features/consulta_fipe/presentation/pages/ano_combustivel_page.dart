@@ -46,26 +46,27 @@ class AnoCombustivelPage extends StatelessWidget {
                       Text(
                         'Selecione o ano e combustível',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         '${state.anosCombustiveis.length} opções disponíveis',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).textTheme.bodySmall?.color,
-                        ),
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                            ),
                       ),
                       const SizedBox(height: 24),
                       Expanded(
                         child: GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12,
-                                childAspectRatio: 2.5,
-                              ),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 2.5,
+                          ),
                           itemCount: state.anosCombustiveis.length,
                           itemBuilder: (context, index) {
                             final anoCombustivel =
@@ -88,11 +89,11 @@ class AnoCombustivelPage extends StatelessWidget {
                 return custom.ErrorWidget(
                   message: state.message,
                   onRetry: () => context.read<AnoCombustivelBloc>().add(
-                    LoadAnosCombustiveisPorModeloEvent(
-                      modeloId: modeloId,
-                      tipo: tipo,
-                    ),
-                  ),
+                        LoadAnosCombustiveisPorModeloEvent(
+                          modeloId: modeloId,
+                          tipo: tipo,
+                        ),
+                      ),
                 );
               }
 
