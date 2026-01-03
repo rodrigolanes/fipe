@@ -101,7 +101,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       if (ano != null) {
         // Buscar apenas modelos disponíveis no ano especificado
         final tipoVeiculoCodigo = _getTipoVeiculoCodigo(tipo);
-        
+
         final response = await client
             .from('modelos_anos')
             .select('''
@@ -220,7 +220,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
   ) async {
     try {
       final tipoVeiculoCodigo = _getTipoVeiculoCodigo(tipo);
-      
+
       // Primeiro, buscar os códigos dos modelos da marca e tipo específicos
       final modelosResponse = await client
           .from('modelos')
@@ -233,9 +233,8 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       }
 
       // Extrair lista de códigos de modelos
-      final codigosModelos = modelosResponse
-          .map((m) => m['codigo'].toString())
-          .toList();
+      final codigosModelos =
+          modelosResponse.map((m) => m['codigo'].toString()).toList();
 
       // Buscar anos/combustíveis apenas desses modelos específicos
       final response = await client
