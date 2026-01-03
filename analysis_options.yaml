@@ -23,8 +23,24 @@ linter:
   rules:
     # Desabilitar warning sobre fields que sobrescrevem fields da Entity (padrão Clean Architecture)
     overridden_fields: false
+    # Desabilitar warning sobre unused_local_variable em testes (callback assertions)
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.mocks.dart"
+    - "**/*.freezed.dart"
+  errors:
+    # Ignorar warnings de mocks gerados automaticamente
+    must_be_immutable: ignore
+    # Permitir variáveis não usadas em testes (usadas em callbacks)
+    unused_local_variable: ignore
+    # Permitir imports não usados em testes (setup futuro)
+    unused_import: ignore
+    # Info sobre dependências em dev_dependencies é aceitável
+    depend_on_referenced_packages: ignore
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
