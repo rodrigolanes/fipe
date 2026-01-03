@@ -1,4 +1,5 @@
 import 'package:share_plus/share_plus.dart';
+import 'mes_referencia_formatter.dart';
 
 import '../../features/consulta_fipe/domain/entities/valor_fipe_entity.dart';
 import 'app_logger.dart';
@@ -44,6 +45,7 @@ class ShareService {
 ⛽ Combustível: $combustivel
 
 📱 Consulte mais preços no app FIPE!
+https://play.google.com/store/apps/details?id=br.com.rodrigolanes.fipe
 ''';
 
     try {
@@ -71,10 +73,11 @@ class ShareService {
 ⛽ Combustível: ${valorFipe.combustivel}
 
 💰 Valor FIPE: ${valorFipe.valor}
-📊 Mês de referência: ${valorFipe.mesReferencia}
+📊 Mês de referência: ${formatarMesReferencia(valorFipe.mesReferencia)}
 🔖 Código FIPE: ${valorFipe.codigoFipe}
 
 📱 Consulte mais preços no app FIPE!
+https://play.google.com/store/apps/details?id=br.com.rodrigolanes.fipe
 ''';
   }
 
@@ -115,8 +118,11 @@ class ShareService {
       buffer.writeln('   💰 ${veiculo.valor}\n');
     }
 
-    buffer.writeln('📊 Mês: ${veiculos.first.mesReferencia}');
+    buffer.writeln(
+        '📊 Mês: ${formatarMesReferencia(veiculos.first.mesReferencia)}');
     buffer.writeln('\n📱 Consulte mais preços no app FIPE!');
+    buffer.writeln(
+        'https://play.google.com/store/apps/details?id=br.com.rodrigolanes.fipe');
 
     return buffer.toString();
   }

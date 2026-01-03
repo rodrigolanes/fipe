@@ -1,5 +1,33 @@
 # Notas de Versão - FIPE Consulta
 
+## [0.2.1] - 2026-01-02
+
+### 🔧 Correções
+
+- **Qualidade de Código**
+  - Corrigido erro de argumentos posicionais no extension MesReferenciaFormatter
+  - Removidos imports não utilizados
+  - Melhorias na análise estática do código
+
+### ⚡ Melhorias
+
+- Otimizações gerais de performance
+- Código mais limpo e manutenível
+
+## [0.2.0] - 2025-12-XX
+
+### 🎉 Integração AdMob e Correções Importantes
+
+- **Google AdMob**
+  - Integração com Google AdMob para monetização
+  - Banners nas telas principais
+
+- **Correções Críticas**
+  - Filtro de anos exibe apenas anos realmente disponíveis
+  - Modelos filtrados por ano mostram apenas veículos específicos
+  - Melhorias na precisão das queries do banco de dados
+  - Filtros de marca e tipo de veículo funcionais
+
 ## [0.1.0] - 2025-12-16
 
 ### 🎉 Lançamento Inicial
