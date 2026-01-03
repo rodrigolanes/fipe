@@ -87,15 +87,15 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   }
 
   @override
-  Future<void> cacheValorFipe(ValorFipeModel valor) async {
+  Future<void> cacheValorFipe(ValorFipeModel valor, String cacheKey) async {
     try {
       final box = await Hive.openBox<ValorFipeModel>(valoresBoxName);
-      await box.put(valor.codigoFipe, valor);
+      await box.put(cacheKey, valor);
 
       // Salva timestamp do cache
       final timesBox = await Hive.openBox<int>(cacheTimesBoxName);
       await timesBox.put(
-        'valor_${valor.codigoFipe}',
+        'valor_$cacheKey',
         DateTime.now().millisecondsSinceEpoch,
       );
     } catch (e) {
@@ -106,10 +106,10 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   }
 
   @override
-  Future<ValorFipeModel?> getCachedValorFipe(String codigoFipe) async {
+  Future<ValorFipeModel?> getCachedValorFipe(String cacheKey) async {
     try {
       final box = await Hive.openBox<ValorFipeModel>(valoresBoxName);
-      return box.get(codigoFipe);
+      return box.get(cacheKey);
     } catch (e) {
       throw CacheException(
         'Erro ao recuperar valor FIPE do cache: ${e.toString()}',

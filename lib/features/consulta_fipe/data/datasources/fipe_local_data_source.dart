@@ -18,11 +18,11 @@ abstract class FipeLocalDataSource {
   /// Recupera modelos do cache
   Future<List<ModeloModel>> getCachedModelos(int marcaId);
 
-  /// Salva valor FIPE em cache
-  Future<void> cacheValorFipe(ValorFipeModel valor);
+  /// Salva valor FIPE em cache com chave customizada
+  Future<void> cacheValorFipe(ValorFipeModel valor, String cacheKey);
 
-  /// Recupera valor FIPE do cache
-  Future<ValorFipeModel?> getCachedValorFipe(String codigoFipe);
+  /// Recupera valor FIPE do cache pela chave customizada
+  Future<ValorFipeModel?> getCachedValorFipe(String cacheKey);
 
   /// Verifica se o cache está válido
   Future<bool> isCacheValid(String key);

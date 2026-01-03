@@ -150,7 +150,37 @@ class FipeRepositoryImpl implements FipeRepository {
     required TipoVeiculo tipo,
   }) async {
     try {
-      // Busca valor FIPE sempre remotamente (dados atualizados)
+      // Gera chave única para este valor específico
+      final codigoFipeKey =
+          '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
+
+      // Tenta buscar do cache primeiro
+      final cacheKey = 'valor_$codigoFipeKey';
+      final isCacheValid = await localDataSource.isCacheValid(cacheKey);
+
+      if (isCacheValid) {
+        try {
+          // Busca valor do cache
+          final cachedValor =
+              await localDataSource.getCachedValorFipe(codigoFipeKey);
+
+          if (cachedValor != null) {
+            // Verifica se o mês de referência ainda é o atual
+            final mesLocal = await localDataSource.getLocalMesReferencia();
+
+            // Se o cache tem o mesmo mês de referência, usa ele
+            if (mesLocal != null &&
+                cachedValor.mesReferencia == mesLocal.id) {
+              return Right(cachedValor);
+            }
+            // Se o mês mudou, continua para buscar remotamente
+          }
+        } on CacheException {
+          // Se falhar, continua para buscar remotamente
+        }
+      }
+
+      // Busca valor FIPE remotamente
       final valor = await remoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -159,13 +189,42 @@ class FipeRepositoryImpl implements FipeRepository {
         tipo: tipo,
       );
 
-      // Salva em cache para histórico
-      await localDataSource.cacheValorFipe(valor);
+      // Salva em cache com a chave customizada
+      await localDataSource.cacheValorFipe(valor, codigoFipeKey);
 
       return Right(valor);
     } on ServerException catch (e) {
+      // Em caso de erro de servidor, tenta retornar do cache mesmo que expirado
+      try {
+        final codigoFipeKey =
+            '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
+        final cachedValor =
+            await localDataSource.getCachedValorFipe(codigoFipeKey);
+
+        if (cachedValor != null) {
+          // Retorna cache mesmo expirado como fallback offline
+          return Right(cachedValor);
+        }
+      } on CacheException {
+        // Ignora erro de cache e retorna o erro original do servidor
+      }
+
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
+      // Tenta usar cache offline em caso de erro de rede
+      try {
+        final codigoFipeKey =
+            '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
+        final cachedValor =
+            await localDataSource.getCachedValorFipe(codigoFipeKey);
+
+        if (cachedValor != null) {
+          return Right(cachedValor);
+        }
+      } on CacheException {
+        // Ignora erro de cache e retorna o erro original de rede
+      }
+
       return Left(NetworkFailure(e.message));
     } catch (e) {
       return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
