@@ -1,5 +1,29 @@
 # Notas de Versão - FIPE Consulta
 
+## [0.3.1] - 2026-01-03
+
+### ✨ Novidades
+
+- **Sistema de Sincronização**
+  - Verificação automática de atualizações ao iniciar o app
+  - Diálogo amigável perguntando se deseja atualizar dados
+  - Armazenamento local de marcas e modelos para uso offline
+  - Controle de versão da tabela FIPE (mês de referência)
+  - Indicador de progresso durante sincronização
+
+- **Arquitetura**
+  - Novos UseCases: CheckForUpdates, SyncAllData, GetLocalMesReferencia
+  - SyncBloc para gerenciamento de estado de sincronização
+  - Entity e Model para controle de versão (MesReferencia)
+  - Métodos de sincronização nos DataSources e Repository
+
+### ⚡ Melhorias
+
+- Possibilidade de uso offline após sincronização
+- Melhor experiência do usuário com feedback visual
+- Opção de atualizar agora ou depois
+- Dados sempre organizados por versão da tabela FIPE
+
 ## [0.2.1] - 2026-01-02
 
 ### 🔧 Correções

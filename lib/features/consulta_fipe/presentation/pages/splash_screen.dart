@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../injection_container.dart' as di;
+import '../bloc/sync_bloc.dart';
 
-/// Tela de Splash com animação
+/// Tela de Splash com animação e verificação de atualizações
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -20,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     _setupAnimations();
-    _navigateToHome();
+    _checkForUpdatesAndNavigate();
   }
 
   void _setupAnimations() {
@@ -46,13 +49,165 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
   }
 
-  Future<void> _navigateToHome() async {
+  Future<void> _checkForUpdatesAndNavigate() async {
+    // Aguarda animação inicial
     await Future.delayed(
       const Duration(milliseconds: AppConstants.splashDelay),
     );
+
+    if (!mounted) return;
+
+    // Cria o SyncBloc
+    final syncBloc = di.sl<SyncBloc>();
+
+    // Verifica se há atualizações
+    syncBloc.add(const CheckForUpdatesEvent());
+
+    // Aguarda resultado da verificação
+    await for (final state in syncBloc.stream) {
+      if (state is UpdateAvailable) {
+        // Mostra diálogo perguntando se deseja atualizar
+        if (mounted) {
+          final shouldUpdate = await _showUpdateDialog(
+            currentVersion: state.currentVersion,
+            newVersion: state.newVersion,
+          );
+
+          if (shouldUpdate == true) {
+            // Inicia sincronização
+            if (mounted) {
+              await _showSyncDialog(syncBloc);
+            }
+          }
+        }
+        break;
+      } else if (state is NoUpdateAvailable || state is SyncError) {
+        // Continua para home
+        break;
+      }
+    }
+
+    syncBloc.close();
+
+    // Navega para home
     if (mounted) {
       Navigator.of(context).pushReplacementNamed('/home');
     }
+  }
+
+  Future<bool?> _showUpdateDialog({
+    required String currentVersion,
+    required String newVersion,
+  }) async {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.update, color: Colors.blue),
+            SizedBox(width: 12),
+            Text('Atualização Disponível'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Uma nova versão da tabela FIPE está disponível!',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Versão atual: $currentVersion',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Deseja baixar os dados atualizados agora?',
+              style: TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Isso permitirá que você consulte preços mesmo offline.',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Agora Não'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Atualizar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showSyncDialog(SyncBloc syncBloc) async {
+    syncBloc.add(const StartSyncEvent());
+
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => BlocProvider<SyncBloc>.value(
+        value: syncBloc,
+        child: BlocConsumer<SyncBloc, SyncState>(
+          listener: (context, state) {
+            if (state is SyncCompleted) {
+              Navigator.of(context).pop();
+            } else if (state is SyncError) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Erro: ${state.message}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            String message = 'Sincronizando...';
+            if (state is Syncing) {
+              message = state.progressMessage;
+            }
+
+            return AlertDialog(
+              title: const Row(
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 16),
+                  Text('Sincronizando'),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(message),
+                  const SizedBox(height: 16),
+                  const LinearProgressIndicator(),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    syncBloc.add(const CancelSyncEvent());
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancelar'),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 
   @override

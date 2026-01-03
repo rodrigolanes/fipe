@@ -1,15 +1,19 @@
-🚗 Versão 0.2.1 - Correções de Código e Melhorias
+🚗 Versão 0.3.1 - Sincronização de Dados e Modo Offline
 
 Consulte preços de veículos pela Tabela FIPE oficial!
 
 ✨ Novidades desta versão:
-• ✅ Correção de erro de argumentos posicionais no formatador de mês
-• ✅ Remoção de imports não utilizados
-• ✅ Melhorias na qualidade do código
-• ✅ Otimizações gerais de desempenho
+• ✅ Sistema de sincronização inteligente de dados
+• ✅ Verificação automática de atualizações ao iniciar o app
+• ✅ Armazenamento local de marcas e modelos para uso offline
+• ✅ Diálogo amigável para atualização de dados
+• ✅ Controle de versão da tabela FIPE
+• ✅ Indicador de progresso durante sincronização
+• ✅ Opção de atualizar agora ou depois
 
 ✨ Recursos principais:
 • Consulta FIPE para carros, motos e caminhões
+• Modo offline com dados sincronizados
 • Busca inteligente de marcas e modelos
 • Filtros por ano e combustível
 • Tema claro e escuro

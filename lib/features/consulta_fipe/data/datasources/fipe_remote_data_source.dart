@@ -1,6 +1,7 @@
 import '../../../../core/constants/app_constants.dart';
 import '../models/ano_combustivel_model.dart';
 import '../models/marca_model.dart';
+import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
 import '../models/valor_fipe_model.dart';
 
@@ -36,4 +37,16 @@ abstract class FipeRemoteDataSource {
     required String combustivel,
     required TipoVeiculo tipo,
   });
+
+  /// Busca o mês de referência mais atual disponível no servidor
+  Future<MesReferenciaModel> getUltimoMesReferencia();
+
+  /// Busca todas as marcas de todos os tipos para sincronização
+  Future<List<MarcaModel>> getAllMarcas();
+
+  /// Busca todos os modelos de uma marca para sincronização
+  Future<List<ModeloModel>> getAllModelosByMarca(
+    int marcaId,
+    TipoVeiculo tipo,
+  );
 }

@@ -1,5 +1,6 @@
 import '../../../../core/constants/app_constants.dart';
 import '../models/marca_model.dart';
+import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
 import '../models/valor_fipe_model.dart';
 
@@ -28,4 +29,16 @@ abstract class FipeLocalDataSource {
 
   /// Limpa todo o cache
   Future<void> clearCache();
+
+  /// Salva o mês de referência atual
+  Future<void> saveMesReferencia(MesReferenciaModel mesReferencia);
+
+  /// Recupera o mês de referência armazenado localmente
+  Future<MesReferenciaModel?> getLocalMesReferencia();
+
+  /// Salva todas as marcas de uma vez (sincronização completa)
+  Future<void> saveAllMarcas(List<MarcaModel> marcas);
+
+  /// Salva todos os modelos de uma marca (sincronização completa)
+  Future<void> saveAllModelos(List<ModeloModel> modelos, int marcaId);
 }

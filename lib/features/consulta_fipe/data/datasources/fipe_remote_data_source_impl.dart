@@ -5,6 +5,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/utils/app_logger.dart';
 import '../models/ano_combustivel_model.dart';
 import '../models/marca_model.dart';
+import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
 import '../models/valor_fipe_model.dart';
 import 'fipe_remote_data_source.dart';
@@ -325,5 +326,117 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       AppLogger.e('Erro ao buscar valor FIPE', e);
       throw ServerException('Erro ao buscar valor FIPE: ${e.toString()}');
     }
+  }
+
+  @override
+  Future<MesReferenciaModel> getUltimoMesReferencia() async {
+    try {
+      AppLogger.d('Buscando último mês de referência disponível');
+
+      // Busca o último registro da tabela valores_fipe para obter o mes_referencia mais atual
+      final response = await client
+          .from('valores_fipe')
+          .select('mes_referencia, data_consulta')
+          .order('mes_referencia', ascending: false)
+          .order('data_consulta', ascending: false)
+          .limit(1)
+          .maybeSingle();
+
+      if (response == null) {
+        throw ServerException(
+          'Nenhum mês de referência encontrado no servidor',
+        );
+      }
+
+      final mesRef = response['mes_referencia'] as String;
+      final dataConsulta = DateTime.parse(response['data_consulta'] as String);
+
+      AppLogger.i('Último mês de referência: $mesRef');
+
+      return MesReferenciaModel(
+        id: mesRef,
+        nomeFormatado: _formatarMesReferencia(mesRef),
+        dataAtualizacao: dataConsulta,
+      );
+    } catch (e) {
+      AppLogger.e('Erro ao buscar último mês de referência', e);
+      throw ServerException(
+        'Erro ao buscar mês de referência: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<List<MarcaModel>> getAllMarcas() async {
+    try {
+      AppLogger.d('Buscando todas as marcas para sincronização');
+
+      final List<MarcaModel> todasMarcas = [];
+
+      // Busca marcas de cada tipo
+      for (final tipo in TipoVeiculo.values) {
+        final marcas = await getMarcasByTipo(tipo);
+        todasMarcas.addAll(marcas);
+      }
+
+      AppLogger.i('Total de marcas encontradas: ${todasMarcas.length}');
+      return todasMarcas;
+    } catch (e) {
+      AppLogger.e('Erro ao buscar todas as marcas', e);
+      throw ServerException('Erro ao buscar marcas: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<List<ModeloModel>> getAllModelosByMarca(
+    int marcaId,
+    TipoVeiculo tipo,
+  ) async {
+    try {
+      AppLogger.d(
+        'Buscando todos os modelos da marca $marcaId (tipo: ${tipo.nome})',
+      );
+
+      // Busca todos os modelos sem filtro de ano
+      final modelos = await getModelosByMarca(marcaId, tipo);
+
+      AppLogger.i(
+        'Total de modelos encontrados para marca $marcaId: ${modelos.length}',
+      );
+      return modelos;
+    } catch (e) {
+      AppLogger.e('Erro ao buscar modelos da marca $marcaId', e);
+      throw ServerException('Erro ao buscar modelos: ${e.toString()}');
+    }
+  }
+
+  /// Formata o mês de referência do formato YYYYMM para texto legível
+  String _formatarMesReferencia(String mesRef) {
+    if (mesRef.length != 6) return mesRef;
+
+    final ano = mesRef.substring(0, 4);
+    final mes = mesRef.substring(4, 6);
+
+    const meses = [
+      'janeiro',
+      'fevereiro',
+      'março',
+      'abril',
+      'maio',
+      'junho',
+      'julho',
+      'agosto',
+      'setembro',
+      'outubro',
+      'novembro',
+      'dezembro'
+    ];
+
+    final mesIndex = int.tryParse(mes);
+    if (mesIndex == null || mesIndex < 1 || mesIndex > 12) {
+      return mesRef;
+    }
+
+    return '${meses[mesIndex - 1]} de $ano';
   }
 }

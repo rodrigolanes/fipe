@@ -5,6 +5,7 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/ano_combustivel_entity.dart';
 import '../../domain/entities/marca_entity.dart';
+import '../../domain/entities/mes_referencia_entity.dart';
 import '../../domain/entities/modelo_entity.dart';
 import '../../domain/entities/valor_fipe_entity.dart';
 import '../../domain/repositories/fipe_repository.dart';
@@ -168,6 +169,90 @@ class FipeRepositoryImpl implements FipeRepository {
       return Left(NetworkFailure(e.message));
     } catch (e) {
       return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkForUpdates() async {
+    try {
+      // Busca o mês de referência mais atual do servidor
+      final mesRemoto = await remoteDataSource.getUltimoMesReferencia();
+
+      // Busca o mês de referência armazenado localmente
+      final mesLocal = await localDataSource.getLocalMesReferencia();
+
+      // Se não há dados locais, precisa sincronizar
+      if (mesLocal == null) {
+        return const Right(true);
+      }
+
+      // Compara se o mês remoto é mais recente que o local
+      final hasUpdate = mesRemoto.isNewerThan(mesLocal);
+
+      return Right(hasUpdate);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } catch (e) {
+      return Left(
+          ServerFailure('Erro ao verificar atualizações: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> syncAllData({
+    required Function(String) onProgress,
+  }) async {
+    try {
+      onProgress('Verificando versão mais recente...');
+
+      // Busca o mês de referência mais atual
+      final mesReferencia = await remoteDataSource.getUltimoMesReferencia();
+
+      onProgress('Baixando marcas...');
+
+      // Busca todas as marcas
+      final todasMarcas = await remoteDataSource.getAllMarcas();
+
+      onProgress('Salvando ${todasMarcas.length} marcas...');
+
+      // Salva todas as marcas localmente
+      await localDataSource.saveAllMarcas(todasMarcas);
+
+      // Opcional: Sincronizar modelos (comentado pois pode ser muito pesado)
+      // Para cada marca, baixar todos os modelos seria muito demorado
+      // Melhor manter o cache sob demanda apenas
+
+      onProgress('Salvando informação de versão...');
+
+      // Salva o mês de referência atualizado
+      await localDataSource.saveMesReferencia(mesReferencia);
+
+      onProgress('Sincronização concluída!');
+
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure('Erro ao sincronizar dados: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, MesReferenciaEntity?>> getLocalMesReferencia() async {
+    try {
+      final mesReferencia = await localDataSource.getLocalMesReferencia();
+      return Right(mesReferencia);
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
+    } catch (e) {
+      return Left(CacheFailure(
+          'Erro ao buscar mês de referência local: ${e.toString()}'));
     }
   }
 }
