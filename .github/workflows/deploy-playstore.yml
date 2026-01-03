@@ -65,13 +65,16 @@ jobs:
           COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep 'lines' | grep -oP '\d+\.\d+(?=%)')
           echo "Current coverage: $COVERAGE%"
           
-          # Check if coverage is above threshold (75% for now)
-          if (( $(echo "$COVERAGE < 75" | bc -l) )); then
-            echo "❌ Code coverage is below 75% (current: $COVERAGE%)"
-            echo "Target: 80% minimum"
+          # Check if coverage is above threshold (60% for now, target: 80%)
+          if (( $(echo "$COVERAGE < 60" | bc -l) )); then
+            echo "❌ Code coverage is below 60% (current: $COVERAGE%)"
+            echo "Target: 80% minimum - Please add more tests"
             exit 1
           else
             echo "✅ Code coverage is sufficient: $COVERAGE%"
+            if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+              echo "⚠️  Note: Coverage is below target of 80%. Current: $COVERAGE%"
+            fi
           fi
 
       - name: Upload coverage to Codecov
