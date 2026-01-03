@@ -25,6 +25,23 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Create Supabase config
+        run: |
+          mkdir -p lib/config
+          cat > lib/config/supabase_config.dart << 'EOF'
+          /// Configuração do Supabase
+          /// 
+          /// IMPORTANTE: Este arquivo é gerado automaticamente no CI/CD
+          /// Para desenvolvimento local, copie supabase_config.example.dart
+          class SupabaseConfig {
+            static const String supabaseUrl = 'https://placeholder.supabase.co';
+            static const String supabaseAnonKey = 'placeholder-key';
+          }
+          EOF
+
+      - name: Generate code (build_runner)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
