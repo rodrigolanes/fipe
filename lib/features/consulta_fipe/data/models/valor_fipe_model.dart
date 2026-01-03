@@ -38,6 +38,18 @@ class ValorFipeModel extends ValorFipeEntity {
   @override
   final DateTime dataConsulta;
 
+  @HiveField(8)
+  final int? tipoVeiculo;
+
+  @HiveField(9)
+  final int? codigoMarca;
+
+  @HiveField(10)
+  final int? codigoModelo;
+
+  @HiveField(11)
+  final int? codigoCombustivel;
+
   const ValorFipeModel({
     required this.marca,
     required this.modelo,
@@ -47,6 +59,10 @@ class ValorFipeModel extends ValorFipeEntity {
     required this.mesReferencia,
     required this.valor,
     required this.dataConsulta,
+    this.tipoVeiculo,
+    this.codigoMarca,
+    this.codigoModelo,
+    this.codigoCombustivel,
   }) : super(
           marca: marca,
           modelo: modelo,
@@ -71,6 +87,12 @@ class ValorFipeModel extends ValorFipeEntity {
       dataConsulta: json['data_consulta'] != null
           ? DateTime.parse(json['data_consulta'] as String)
           : DateTime.now(),
+      tipoVeiculo: json['tipo_veiculo'] as int?,
+      codigoMarca: json['codigo_marca'] != null
+          ? int.tryParse(json['codigo_marca'].toString())
+          : null,
+      codigoModelo: json['codigo_modelo'] as int?,
+      codigoCombustivel: json['codigo_combustivel'] as int?,
     );
   }
 
@@ -85,6 +107,10 @@ class ValorFipeModel extends ValorFipeEntity {
       'mes_referencia': mesReferencia,
       'valor': valor,
       'data_consulta': dataConsulta.toIso8601String(),
+      if (tipoVeiculo != null) 'tipo_veiculo': tipoVeiculo,
+      if (codigoMarca != null) 'codigo_marca': codigoMarca,
+      if (codigoModelo != null) 'codigo_modelo': codigoModelo,
+      if (codigoCombustivel != null) 'codigo_combustivel': codigoCombustivel,
     };
   }
 

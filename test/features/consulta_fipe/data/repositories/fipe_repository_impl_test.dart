@@ -276,6 +276,13 @@ void main() {
 
     test('deve buscar valor FIPE remotamente e salvar em cache', () async {
       // Arrange
+      when(mockLocalDataSource.getValorFipeLocal(
+        marcaId: anyNamed('marcaId'),
+        modeloId: anyNamed('modeloId'),
+        anoModelo: anyNamed('anoModelo'),
+        codigoCombustivel: anyNamed('codigoCombustivel'),
+        tipoVeiculo: anyNamed('tipoVeiculo'),
+      )).thenAnswer((_) async => null);
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -283,7 +290,8 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       )).thenAnswer((_) async => ValorFipeFixture.valorFipeModel);
-      when(mockLocalDataSource.cacheValorFipe(any)).thenAnswer((_) async => {});
+      when(mockLocalDataSource.cacheValorFipe(any, any))
+          .thenAnswer((_) async => {});
 
       // Act
       final result = await repository.getValorFipe(
@@ -305,12 +313,20 @@ void main() {
       ));
       verify(mockLocalDataSource.cacheValorFipe(
         ValorFipeFixture.valorFipeModel,
+        any,
       ));
     });
 
     test('deve retornar ServerFailure quando remoto lança ServerException',
         () async {
       // Arrange
+      when(mockLocalDataSource.getValorFipeLocal(
+        marcaId: anyNamed('marcaId'),
+        modeloId: anyNamed('modeloId'),
+        anoModelo: anyNamed('anoModelo'),
+        codigoCombustivel: anyNamed('codigoCombustivel'),
+        tipoVeiculo: anyNamed('tipoVeiculo'),
+      )).thenAnswer((_) async => null);
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -335,6 +351,13 @@ void main() {
     test('deve retornar NetworkFailure quando remoto lança NetworkException',
         () async {
       // Arrange
+      when(mockLocalDataSource.getValorFipeLocal(
+        marcaId: anyNamed('marcaId'),
+        modeloId: anyNamed('modeloId'),
+        anoModelo: anyNamed('anoModelo'),
+        codigoCombustivel: anyNamed('codigoCombustivel'),
+        tipoVeiculo: anyNamed('tipoVeiculo'),
+      )).thenAnswer((_) async => null);
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,

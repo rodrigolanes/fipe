@@ -7,6 +7,7 @@ import '../../domain/entities/ano_combustivel_entity.dart';
 import '../../domain/entities/marca_entity.dart';
 import '../../domain/entities/mes_referencia_entity.dart';
 import '../../domain/entities/modelo_entity.dart';
+import '../../domain/entities/sync_version_entity.dart';
 import '../../domain/entities/valor_fipe_entity.dart';
 import '../../domain/repositories/fipe_repository.dart';
 import '../datasources/fipe_local_data_source.dart';
@@ -150,37 +151,28 @@ class FipeRepositoryImpl implements FipeRepository {
     required TipoVeiculo tipo,
   }) async {
     try {
-      // Gera chave única para este valor específico
+      // ESTRATÉGIA OFFLINE-FIRST: Sempre busca localmente primeiro
+      final codigoCombustivel = _getCombustivelCodigo(combustivel);
+      final anoModelo = int.parse(ano);
+
+      final valorLocal = await localDataSource.getValorFipeLocal(
+        marcaId: marcaId,
+        modeloId: modeloId,
+        anoModelo: anoModelo,
+        codigoCombustivel: codigoCombustivel,
+        tipoVeiculo: tipo.codigo,
+      );
+
+      if (valorLocal != null) {
+        // Retorna dado local (funciona offline!)
+        return Right(valorLocal);
+      }
+
+      // Se não tem local, tenta buscar remotamente
+      // (só acontece se não fez sync ou dado não existe)
       final codigoFipeKey =
           '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
 
-      // Tenta buscar do cache primeiro
-      final cacheKey = 'valor_$codigoFipeKey';
-      final isCacheValid = await localDataSource.isCacheValid(cacheKey);
-
-      if (isCacheValid) {
-        try {
-          // Busca valor do cache
-          final cachedValor =
-              await localDataSource.getCachedValorFipe(codigoFipeKey);
-
-          if (cachedValor != null) {
-            // Verifica se o mês de referência ainda é o atual
-            final mesLocal = await localDataSource.getLocalMesReferencia();
-
-            // Se o cache tem o mesmo mês de referência, usa ele
-            if (mesLocal != null &&
-                cachedValor.mesReferencia == mesLocal.id) {
-              return Right(cachedValor);
-            }
-            // Se o mês mudou, continua para buscar remotamente
-          }
-        } on CacheException {
-          // Se falhar, continua para buscar remotamente
-        }
-      }
-
-      // Busca valor FIPE remotamente
       final valor = await remoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -194,59 +186,56 @@ class FipeRepositoryImpl implements FipeRepository {
 
       return Right(valor);
     } on ServerException catch (e) {
-      // Em caso de erro de servidor, tenta retornar do cache mesmo que expirado
-      try {
-        final codigoFipeKey =
-            '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
-        final cachedValor =
-            await localDataSource.getCachedValorFipe(codigoFipeKey);
-
-        if (cachedValor != null) {
-          // Retorna cache mesmo expirado como fallback offline
-          return Right(cachedValor);
-        }
-      } on CacheException {
-        // Ignora erro de cache e retorna o erro original do servidor
-      }
-
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
-      // Tenta usar cache offline em caso de erro de rede
-      try {
-        final codigoFipeKey =
-            '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
-        final cachedValor =
-            await localDataSource.getCachedValorFipe(codigoFipeKey);
-
-        if (cachedValor != null) {
-          return Right(cachedValor);
-        }
-      } on CacheException {
-        // Ignora erro de cache e retorna o erro original de rede
-      }
-
       return Left(NetworkFailure(e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(e.message));
     } catch (e) {
       return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
     }
   }
 
+  /// Mapeia nome do combustível para código numérico
+  int _getCombustivelCodigo(String combustivel) {
+    final combustivelLower = combustivel.toLowerCase();
+    if (combustivelLower.contains('gasolina')) return 1;
+    if (combustivelLower.contains('álcool') ||
+        combustivelLower.contains('etanol')) {
+      return 2;
+    }
+    if (combustivelLower.contains('diesel')) return 3;
+    if (combustivelLower.contains('elétrico') ||
+        combustivelLower.contains('eletrico')) {
+      return 4;
+    }
+    if (combustivelLower.contains('flex')) return 5;
+    if (combustivelLower.contains('híbrido') ||
+        combustivelLower.contains('hibrido')) {
+      return 6;
+    }
+    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv')) {
+      return 7;
+    }
+    return 1; // Default: Gasolina
+  }
+
   @override
   Future<Either<Failure, bool>> checkForUpdates() async {
     try {
-      // Busca o mês de referência mais atual do servidor
-      final mesRemoto = await remoteDataSource.getUltimoMesReferencia();
+      // Busca a versão de sincronização do servidor
+      final versaoRemota = await remoteDataSource.getSyncVersion();
 
-      // Busca o mês de referência armazenado localmente
-      final mesLocal = await localDataSource.getLocalMesReferencia();
+      // Busca a versão armazenada localmente
+      final versaoLocal = await localDataSource.getLocalSyncVersion();
 
       // Se não há dados locais, precisa sincronizar
-      if (mesLocal == null) {
+      if (versaoLocal == null) {
         return const Right(true);
       }
 
-      // Compara se o mês remoto é mais recente que o local
-      final hasUpdate = mesRemoto.isNewerThan(mesLocal);
+      // Compara se a versão remota é mais recente que a local
+      final hasUpdate = versaoRemota.isNewerThan(versaoLocal);
 
       return Right(hasUpdate);
     } on ServerException catch (e) {
@@ -264,12 +253,16 @@ class FipeRepositoryImpl implements FipeRepository {
     required Function(String) onProgress,
   }) async {
     try {
-      onProgress('Verificando versão mais recente...');
+      onProgress('Verificando versão no servidor...');
 
-      // Busca o mês de referência mais atual
-      final mesReferencia = await remoteDataSource.getUltimoMesReferencia();
+      // Busca a versão de sincronização do servidor
+      final syncVersion = await remoteDataSource.getSyncVersion();
 
-      onProgress('Baixando marcas...');
+      onProgress(
+        'Versão ${syncVersion.version} - ${syncVersion.mesReferencia}',
+      );
+
+      onProgress('Baixando todas as marcas...');
 
       // Busca todas as marcas
       final todasMarcas = await remoteDataSource.getAllMarcas();
@@ -279,16 +272,22 @@ class FipeRepositoryImpl implements FipeRepository {
       // Salva todas as marcas localmente
       await localDataSource.saveAllMarcas(todasMarcas);
 
-      // Opcional: Sincronizar modelos (comentado pois pode ser muito pesado)
-      // Para cada marca, baixar todos os modelos seria muito demorado
-      // Melhor manter o cache sob demanda apenas
+      onProgress('Baixando TODOS os valores FIPE...');
+
+      // Busca TODOS os valores FIPE para sincronização completa offline
+      final todosValores = await remoteDataSource.getAllValoresFipe();
+
+      onProgress('Salvando ${todosValores.length} preços FIPE...');
+
+      // Salva todos os valores localmente
+      await localDataSource.saveAllValoresFipe(todosValores);
 
       onProgress('Salvando informação de versão...');
 
-      // Salva o mês de referência atualizado
-      await localDataSource.saveMesReferencia(mesReferencia);
+      // Salva a versão de sincronização atualizada
+      await localDataSource.saveSyncVersion(syncVersion);
 
-      onProgress('Sincronização concluída!');
+      onProgress('Sincronização concluída! App pronto para uso offline.');
 
       return const Right(null);
     } on ServerException catch (e) {
@@ -305,13 +304,23 @@ class FipeRepositoryImpl implements FipeRepository {
   @override
   Future<Either<Failure, MesReferenciaEntity?>> getLocalMesReferencia() async {
     try {
-      final mesReferencia = await localDataSource.getLocalMesReferencia();
-      return Right(mesReferencia);
+      // Retorna a versão de sync como mes referencia para compatibilidade
+      final syncVersion = await localDataSource.getLocalSyncVersion();
+
+      if (syncVersion == null) return const Right(null);
+
+      // Converte SyncVersion para MesReferencia
+      final mesRef = MesReferenciaEntity(
+        id: syncVersion.version,
+        nomeFormatado: syncVersion.mesReferencia,
+        dataAtualizacao: syncVersion.dataAtualizacao,
+      );
+
+      return Right(mesRef);
     } on CacheException catch (e) {
       return Left(CacheFailure(e.message));
     } catch (e) {
-      return Left(CacheFailure(
-          'Erro ao buscar mês de referência local: ${e.toString()}'));
+      return Left(CacheFailure('Erro ao buscar versão local: ${e.toString()}'));
     }
   }
 }

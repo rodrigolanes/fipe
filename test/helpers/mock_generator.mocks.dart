@@ -5,45 +5,51 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:dartz/dartz.dart' as _i5;
-import 'package:fipe/core/constants/app_constants.dart' as _i12;
-import 'package:fipe/core/error/failures.dart' as _i16;
+import 'package:dartz/dartz.dart' as _i7;
+import 'package:fipe/core/constants/app_constants.dart' as _i14;
+import 'package:fipe/core/error/failures.dart' as _i18;
 import 'package:fipe/features/consulta_fipe/data/datasources/fipe_local_data_source.dart'
-    as _i15;
+    as _i17;
 import 'package:fipe/features/consulta_fipe/data/datasources/fipe_remote_data_source.dart'
-    as _i10;
+    as _i12;
 import 'package:fipe/features/consulta_fipe/data/models/ano_combustivel_model.dart'
-    as _i14;
+    as _i16;
 import 'package:fipe/features/consulta_fipe/data/models/marca_model.dart'
-    as _i11;
-import 'package:fipe/features/consulta_fipe/data/models/modelo_model.dart'
     as _i13;
+import 'package:fipe/features/consulta_fipe/data/models/mes_referencia_model.dart'
+    as _i5;
+import 'package:fipe/features/consulta_fipe/data/models/modelo_model.dart'
+    as _i15;
+import 'package:fipe/features/consulta_fipe/data/models/sync_version_model.dart'
+    as _i6;
 import 'package:fipe/features/consulta_fipe/data/models/valor_fipe_model.dart'
     as _i4;
 import 'package:fipe/features/consulta_fipe/domain/entities/ano_combustivel_entity.dart'
-    as _i19;
-import 'package:fipe/features/consulta_fipe/domain/entities/marca_entity.dart'
-    as _i17;
-import 'package:fipe/features/consulta_fipe/domain/entities/modelo_entity.dart'
-    as _i18;
-import 'package:fipe/features/consulta_fipe/domain/entities/valor_fipe_entity.dart'
-    as _i20;
-import 'package:fipe/features/consulta_fipe/domain/repositories/fipe_repository.dart'
-    as _i6;
-import 'package:fipe/features/consulta_fipe/domain/usecases/get_anos_combustiveis_por_modelo_usecase.dart'
-    as _i23;
-import 'package:fipe/features/consulta_fipe/domain/usecases/get_anos_por_marca_usecase.dart'
-    as _i24;
-import 'package:fipe/features/consulta_fipe/domain/usecases/get_marcas_por_tipo_usecase.dart'
     as _i21;
-import 'package:fipe/features/consulta_fipe/domain/usecases/get_modelos_por_marca_usecase.dart'
+import 'package:fipe/features/consulta_fipe/domain/entities/marca_entity.dart'
+    as _i19;
+import 'package:fipe/features/consulta_fipe/domain/entities/mes_referencia_entity.dart'
+    as _i23;
+import 'package:fipe/features/consulta_fipe/domain/entities/modelo_entity.dart'
+    as _i20;
+import 'package:fipe/features/consulta_fipe/domain/entities/valor_fipe_entity.dart'
     as _i22;
-import 'package:fipe/features/consulta_fipe/domain/usecases/get_valor_fipe_usecase.dart'
+import 'package:fipe/features/consulta_fipe/domain/repositories/fipe_repository.dart'
+    as _i8;
+import 'package:fipe/features/consulta_fipe/domain/usecases/get_anos_combustiveis_por_modelo_usecase.dart'
+    as _i26;
+import 'package:fipe/features/consulta_fipe/domain/usecases/get_anos_por_marca_usecase.dart'
+    as _i27;
+import 'package:fipe/features/consulta_fipe/domain/usecases/get_marcas_por_tipo_usecase.dart'
+    as _i24;
+import 'package:fipe/features/consulta_fipe/domain/usecases/get_modelos_por_marca_usecase.dart'
     as _i25;
-import 'package:hive/hive.dart' as _i8;
+import 'package:fipe/features/consulta_fipe/domain/usecases/get_valor_fipe_usecase.dart'
+    as _i28;
+import 'package:hive/hive.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i7;
-import 'package:shared_preferences/src/shared_preferences_legacy.dart' as _i9;
+import 'package:mockito/src/dummies.dart' as _i9;
+import 'package:shared_preferences/src/shared_preferences_legacy.dart' as _i11;
 import 'package:supabase/supabase.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -243,8 +249,9 @@ class _FakeValorFipeModel_16 extends _i1.SmartFake
         );
 }
 
-class _FakeEither_17<L, R> extends _i1.SmartFake implements _i5.Either<L, R> {
-  _FakeEither_17(
+class _FakeMesReferenciaModel_17 extends _i1.SmartFake
+    implements _i5.MesReferenciaModel {
+  _FakeMesReferenciaModel_17(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -253,9 +260,30 @@ class _FakeEither_17<L, R> extends _i1.SmartFake implements _i5.Either<L, R> {
         );
 }
 
-class _FakeFipeRepository_18 extends _i1.SmartFake
-    implements _i6.FipeRepository {
-  _FakeFipeRepository_18(
+class _FakeSyncVersionModel_18 extends _i1.SmartFake
+    implements _i6.SyncVersionModel {
+  _FakeSyncVersionModel_18(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeEither_19<L, R> extends _i1.SmartFake implements _i7.Either<L, R> {
+  _FakeEither_19(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFipeRepository_20 extends _i1.SmartFake
+    implements _i8.FipeRepository {
+  _FakeFipeRepository_20(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -463,7 +491,7 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           #removeChannel,
           [channel],
         ),
-        returnValue: _i3.Future<String>.value(_i7.dummyValue<String>(
+        returnValue: _i3.Future<String>.value(_i9.dummyValue<String>(
           this,
           Invocation.method(
             #removeChannel,
@@ -765,8 +793,8 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           [onValue],
           {#onError: onError},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<U>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<U>(
                 this,
                 Invocation.method(
                   #then,
@@ -1952,8 +1980,8 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [onError],
           {#test: test},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<T>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #catchError,
@@ -1984,8 +2012,8 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [onValue],
           {#onError: onError},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<U>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<U>(
                 this,
                 Invocation.method(
                   #then,
@@ -2016,8 +2044,8 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [timeLimit],
           {#onTimeout: onTimeout},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<T>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #timeout,
@@ -2044,8 +2072,8 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           #whenComplete,
           [action],
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<T>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #whenComplete,
@@ -2452,8 +2480,8 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [onError],
           {#test: test},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<T>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #catchError,
@@ -2484,8 +2512,8 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [onValue],
           {#onError: onError},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<U>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<U>(
                 this,
                 Invocation.method(
                   #then,
@@ -2516,8 +2544,8 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [timeLimit],
           {#onTimeout: onTimeout},
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<T>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #timeout,
@@ -2544,8 +2572,8 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           #whenComplete,
           [action],
         ),
-        returnValue: _i7.ifNotNull(
-              _i7.dummyValueOrNull<T>(
+        returnValue: _i9.ifNotNull(
+              _i9.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #whenComplete,
@@ -2567,7 +2595,7 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
 /// A class which mocks [Box].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockBox<E> extends _i1.Mock implements _i8.Box<E> {
+class MockBox<E> extends _i1.Mock implements _i10.Box<E> {
   MockBox() {
     _i1.throwOnMissingStub(this);
   }
@@ -2581,7 +2609,7 @@ class MockBox<E> extends _i1.Mock implements _i8.Box<E> {
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i7.dummyValue<String>(
+        returnValue: _i9.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -2662,14 +2690,14 @@ class MockBox<E> extends _i1.Mock implements _i8.Box<E> {
       ));
 
   @override
-  _i3.Stream<_i8.BoxEvent> watch({dynamic key}) => (super.noSuchMethod(
+  _i3.Stream<_i10.BoxEvent> watch({dynamic key}) => (super.noSuchMethod(
         Invocation.method(
           #watch,
           [],
           {#key: key},
         ),
-        returnValue: _i3.Stream<_i8.BoxEvent>.empty(),
-      ) as _i3.Stream<_i8.BoxEvent>);
+        returnValue: _i3.Stream<_i10.BoxEvent>.empty(),
+      ) as _i3.Stream<_i10.BoxEvent>);
 
   @override
   bool containsKey(dynamic key) => (super.noSuchMethod(
@@ -2825,7 +2853,7 @@ class MockBox<E> extends _i1.Mock implements _i8.Box<E> {
 /// A class which mocks [SharedPreferences].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSharedPreferences extends _i1.Mock implements _i9.SharedPreferences {
+class MockSharedPreferences extends _i1.Mock implements _i11.SharedPreferences {
   MockSharedPreferences() {
     _i1.throwOnMissingStub(this);
   }
@@ -3007,26 +3035,26 @@ class MockSharedPreferences extends _i1.Mock implements _i9.SharedPreferences {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFipeRemoteDataSource extends _i1.Mock
-    implements _i10.FipeRemoteDataSource {
+    implements _i12.FipeRemoteDataSource {
   MockFipeRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i11.MarcaModel>> getMarcasByTipo(_i12.TipoVeiculo? tipo) =>
+  _i3.Future<List<_i13.MarcaModel>> getMarcasByTipo(_i14.TipoVeiculo? tipo) =>
       (super.noSuchMethod(
         Invocation.method(
           #getMarcasByTipo,
           [tipo],
         ),
         returnValue:
-            _i3.Future<List<_i11.MarcaModel>>.value(<_i11.MarcaModel>[]),
-      ) as _i3.Future<List<_i11.MarcaModel>>);
+            _i3.Future<List<_i13.MarcaModel>>.value(<_i13.MarcaModel>[]),
+      ) as _i3.Future<List<_i13.MarcaModel>>);
 
   @override
-  _i3.Future<List<_i13.ModeloModel>> getModelosByMarca(
+  _i3.Future<List<_i15.ModeloModel>> getModelosByMarca(
     int? marcaId,
-    _i12.TipoVeiculo? tipo, {
+    _i14.TipoVeiculo? tipo, {
     String? ano,
   }) =>
       (super.noSuchMethod(
@@ -3039,13 +3067,13 @@ class MockFipeRemoteDataSource extends _i1.Mock
           {#ano: ano},
         ),
         returnValue:
-            _i3.Future<List<_i13.ModeloModel>>.value(<_i13.ModeloModel>[]),
-      ) as _i3.Future<List<_i13.ModeloModel>>);
+            _i3.Future<List<_i15.ModeloModel>>.value(<_i15.ModeloModel>[]),
+      ) as _i3.Future<List<_i15.ModeloModel>>);
 
   @override
-  _i3.Future<List<_i14.AnoCombustivelModel>> getAnosCombustiveisByModelo(
+  _i3.Future<List<_i16.AnoCombustivelModel>> getAnosCombustiveisByModelo(
     int? modeloId,
-    _i12.TipoVeiculo? tipo,
+    _i14.TipoVeiculo? tipo,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3055,14 +3083,14 @@ class MockFipeRemoteDataSource extends _i1.Mock
             tipo,
           ],
         ),
-        returnValue: _i3.Future<List<_i14.AnoCombustivelModel>>.value(
-            <_i14.AnoCombustivelModel>[]),
-      ) as _i3.Future<List<_i14.AnoCombustivelModel>>);
+        returnValue: _i3.Future<List<_i16.AnoCombustivelModel>>.value(
+            <_i16.AnoCombustivelModel>[]),
+      ) as _i3.Future<List<_i16.AnoCombustivelModel>>);
 
   @override
-  _i3.Future<List<_i14.AnoCombustivelModel>> getAnosPorMarca(
+  _i3.Future<List<_i16.AnoCombustivelModel>> getAnosPorMarca(
     int? marcaId,
-    _i12.TipoVeiculo? tipo,
+    _i14.TipoVeiculo? tipo,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3072,9 +3100,9 @@ class MockFipeRemoteDataSource extends _i1.Mock
             tipo,
           ],
         ),
-        returnValue: _i3.Future<List<_i14.AnoCombustivelModel>>.value(
-            <_i14.AnoCombustivelModel>[]),
-      ) as _i3.Future<List<_i14.AnoCombustivelModel>>);
+        returnValue: _i3.Future<List<_i16.AnoCombustivelModel>>.value(
+            <_i16.AnoCombustivelModel>[]),
+      ) as _i3.Future<List<_i16.AnoCombustivelModel>>);
 
   @override
   _i3.Future<_i4.ValorFipeModel> getValorFipe({
@@ -3082,7 +3110,7 @@ class MockFipeRemoteDataSource extends _i1.Mock
     required int? modeloId,
     required String? ano,
     required String? combustivel,
-    required _i12.TipoVeiculo? tipo,
+    required _i14.TipoVeiculo? tipo,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3112,21 +3140,92 @@ class MockFipeRemoteDataSource extends _i1.Mock
           ),
         )),
       ) as _i3.Future<_i4.ValorFipeModel>);
+
+  @override
+  _i3.Future<_i5.MesReferenciaModel> getUltimoMesReferencia() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUltimoMesReferencia,
+          [],
+        ),
+        returnValue:
+            _i3.Future<_i5.MesReferenciaModel>.value(_FakeMesReferenciaModel_17(
+          this,
+          Invocation.method(
+            #getUltimoMesReferencia,
+            [],
+          ),
+        )),
+      ) as _i3.Future<_i5.MesReferenciaModel>);
+
+  @override
+  _i3.Future<List<_i13.MarcaModel>> getAllMarcas() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllMarcas,
+          [],
+        ),
+        returnValue:
+            _i3.Future<List<_i13.MarcaModel>>.value(<_i13.MarcaModel>[]),
+      ) as _i3.Future<List<_i13.MarcaModel>>);
+
+  @override
+  _i3.Future<List<_i15.ModeloModel>> getAllModelosByMarca(
+    int? marcaId,
+    _i14.TipoVeiculo? tipo,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllModelosByMarca,
+          [
+            marcaId,
+            tipo,
+          ],
+        ),
+        returnValue:
+            _i3.Future<List<_i15.ModeloModel>>.value(<_i15.ModeloModel>[]),
+      ) as _i3.Future<List<_i15.ModeloModel>>);
+
+  @override
+  _i3.Future<_i6.SyncVersionModel> getSyncVersion() => (super.noSuchMethod(
+        Invocation.method(
+          #getSyncVersion,
+          [],
+        ),
+        returnValue:
+            _i3.Future<_i6.SyncVersionModel>.value(_FakeSyncVersionModel_18(
+          this,
+          Invocation.method(
+            #getSyncVersion,
+            [],
+          ),
+        )),
+      ) as _i3.Future<_i6.SyncVersionModel>);
+
+  @override
+  _i3.Future<List<_i4.ValorFipeModel>> getAllValoresFipe() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllValoresFipe,
+          [],
+        ),
+        returnValue:
+            _i3.Future<List<_i4.ValorFipeModel>>.value(<_i4.ValorFipeModel>[]),
+      ) as _i3.Future<List<_i4.ValorFipeModel>>);
 }
 
 /// A class which mocks [FipeLocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFipeLocalDataSource extends _i1.Mock
-    implements _i15.FipeLocalDataSource {
+    implements _i17.FipeLocalDataSource {
   MockFipeLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i3.Future<void> cacheMarcas(
-    List<_i11.MarcaModel>? marcas,
-    _i12.TipoVeiculo? tipo,
+    List<_i13.MarcaModel>? marcas,
+    _i14.TipoVeiculo? tipo,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3141,19 +3240,19 @@ class MockFipeLocalDataSource extends _i1.Mock
       ) as _i3.Future<void>);
 
   @override
-  _i3.Future<List<_i11.MarcaModel>> getCachedMarcas(_i12.TipoVeiculo? tipo) =>
+  _i3.Future<List<_i13.MarcaModel>> getCachedMarcas(_i14.TipoVeiculo? tipo) =>
       (super.noSuchMethod(
         Invocation.method(
           #getCachedMarcas,
           [tipo],
         ),
         returnValue:
-            _i3.Future<List<_i11.MarcaModel>>.value(<_i11.MarcaModel>[]),
-      ) as _i3.Future<List<_i11.MarcaModel>>);
+            _i3.Future<List<_i13.MarcaModel>>.value(<_i13.MarcaModel>[]),
+      ) as _i3.Future<List<_i13.MarcaModel>>);
 
   @override
   _i3.Future<void> cacheModelos(
-    List<_i13.ModeloModel>? modelos,
+    List<_i15.ModeloModel>? modelos,
     int? marcaId,
   ) =>
       (super.noSuchMethod(
@@ -3169,33 +3268,39 @@ class MockFipeLocalDataSource extends _i1.Mock
       ) as _i3.Future<void>);
 
   @override
-  _i3.Future<List<_i13.ModeloModel>> getCachedModelos(int? marcaId) =>
+  _i3.Future<List<_i15.ModeloModel>> getCachedModelos(int? marcaId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getCachedModelos,
           [marcaId],
         ),
         returnValue:
-            _i3.Future<List<_i13.ModeloModel>>.value(<_i13.ModeloModel>[]),
-      ) as _i3.Future<List<_i13.ModeloModel>>);
+            _i3.Future<List<_i15.ModeloModel>>.value(<_i15.ModeloModel>[]),
+      ) as _i3.Future<List<_i15.ModeloModel>>);
 
   @override
-  _i3.Future<void> cacheValorFipe(_i4.ValorFipeModel? valor) =>
+  _i3.Future<void> cacheValorFipe(
+    _i4.ValorFipeModel? valor,
+    String? cacheKey,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #cacheValorFipe,
-          [valor],
+          [
+            valor,
+            cacheKey,
+          ],
         ),
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
 
   @override
-  _i3.Future<_i4.ValorFipeModel?> getCachedValorFipe(String? codigoFipe) =>
+  _i3.Future<_i4.ValorFipeModel?> getCachedValorFipe(String? cacheKey) =>
       (super.noSuchMethod(
         Invocation.method(
           #getCachedValorFipe,
-          [codigoFipe],
+          [cacheKey],
         ),
         returnValue: _i3.Future<_i4.ValorFipeModel?>.value(),
       ) as _i3.Future<_i4.ValorFipeModel?>);
@@ -3218,40 +3323,144 @@ class MockFipeLocalDataSource extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> saveMesReferencia(_i5.MesReferenciaModel? mesReferencia) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveMesReferencia,
+          [mesReferencia],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i5.MesReferenciaModel?> getLocalMesReferencia() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getLocalMesReferencia,
+          [],
+        ),
+        returnValue: _i3.Future<_i5.MesReferenciaModel?>.value(),
+      ) as _i3.Future<_i5.MesReferenciaModel?>);
+
+  @override
+  _i3.Future<void> saveAllMarcas(List<_i13.MarcaModel>? marcas) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveAllMarcas,
+          [marcas],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> saveAllModelos(
+    List<_i15.ModeloModel>? modelos,
+    int? marcaId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveAllModelos,
+          [
+            modelos,
+            marcaId,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> saveSyncVersion(_i6.SyncVersionModel? syncVersion) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveSyncVersion,
+          [syncVersion],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i6.SyncVersionModel?> getLocalSyncVersion() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getLocalSyncVersion,
+          [],
+        ),
+        returnValue: _i3.Future<_i6.SyncVersionModel?>.value(),
+      ) as _i3.Future<_i6.SyncVersionModel?>);
+
+  @override
+  _i3.Future<void> saveAllValoresFipe(List<_i4.ValorFipeModel>? valores) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveAllValoresFipe,
+          [valores],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i4.ValorFipeModel?> getValorFipeLocal({
+    required int? marcaId,
+    required int? modeloId,
+    required int? anoModelo,
+    required int? codigoCombustivel,
+    required int? tipoVeiculo,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getValorFipeLocal,
+          [],
+          {
+            #marcaId: marcaId,
+            #modeloId: modeloId,
+            #anoModelo: anoModelo,
+            #codigoCombustivel: codigoCombustivel,
+            #tipoVeiculo: tipoVeiculo,
+          },
+        ),
+        returnValue: _i3.Future<_i4.ValorFipeModel?>.value(),
+      ) as _i3.Future<_i4.ValorFipeModel?>);
 }
 
 /// A class which mocks [FipeRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
+class MockFipeRepository extends _i1.Mock implements _i8.FipeRepository {
   MockFipeRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i17.MarcaEntity>>> getMarcasPorTipo(
-          _i12.TipoVeiculo? tipo) =>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i19.MarcaEntity>>> getMarcasPorTipo(
+          _i14.TipoVeiculo? tipo) =>
       (super.noSuchMethod(
         Invocation.method(
           #getMarcasPorTipo,
           [tipo],
         ),
         returnValue:
-            _i3.Future<_i5.Either<_i16.Failure, List<_i17.MarcaEntity>>>.value(
-                _FakeEither_17<_i16.Failure, List<_i17.MarcaEntity>>(
+            _i3.Future<_i7.Either<_i18.Failure, List<_i19.MarcaEntity>>>.value(
+                _FakeEither_19<_i18.Failure, List<_i19.MarcaEntity>>(
           this,
           Invocation.method(
             #getMarcasPorTipo,
             [tipo],
           ),
         )),
-      ) as _i3.Future<_i5.Either<_i16.Failure, List<_i17.MarcaEntity>>>);
+      ) as _i3.Future<_i7.Either<_i18.Failure, List<_i19.MarcaEntity>>>);
 
   @override
   _i3.Future<
-      _i5.Either<_i16.Failure, List<_i18.ModeloEntity>>> getModelosPorMarca(
+      _i7.Either<_i18.Failure, List<_i20.ModeloEntity>>> getModelosPorMarca(
     int? marcaId,
-    _i12.TipoVeiculo? tipo, {
+    _i14.TipoVeiculo? tipo, {
     String? ano,
   }) =>
       (super.noSuchMethod(
@@ -3264,8 +3473,8 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
           {#ano: ano},
         ),
         returnValue:
-            _i3.Future<_i5.Either<_i16.Failure, List<_i18.ModeloEntity>>>.value(
-                _FakeEither_17<_i16.Failure, List<_i18.ModeloEntity>>(
+            _i3.Future<_i7.Either<_i18.Failure, List<_i20.ModeloEntity>>>.value(
+                _FakeEither_19<_i18.Failure, List<_i20.ModeloEntity>>(
           this,
           Invocation.method(
             #getModelosPorMarca,
@@ -3276,13 +3485,13 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
             {#ano: ano},
           ),
         )),
-      ) as _i3.Future<_i5.Either<_i16.Failure, List<_i18.ModeloEntity>>>);
+      ) as _i3.Future<_i7.Either<_i18.Failure, List<_i20.ModeloEntity>>>);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>
       getAnosCombustiveisPorModelo(
     int? modeloId,
-    _i12.TipoVeiculo? tipo,
+    _i14.TipoVeiculo? tipo,
   ) =>
           (super.noSuchMethod(
             Invocation.method(
@@ -3293,9 +3502,9 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
               ],
             ),
             returnValue: _i3.Future<
-                    _i5.Either<_i16.Failure,
-                        List<_i19.AnoCombustivelEntity>>>.value(
-                _FakeEither_17<_i16.Failure, List<_i19.AnoCombustivelEntity>>(
+                    _i7.Either<_i18.Failure,
+                        List<_i21.AnoCombustivelEntity>>>.value(
+                _FakeEither_19<_i18.Failure, List<_i21.AnoCombustivelEntity>>(
               this,
               Invocation.method(
                 #getAnosCombustiveisPorModelo,
@@ -3306,13 +3515,13 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
               ),
             )),
           ) as _i3.Future<
-              _i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>);
+              _i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>
       getAnosPorMarca(
     int? marcaId,
-    _i12.TipoVeiculo? tipo,
+    _i14.TipoVeiculo? tipo,
   ) =>
           (super.noSuchMethod(
             Invocation.method(
@@ -3323,9 +3532,9 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
               ],
             ),
             returnValue: _i3.Future<
-                    _i5.Either<_i16.Failure,
-                        List<_i19.AnoCombustivelEntity>>>.value(
-                _FakeEither_17<_i16.Failure, List<_i19.AnoCombustivelEntity>>(
+                    _i7.Either<_i18.Failure,
+                        List<_i21.AnoCombustivelEntity>>>.value(
+                _FakeEither_19<_i18.Failure, List<_i21.AnoCombustivelEntity>>(
               this,
               Invocation.method(
                 #getAnosPorMarca,
@@ -3336,15 +3545,15 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
               ),
             )),
           ) as _i3.Future<
-              _i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>);
+              _i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, _i20.ValorFipeEntity>> getValorFipe({
+  _i3.Future<_i7.Either<_i18.Failure, _i22.ValorFipeEntity>> getValorFipe({
     required int? marcaId,
     required int? modeloId,
     required String? ano,
     required String? combustivel,
-    required _i12.TipoVeiculo? tipo,
+    required _i14.TipoVeiculo? tipo,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -3359,8 +3568,8 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
           },
         ),
         returnValue:
-            _i3.Future<_i5.Either<_i16.Failure, _i20.ValorFipeEntity>>.value(
-                _FakeEither_17<_i16.Failure, _i20.ValorFipeEntity>(
+            _i3.Future<_i7.Either<_i18.Failure, _i22.ValorFipeEntity>>.value(
+                _FakeEither_19<_i18.Failure, _i22.ValorFipeEntity>(
           this,
           Invocation.method(
             #getValorFipe,
@@ -3374,115 +3583,170 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
             },
           ),
         )),
-      ) as _i3.Future<_i5.Either<_i16.Failure, _i20.ValorFipeEntity>>);
+      ) as _i3.Future<_i7.Either<_i18.Failure, _i22.ValorFipeEntity>>);
+
+  @override
+  _i3.Future<_i7.Either<_i18.Failure, bool>> checkForUpdates() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #checkForUpdates,
+          [],
+        ),
+        returnValue: _i3.Future<_i7.Either<_i18.Failure, bool>>.value(
+            _FakeEither_19<_i18.Failure, bool>(
+          this,
+          Invocation.method(
+            #checkForUpdates,
+            [],
+          ),
+        )),
+      ) as _i3.Future<_i7.Either<_i18.Failure, bool>>);
+
+  @override
+  _i3.Future<_i7.Either<_i18.Failure, void>> syncAllData(
+          {required dynamic Function(String)? onProgress}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #syncAllData,
+          [],
+          {#onProgress: onProgress},
+        ),
+        returnValue: _i3.Future<_i7.Either<_i18.Failure, void>>.value(
+            _FakeEither_19<_i18.Failure, void>(
+          this,
+          Invocation.method(
+            #syncAllData,
+            [],
+            {#onProgress: onProgress},
+          ),
+        )),
+      ) as _i3.Future<_i7.Either<_i18.Failure, void>>);
+
+  @override
+  _i3.Future<_i7.Either<_i18.Failure, _i23.MesReferenciaEntity?>>
+      getLocalMesReferencia() => (super.noSuchMethod(
+            Invocation.method(
+              #getLocalMesReferencia,
+              [],
+            ),
+            returnValue: _i3.Future<
+                    _i7.Either<_i18.Failure, _i23.MesReferenciaEntity?>>.value(
+                _FakeEither_19<_i18.Failure, _i23.MesReferenciaEntity?>(
+              this,
+              Invocation.method(
+                #getLocalMesReferencia,
+                [],
+              ),
+            )),
+          ) as _i3.Future<_i7.Either<_i18.Failure, _i23.MesReferenciaEntity?>>);
 }
 
 /// A class which mocks [GetMarcasPorTipoUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetMarcasPorTipoUseCase extends _i1.Mock
-    implements _i21.GetMarcasPorTipoUseCase {
+    implements _i24.GetMarcasPorTipoUseCase {
   MockGetMarcasPorTipoUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.FipeRepository get repository => (super.noSuchMethod(
+  _i8.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFipeRepository_18(
+        returnValue: _FakeFipeRepository_20(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i6.FipeRepository);
+      ) as _i8.FipeRepository);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i17.MarcaEntity>>> call(
-          _i21.GetMarcasPorTipoParams? params) =>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i19.MarcaEntity>>> call(
+          _i24.GetMarcasPorTipoParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue:
-            _i3.Future<_i5.Either<_i16.Failure, List<_i17.MarcaEntity>>>.value(
-                _FakeEither_17<_i16.Failure, List<_i17.MarcaEntity>>(
+            _i3.Future<_i7.Either<_i18.Failure, List<_i19.MarcaEntity>>>.value(
+                _FakeEither_19<_i18.Failure, List<_i19.MarcaEntity>>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i3.Future<_i5.Either<_i16.Failure, List<_i17.MarcaEntity>>>);
+      ) as _i3.Future<_i7.Either<_i18.Failure, List<_i19.MarcaEntity>>>);
 }
 
 /// A class which mocks [GetModelosPorMarcaUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetModelosPorMarcaUseCase extends _i1.Mock
-    implements _i22.GetModelosPorMarcaUseCase {
+    implements _i25.GetModelosPorMarcaUseCase {
   MockGetModelosPorMarcaUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.FipeRepository get repository => (super.noSuchMethod(
+  _i8.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFipeRepository_18(
+        returnValue: _FakeFipeRepository_20(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i6.FipeRepository);
+      ) as _i8.FipeRepository);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i18.ModeloEntity>>> call(
-          _i22.GetModelosPorMarcaParams? params) =>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i20.ModeloEntity>>> call(
+          _i25.GetModelosPorMarcaParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue:
-            _i3.Future<_i5.Either<_i16.Failure, List<_i18.ModeloEntity>>>.value(
-                _FakeEither_17<_i16.Failure, List<_i18.ModeloEntity>>(
+            _i3.Future<_i7.Either<_i18.Failure, List<_i20.ModeloEntity>>>.value(
+                _FakeEither_19<_i18.Failure, List<_i20.ModeloEntity>>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i3.Future<_i5.Either<_i16.Failure, List<_i18.ModeloEntity>>>);
+      ) as _i3.Future<_i7.Either<_i18.Failure, List<_i20.ModeloEntity>>>);
 }
 
 /// A class which mocks [GetAnosCombustiveisPorModeloUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetAnosCombustiveisPorModeloUseCase extends _i1.Mock
-    implements _i23.GetAnosCombustiveisPorModeloUseCase {
+    implements _i26.GetAnosCombustiveisPorModeloUseCase {
   MockGetAnosCombustiveisPorModeloUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.FipeRepository get repository => (super.noSuchMethod(
+  _i8.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFipeRepository_18(
+        returnValue: _FakeFipeRepository_20(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i6.FipeRepository);
+      ) as _i8.FipeRepository);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>> call(
-          _i23.GetAnosCombustiveisPorModeloParams? params) =>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>> call(
+          _i26.GetAnosCombustiveisPorModeloParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue: _i3.Future<
-                _i5
-                .Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>.value(
-            _FakeEither_17<_i16.Failure, List<_i19.AnoCombustivelEntity>>(
+                _i7
+                .Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>.value(
+            _FakeEither_19<_i18.Failure, List<_i21.AnoCombustivelEntity>>(
           this,
           Invocation.method(
             #call,
@@ -3490,39 +3754,39 @@ class MockGetAnosCombustiveisPorModeloUseCase extends _i1.Mock
           ),
         )),
       ) as _i3
-          .Future<_i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>);
+          .Future<_i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>);
 }
 
 /// A class which mocks [GetAnosPorMarcaUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetAnosPorMarcaUseCase extends _i1.Mock
-    implements _i24.GetAnosPorMarcaUseCase {
+    implements _i27.GetAnosPorMarcaUseCase {
   MockGetAnosPorMarcaUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.FipeRepository get repository => (super.noSuchMethod(
+  _i8.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFipeRepository_18(
+        returnValue: _FakeFipeRepository_20(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i6.FipeRepository);
+      ) as _i8.FipeRepository);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>> call(
-          _i24.GetAnosPorMarcaParams? params) =>
+  _i3.Future<_i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>> call(
+          _i27.GetAnosPorMarcaParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue: _i3.Future<
-                _i5
-                .Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>.value(
-            _FakeEither_17<_i16.Failure, List<_i19.AnoCombustivelEntity>>(
+                _i7
+                .Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>.value(
+            _FakeEither_19<_i18.Failure, List<_i21.AnoCombustivelEntity>>(
           this,
           Invocation.method(
             #call,
@@ -3530,43 +3794,43 @@ class MockGetAnosPorMarcaUseCase extends _i1.Mock
           ),
         )),
       ) as _i3
-          .Future<_i5.Either<_i16.Failure, List<_i19.AnoCombustivelEntity>>>);
+          .Future<_i7.Either<_i18.Failure, List<_i21.AnoCombustivelEntity>>>);
 }
 
 /// A class which mocks [GetValorFipeUseCase].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGetValorFipeUseCase extends _i1.Mock
-    implements _i25.GetValorFipeUseCase {
+    implements _i28.GetValorFipeUseCase {
   MockGetValorFipeUseCase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.FipeRepository get repository => (super.noSuchMethod(
+  _i8.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
-        returnValue: _FakeFipeRepository_18(
+        returnValue: _FakeFipeRepository_20(
           this,
           Invocation.getter(#repository),
         ),
-      ) as _i6.FipeRepository);
+      ) as _i8.FipeRepository);
 
   @override
-  _i3.Future<_i5.Either<_i16.Failure, _i20.ValorFipeEntity>> call(
-          _i25.GetValorFipeParams? params) =>
+  _i3.Future<_i7.Either<_i18.Failure, _i22.ValorFipeEntity>> call(
+          _i28.GetValorFipeParams? params) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
           [params],
         ),
         returnValue:
-            _i3.Future<_i5.Either<_i16.Failure, _i20.ValorFipeEntity>>.value(
-                _FakeEither_17<_i16.Failure, _i20.ValorFipeEntity>(
+            _i3.Future<_i7.Either<_i18.Failure, _i22.ValorFipeEntity>>.value(
+                _FakeEither_19<_i18.Failure, _i22.ValorFipeEntity>(
           this,
           Invocation.method(
             #call,
             [params],
           ),
         )),
-      ) as _i3.Future<_i5.Either<_i16.Failure, _i20.ValorFipeEntity>>);
+      ) as _i3.Future<_i7.Either<_i18.Failure, _i22.ValorFipeEntity>>);
 }

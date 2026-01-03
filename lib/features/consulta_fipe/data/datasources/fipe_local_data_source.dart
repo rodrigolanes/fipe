@@ -2,6 +2,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../models/marca_model.dart';
 import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
+import '../models/sync_version_model.dart';
 import '../models/valor_fipe_model.dart';
 
 /// Interface para a fonte de dados local (Hive)
@@ -41,4 +42,22 @@ abstract class FipeLocalDataSource {
 
   /// Salva todos os modelos de uma marca (sincronização completa)
   Future<void> saveAllModelos(List<ModeloModel> modelos, int marcaId);
+
+  /// Salva a versão de sincronização atual
+  Future<void> saveSyncVersion(SyncVersionModel syncVersion);
+
+  /// Recupera a versão de sincronização armazenada localmente
+  Future<SyncVersionModel?> getLocalSyncVersion();
+
+  /// Salva TODOS os valores FIPE de uma vez (sincronização offline)
+  Future<void> saveAllValoresFipe(List<ValorFipeModel> valores);
+
+  /// Busca valor FIPE localmente por parâmetros específicos
+  Future<ValorFipeModel?> getValorFipeLocal({
+    required int marcaId,
+    required int modeloId,
+    required int anoModelo,
+    required int codigoCombustivel,
+    required int tipoVeiculo,
+  });
 }

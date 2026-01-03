@@ -3,6 +3,7 @@ import '../models/ano_combustivel_model.dart';
 import '../models/marca_model.dart';
 import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
+import '../models/sync_version_model.dart';
 import '../models/valor_fipe_model.dart';
 
 /// Interface para a fonte de dados remota (Supabase)
@@ -49,4 +50,10 @@ abstract class FipeRemoteDataSource {
     int marcaId,
     TipoVeiculo tipo,
   );
+
+  /// Busca a versão atual de sincronização do servidor
+  Future<SyncVersionModel> getSyncVersion();
+
+  /// Busca TODOS os valores FIPE do mês atual para sincronização offline
+  Future<List<ValorFipeModel>> getAllValoresFipe();
 }

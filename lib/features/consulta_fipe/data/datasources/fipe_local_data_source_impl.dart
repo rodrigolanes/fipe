@@ -5,6 +5,7 @@ import '../../../../core/error/exceptions.dart';
 import '../models/marca_model.dart';
 import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
+import '../models/sync_version_model.dart';
 import '../models/valor_fipe_model.dart';
 import 'fipe_local_data_source.dart';
 
@@ -15,6 +16,8 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   static const String cacheTimesBoxName = 'cache_times';
   static const String mesReferenciaBoxName = 'mes_referencia';
   static const String mesReferenciaKey = 'current_mes_referencia';
+  static const String syncVersionBoxName = 'sync_version';
+  static const String syncVersionKey = 'current_sync_version';
 
   @override
   Future<void> cacheMarcas(List<MarcaModel> marcas, TipoVeiculo tipo) async {
@@ -223,6 +226,82 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
     } catch (e) {
       throw CacheException(
         'Erro ao salvar todos os modelos: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<void> saveSyncVersion(SyncVersionModel syncVersion) async {
+    try {
+      final box = await Hive.openBox<Map<dynamic, dynamic>>(
+        syncVersionBoxName,
+      );
+      await box.put(syncVersionKey, syncVersion.toJson());
+    } catch (e) {
+      throw CacheException(
+        'Erro ao salvar versão de sincronização: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<SyncVersionModel?> getLocalSyncVersion() async {
+    try {
+      final box = await Hive.openBox<Map<dynamic, dynamic>>(
+        syncVersionBoxName,
+      );
+      final data = box.get(syncVersionKey);
+
+      if (data == null) return null;
+
+      final jsonMap = Map<String, dynamic>.from(data);
+      return SyncVersionModel.fromJson(jsonMap);
+    } catch (e) {
+      throw CacheException(
+        'Erro ao recuperar versão de sincronização: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<void> saveAllValoresFipe(List<ValorFipeModel> valores) async {
+    try {
+      final box = await Hive.openBox<ValorFipeModel>(valoresBoxName);
+      final timesBox = await Hive.openBox<int>(cacheTimesBoxName);
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      // Salva cada valor com chave composta
+      for (final valor in valores) {
+        final cacheKey =
+            '${valor.tipoVeiculo}_${valor.codigoMarca}_${valor.codigoModelo}_${valor.anoModelo}_${valor.codigoCombustivel}';
+
+        await box.put(cacheKey, valor);
+        await timesBox.put('valor_$cacheKey', timestamp);
+      }
+    } catch (e) {
+      throw CacheException(
+        'Erro ao salvar todos os valores FIPE: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<ValorFipeModel?> getValorFipeLocal({
+    required int marcaId,
+    required int modeloId,
+    required int anoModelo,
+    required int codigoCombustivel,
+    required int tipoVeiculo,
+  }) async {
+    try {
+      final box = await Hive.openBox<ValorFipeModel>(valoresBoxName);
+      final cacheKey =
+          '${tipoVeiculo}_${marcaId}_${modeloId}_${anoModelo}_$codigoCombustivel';
+
+      return box.get(cacheKey);
+    } catch (e) {
+      throw CacheException(
+        'Erro ao buscar valor FIPE local: ${e.toString()}',
       );
     }
   }

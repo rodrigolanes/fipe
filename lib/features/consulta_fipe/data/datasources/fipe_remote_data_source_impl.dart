@@ -7,6 +7,7 @@ import '../models/ano_combustivel_model.dart';
 import '../models/marca_model.dart';
 import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
+import '../models/sync_version_model.dart';
 import '../models/valor_fipe_model.dart';
 import 'fipe_remote_data_source.dart';
 
@@ -438,5 +439,106 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
     }
 
     return '${meses[mesIndex - 1]} de $ano';
+  }
+
+  @override
+  Future<SyncVersionModel> getSyncVersion() async {
+    try {
+      AppLogger.d('Buscando versão de sincronização do servidor');
+
+      final response = await client
+          .from('sync_version')
+          .select(
+              'version, mes_referencia, data_atualizacao, total_marcas, total_modelos, total_valores')
+          .limit(1)
+          .maybeSingle();
+
+      if (response == null) {
+        throw ServerException(
+          'Nenhuma versão de sincronização encontrada no servidor',
+        );
+      }
+
+      final syncVersion = SyncVersionModel.fromJson(response);
+      AppLogger.i('Versão de sincronização: ${syncVersion.version}');
+
+      return syncVersion;
+    } catch (e) {
+      AppLogger.e('Erro ao buscar versão de sincronização', e);
+      throw ServerException(
+        'Erro ao buscar versão de sincronização: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<List<ValorFipeModel>> getAllValoresFipe() async {
+    try {
+      AppLogger.d('Buscando TODOS os valores FIPE para sincronização offline');
+
+      // Busca todos os valores em lotes para não sobrecarregar
+      final List<ValorFipeModel> todosValores = [];
+      const int batchSize = 1000;
+      int offset = 0;
+      bool hasMore = true;
+
+      while (hasMore) {
+        AppLogger.d('Buscando lote offset=$offset, limit=$batchSize');
+
+        final response = await client.from('valores_fipe').select('''
+              marca,
+              modelo,
+              ano_modelo,
+              combustivel,
+              codigo_fipe,
+              mes_referencia,
+              valor,
+              data_consulta,
+              tipo_veiculo,
+              codigo_marca,
+              codigo_modelo,
+              codigo_combustivel,
+              sigla_combustivel
+            ''').order('codigo_marca').range(offset, offset + batchSize - 1);
+
+        if ((response as List).isEmpty) {
+          hasMore = false;
+          break;
+        }
+
+        final valores = (response as List)
+            .map((json) => ValorFipeModel.fromJson(json))
+            .toList();
+
+        todosValores.addAll(valores);
+        offset += batchSize;
+
+        AppLogger.d(
+          'Total acumulado: ${todosValores.length} valores',
+        );
+
+        // Limita para não ficar infinito
+        if (valores.length < batchSize) {
+          hasMore = false;
+        }
+
+        // Limite de segurança (100mil valores)
+        if (todosValores.length >= 100000) {
+          AppLogger.w('Limite de segurança atingido: 100.000 valores');
+          hasMore = false;
+        }
+      }
+
+      AppLogger.i(
+        'Total de valores FIPE sincronizados: ${todosValores.length}',
+      );
+
+      return todosValores;
+    } catch (e) {
+      AppLogger.e('Erro ao buscar todos os valores FIPE', e);
+      throw ServerException(
+        'Erro ao buscar valores FIPE: ${e.toString()}',
+      );
+    }
   }
 }
