@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/ads/ad_banner_widget.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/mes_referencia_formatter.dart';
 import '../../../../core/utils/share_service.dart';
 import '../../../../injection_container.dart';
 import '../bloc/valor_fipe_bloc.dart';
@@ -133,7 +134,7 @@ class ValorDetalhesPage extends StatelessWidget {
               context,
               Icons.calendar_today,
               'Mês de Referência',
-              state.valorFipe.mesReferencia,
+              state.valorFipe.mesReferencia.formatado(),
             ),
             const Divider(height: 24),
             _buildInfoRow(
