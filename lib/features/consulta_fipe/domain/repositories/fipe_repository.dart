@@ -4,7 +4,6 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/ano_combustivel_entity.dart';
 import '../../domain/entities/marca_entity.dart';
-import '../../domain/entities/mes_referencia_entity.dart';
 import '../../domain/entities/modelo_entity.dart';
 import '../../domain/entities/valor_fipe_entity.dart';
 
@@ -38,17 +37,4 @@ abstract class FipeRepository {
     required String combustivel,
     required TipoVeiculo tipo,
   });
-
-  /// Verifica se há atualização disponível
-  /// Retorna true se houver uma versão mais recente no servidor
-  Future<Either<Failure, bool>> checkForUpdates();
-
-  /// Sincroniza todos os dados do servidor
-  /// Faz download completo de marcas e modelos da versão mais atual
-  Future<Either<Failure, void>> syncAllData({
-    required Function(String) onProgress,
-  });
-
-  /// Busca o mês de referência armazenado localmente
-  Future<Either<Failure, MesReferenciaEntity?>> getLocalMesReferencia();
 }

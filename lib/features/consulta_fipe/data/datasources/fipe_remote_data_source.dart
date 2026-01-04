@@ -1,7 +1,6 @@
 import '../../../../core/constants/app_constants.dart';
 import '../models/ano_combustivel_model.dart';
 import '../models/marca_model.dart';
-import '../models/mes_referencia_model.dart';
 import '../models/modelo_model.dart';
 import '../models/valor_fipe_model.dart';
 
@@ -39,5 +38,6 @@ abstract class FipeRemoteDataSource {
   });
 
   /// Busca o mês de referência mais atual disponível no servidor
-  Future<MesReferenciaModel> getUltimoMesReferencia();
+  /// Retorna string no formato "YYYYMM" (ex: "202412")
+  Future<String> getUltimoMesReferencia();
 }

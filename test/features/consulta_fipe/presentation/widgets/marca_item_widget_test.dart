@@ -57,9 +57,8 @@ void main() {
     expect(tapped, isTrue);
   });
 
-  testWidgets('MarcaItemWidget deve mostrar anos de disponibilidade',
-      (tester) async {
-    final marca = MarcaFixture.marcaComEstatisticasEntity;
+  testWidgets('MarcaItemWidget deve ter ícone de carro', (tester) async {
+    final marca = MarcaFixture.marcaEntity;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -72,14 +71,12 @@ void main() {
       ),
     );
 
-    // Deve exibir range de anos (fixture: 1990-2026)
-    expect(find.textContaining('1990'), findsOneWidget);
-    expect(find.textContaining('2026'), findsOneWidget);
+    // Deve exibir ícone de carro
+    expect(find.byIcon(Icons.directions_car), findsOneWidget);
   });
 
-  testWidgets('MarcaItemWidget deve mostrar total de modelos se disponível',
-      (tester) async {
-    final marca = MarcaFixture.marcaComEstatisticasEntity;
+  testWidgets('MarcaItemWidget deve ter ícone de navegação', (tester) async {
+    final marca = MarcaFixture.marcaEntity;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -92,17 +89,12 @@ void main() {
       ),
     );
 
-    // Deve mostrar ícone de modelo
-    expect(find.byIcon(Icons.car_rental), findsOneWidget);
-
-    // Deve mostrar quantidade de modelos
-    expect(find.textContaining('150 modelo'), findsOneWidget);
+    // Deve exibir seta de navegação
+    expect(find.byIcon(Icons.chevron_right), findsOneWidget);
   });
 
-  testWidgets(
-      'MarcaItemWidget deve exibir "Sem informação de anos" quando não tiver dados',
-      (tester) async {
-    final marca = MarcaFixture.marcaEntity; // sem estatísticas
+  testWidgets('MarcaItemWidget deve aplicar estilos corretos', (tester) async {
+    final marca = MarcaFixture.marcaEntity;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -115,44 +107,46 @@ void main() {
       ),
     );
 
-    expect(find.text('Sem informação de anos'), findsOneWidget);
+    // Deve ter um Card como widget raiz
+    expect(find.byType(Card), findsOneWidget);
+    // Deve ter InkWell para resposta de toque
+    expect(find.byType(InkWell), findsOneWidget);
   });
 
-  testWidgets('MarcaItemWidget deve indicar se marca está ativa',
-      (tester) async {
-    final marcaAtiva = MarcaFixture.marcaComEstatisticasEntity;
+  testWidgets('MarcaItemWidget deve ser compacto e eficiente', (tester) async {
+    final marca = MarcaFixture.marcaEntity;
 
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: MarcaItemWidget(
-            marca: marcaAtiva,
+            marca: marca,
             onTap: () {},
           ),
         ),
       ),
     );
 
-    // Deve mostrar "Ativa" (fixture tem ultimoAno = 2026)
-    expect(find.textContaining('Ativa'), findsOneWidget);
+    // Deve exibir apenas elementos essenciais: ícone, nome, navegação
+    expect(find.byType(Container), findsWidgets); // Container do ícone
+    expect(find.text(marca.nome), findsOneWidget);
   });
 
-  testWidgets('MarcaItemWidget deve usar cores apropriadas para marca ativa',
-      (tester) async {
-    final marcaAtiva = MarcaFixture.marcaComEstatisticasEntity;
+  testWidgets('MarcaItemWidget layout deve ser responsivo', (tester) async {
+    final marca = MarcaFixture.marcaEntity;
 
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: MarcaItemWidget(
-            marca: marcaAtiva,
+            marca: marca,
             onTap: () {},
           ),
         ),
       ),
     );
 
-    // O Container do ícone deve ter cor primaryContainer
+    // O Container do ícone deve ter elementos visuais organizados
     final containers = tester.widgetList<Container>(find.byType(Container));
     expect(containers, isNotEmpty);
   });

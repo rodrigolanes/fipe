@@ -1,23 +1,18 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/ano_combustivel_entity.dart';
 import '../../domain/entities/marca_entity.dart';
-import '../../domain/entities/mes_referencia_entity.dart';
 import '../../domain/entities/modelo_entity.dart';
-import '../../domain/entities/sync_version_entity.dart';
 import '../../domain/entities/valor_fipe_entity.dart';
 import '../../domain/repositories/fipe_repository.dart';
 import '../datasources/fipe_local_data_source.dart';
 import '../datasources/fipe_remote_data_source.dart';
 import '../models/marca_model.dart';
-import '../models/sync_version_model.dart';
-import '../models/valor_fipe_model.dart';
 
 class FipeRepositoryImpl implements FipeRepository {
   final FipeRemoteDataSource remoteDataSource;
@@ -33,14 +28,16 @@ class FipeRepositoryImpl implements FipeRepository {
     TipoVeiculo tipo,
   ) async {
     try {
-      // Tenta buscar do cache primeiro
+      // Tenta buscar do cache primeiro (marcas são dados estáveis)
       final cacheKey = 'marcas_${tipo.nome}';
       final isCacheValid = await localDataSource.isCacheValid(cacheKey);
 
       if (isCacheValid) {
         try {
           final cachedMarcas = await localDataSource.getCachedMarcas(tipo);
-          return Right(cachedMarcas);
+          if (cachedMarcas.isNotEmpty) {
+            return Right(cachedMarcas);
+          }
         } on CacheException {
           // Se falhar, continua para buscar remotamente
         }
@@ -53,8 +50,7 @@ class FipeRepositoryImpl implements FipeRepository {
       try {
         await localDataSource.cacheMarcas(marcas, tipo);
       } catch (e) {
-        // ignore: avoid_print
-        print('⚠️ Aviso: Não foi possível cachear marcas: $e');
+        // Não falha se cache falhar
       }
 
       return Right(marcas);
@@ -84,7 +80,9 @@ class FipeRepositoryImpl implements FipeRepository {
             final cachedModelos = await localDataSource.getCachedModelos(
               marcaId,
             );
-            return Right(cachedModelos);
+            if (cachedModelos.isNotEmpty) {
+              return Right(cachedModelos);
+            }
           } on CacheException {
             // Se falhar, continua para buscar remotamente
           }
@@ -103,8 +101,7 @@ class FipeRepositoryImpl implements FipeRepository {
         try {
           await localDataSource.cacheModelos(modelos, marcaId);
         } catch (e) {
-          // ignore: avoid_print
-          print('⚠️ Aviso: Não foi possível cachear modelos: $e');
+          // Não falha se cache falhar
         }
       }
 
@@ -122,7 +119,7 @@ class FipeRepositoryImpl implements FipeRepository {
   Future<Either<Failure, List<AnoCombustivelEntity>>>
       getAnosCombustiveisPorModelo(int modeloId, TipoVeiculo tipo) async {
     try {
-      // Anos e combustíveis são buscados sempre remotamente (dados mais dinâmicos)
+      // Anos e combustíveis são sempre buscados remotamente (dados dinâmicos)
       final anosCombustiveis =
           await remoteDataSource.getAnosCombustiveisByModelo(modeloId, tipo);
 
@@ -167,28 +164,8 @@ class FipeRepositoryImpl implements FipeRepository {
     required TipoVeiculo tipo,
   }) async {
     try {
-      // ESTRATÉGIA OFFLINE-FIRST: Sempre busca localmente primeiro
-      final codigoCombustivel = _getCombustivelCodigo(combustivel);
-      final anoModelo = int.parse(ano);
-
-      final valorLocal = await localDataSource.getValorFipeLocal(
-        marcaId: marcaId,
-        modeloId: modeloId,
-        anoModelo: anoModelo,
-        codigoCombustivel: codigoCombustivel,
-        tipoVeiculo: tipo.codigo,
-      );
-
-      if (valorLocal != null) {
-        // Retorna dado local (funciona offline!)
-        return Right(valorLocal);
-      }
-
-      // Se não tem local, tenta buscar remotamente
-      // (só acontece se não fez sync ou dado não existe)
-      final codigoFipeKey =
-          '${tipo.codigo}_${marcaId}_${modeloId}_${ano}_$combustivel';
-
+      // ESTRATÉGIA ONLINE-FIRST: Sempre busca do servidor
+      // Garante dados sempre atualizados
       final valor = await remoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -197,163 +174,13 @@ class FipeRepositoryImpl implements FipeRepository {
         tipo: tipo,
       );
 
-      // Tenta salvar em cache (opcional - não deve falhar a operação)
-      try {
-        await localDataSource.cacheValorFipe(valor, codigoFipeKey);
-      } catch (e) {
-        // Se falhar ao cachear, apenas loga mas retorna o valor obtido online
-        // ignore: avoid_print
-        print('⚠️ Aviso: Não foi possível cachear valor FIPE: $e');
-      }
-
       return Right(valor);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
     } catch (e) {
       return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
-    }
-  }
-
-  /// Mapeia nome do combustível para código numérico
-  int _getCombustivelCodigo(String combustivel) {
-    final combustivelLower = combustivel.toLowerCase();
-    if (combustivelLower.contains('gasolina')) return 1;
-    if (combustivelLower.contains('álcool') ||
-        combustivelLower.contains('etanol')) {
-      return 2;
-    }
-    if (combustivelLower.contains('diesel')) return 3;
-    if (combustivelLower.contains('elétrico') ||
-        combustivelLower.contains('eletrico')) {
-      return 4;
-    }
-    if (combustivelLower.contains('flex')) return 5;
-    if (combustivelLower.contains('híbrido') ||
-        combustivelLower.contains('hibrido')) {
-      return 6;
-    }
-    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv')) {
-      return 7;
-    }
-    return 1; // Default: Gasolina
-  }
-
-  @override
-  Future<Either<Failure, bool>> checkForUpdates() async {
-    try {
-      // Busca a versão de sincronização do servidor
-      final versaoRemota = await remoteDataSource.getSyncVersion();
-
-      // Busca a versão armazenada localmente
-      final versaoLocal = await localDataSource.getLocalSyncVersion();
-
-      // Se não há dados locais, precisa sincronizar
-      if (versaoLocal == null) {
-        return const Right(true);
-      }
-
-      // Se a versão local não foi concluída, precisa sincronizar
-      if (!versaoLocal.cargaConcluida) {
-        return const Right(true);
-      }
-
-      // Compara se a versão remota é mais recente E diferente da local
-      final hasUpdate = versaoRemota.isNewerThan(versaoLocal) &&
-          !versaoRemota.isSameVersion(versaoLocal);
-
-      return Right(hasUpdate);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(e.message));
-    } catch (e) {
-      return Left(
-          ServerFailure('Erro ao verificar atualizações: ${e.toString()}'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> syncAllData({
-    required Function(String) onProgress,
-  }) async {
-    try {
-      onProgress('Verificando versão no servidor...');
-
-      // Busca a versão de sincronização do servidor
-      final syncVersion = await remoteDataSource.getSyncVersion();
-
-      onProgress(
-        'Versão ${syncVersion.version} - ${syncVersion.mesReferencia}',
-      );
-
-      onProgress('Baixando todas as marcas...');
-
-      // Limpa todos os dados locais antes de sincronizar nova vers\u00e3o\n      await localDataSource.clearAllLocalData();\n\n      // Busca todas as marcas
-      final todasMarcas = await remoteDataSource.getAllMarcas();
-
-      onProgress('Salvando ${todasMarcas.length} marcas...');
-
-      // Salva todas as marcas localmente
-      await localDataSource.saveAllMarcas(todasMarcas);
-
-      onProgress('Baixando valores FIPE da versão ${syncVersion.version}...');
-
-      // Busca valores FIPE da versão específica com progresso (não histórico completo)
-      final todosValores = await remoteDataSource.getAllValoresFipeComProgresso(
-        version: syncVersion.version,
-        onProgress: (total) {
-          onProgress('Baixando valores FIPE: $total registros...');
-        },
-      );
-
-      onProgress('Salvando ${todosValores.length} preços FIPE...');
-
-      // Salva todos os valores localmente
-      await localDataSource.saveAllValoresFipe(todosValores);
-
-      onProgress('Salvando informação de versão...');
-
-      // Salva a versão de sincronização atualizada
-      await localDataSource.saveSyncVersion(syncVersion);
-
-      onProgress('Sincronização concluída! App pronto para uso offline.');
-
-      return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(e.message));
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
-    } catch (e) {
-      return Left(ServerFailure('Erro ao sincronizar dados: ${e.toString()}'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, MesReferenciaEntity?>> getLocalMesReferencia() async {
-    try {
-      // Retorna a versão de sync como mes referencia para compatibilidade
-      final syncVersion = await localDataSource.getLocalSyncVersion();
-
-      if (syncVersion == null) return const Right(null);
-
-      // Converte SyncVersion para MesReferencia
-      final mesRef = MesReferenciaEntity(
-        id: syncVersion.version,
-        nomeFormatado: syncVersion.mesReferencia,
-        dataAtualizacao: syncVersion.dataAtualizacao,
-      );
-
-      return Right(mesRef);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
-    } catch (e) {
-      return Left(CacheFailure('Erro ao buscar versão local: ${e.toString()}'));
     }
   }
 }

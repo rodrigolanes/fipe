@@ -274,15 +274,8 @@ void main() {
     const combustivel = 'Gasolina';
     const tipo = TipoVeiculo.carro;
 
-    test('deve buscar valor FIPE remotamente e salvar em cache', () async {
+    test('deve buscar valor FIPE remotamente (online-first)', () async {
       // Arrange
-      when(mockLocalDataSource.getValorFipeLocal(
-        marcaId: anyNamed('marcaId'),
-        modeloId: anyNamed('modeloId'),
-        anoModelo: anyNamed('anoModelo'),
-        codigoCombustivel: anyNamed('codigoCombustivel'),
-        tipoVeiculo: anyNamed('tipoVeiculo'),
-      )).thenAnswer((_) async => null);
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -290,8 +283,6 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       )).thenAnswer((_) async => ValorFipeFixture.valorFipeModel);
-      when(mockLocalDataSource.cacheValorFipe(any, any))
-          .thenAnswer((_) async => {});
 
       // Act
       final result = await repository.getValorFipe(
@@ -311,22 +302,12 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       ));
-      verify(mockLocalDataSource.cacheValorFipe(
-        ValorFipeFixture.valorFipeModel,
-        any,
-      ));
+      verifyNoMoreInteractions(mockLocalDataSource);
     });
 
     test('deve retornar ServerFailure quando remoto lança ServerException',
         () async {
       // Arrange
-      when(mockLocalDataSource.getValorFipeLocal(
-        marcaId: anyNamed('marcaId'),
-        modeloId: anyNamed('modeloId'),
-        anoModelo: anyNamed('anoModelo'),
-        codigoCombustivel: anyNamed('codigoCombustivel'),
-        tipoVeiculo: anyNamed('tipoVeiculo'),
-      )).thenAnswer((_) async => null);
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -351,13 +332,6 @@ void main() {
     test('deve retornar NetworkFailure quando remoto lança NetworkException',
         () async {
       // Arrange
-      when(mockLocalDataSource.getValorFipeLocal(
-        marcaId: anyNamed('marcaId'),
-        modeloId: anyNamed('modeloId'),
-        anoModelo: anyNamed('anoModelo'),
-        codigoCombustivel: anyNamed('codigoCombustivel'),
-        tipoVeiculo: anyNamed('tipoVeiculo'),
-      )).thenAnswer((_) async => null);
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
