@@ -43,4 +43,3 @@ class AnoCombustivelModel extends AnoCombustivelEntity {
     );
   }
 }
-

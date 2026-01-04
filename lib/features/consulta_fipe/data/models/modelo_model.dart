@@ -45,4 +45,3 @@ class ModeloModel extends ModeloEntity {
     );
   }
 }
-

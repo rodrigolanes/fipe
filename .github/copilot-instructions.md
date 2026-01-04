@@ -974,30 +974,51 @@ extension StringExtension on String {
 **IMPORTANTE**: Sempre execute os seguintes comandos antes de commitar qualquer código:
 
 ```bash
-# 1. Verificar formatação
-flutter format .
+# 1. Formatar código (OBRIGATÓRIO - corrige formatação automaticamente)
+dart format .
 
-# 2. Analisar código (OBRIGATÓRIO - deve retornar 0 issues)
+# 2. Verificar formatação (OBRIGATÓRIO - CI/CD usa este comando)
+dart format --output=none --set-exit-if-changed .
+
+# 3. Analisar código (OBRIGATÓRIO - deve retornar 0 issues)
 flutter analyze
 
-# 3. Executar testes (OBRIGATÓRIO - todos devem passar)
+# 4. Executar testes (OBRIGATÓRIO - todos devem passar)
 flutter test
 
-# 4. Verificar cobertura (opcional, mas recomendado)
+# 5. Verificar cobertura (opcional, mas recomendado)
 flutter test --coverage
 ```
 
 **❌ NÃO COMMITE SE:**
 
+- `dart format --set-exit-if-changed` retornar exit code 1 (arquivos não formatados)
 - `flutter analyze` retornar warnings ou erros
 - `flutter test` tiver testes falhando
 - Houver código não formatado
 
 **✅ SÓ COMMITE QUANDO:**
 
+- `dart format --set-exit-if-changed .` retornar exit code 0 (nenhum arquivo alterado)
 - Todos os testes passarem
 - `flutter analyze` não retornar issues
-- Código estiver formatado
+- Código estiver 100% formatado
+
+**⚠️ ERRO COMUM NO CI/CD:**
+
+Se o GitHub Actions falhar com erro "Changed X files", significa que você commitou código não formatado:
+
+```
+Changed lib/features/consulta_fipe/data/models/ano_combustivel_model.dart
+Changed lib/features/consulta_fipe/data/models/modelo_model.dart
+Formatted 112 files (3 changed) in 2.38 seconds.
+Error: Process completed with exit code 1.
+```
+
+**Solução:**
+1. Execute `dart format .` localmente
+2. Commit as alterações formatadas
+3. Push novamente
 
 ### 🤖 OBRIGATÓRIO: Validação pelo GitHub Copilot
 
