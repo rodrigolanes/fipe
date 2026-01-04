@@ -264,7 +264,7 @@ class FipeRepositoryImpl implements FipeRepository {
 
       onProgress('Baixando todas as marcas...');
 
-      // Busca todas as marcas
+      // Limpa todos os dados locais antes de sincronizar nova vers\u00e3o\n      await localDataSource.clearAllLocalData();\n\n      // Busca todas as marcas
       final todasMarcas = await remoteDataSource.getAllMarcas();
 
       onProgress('Salvando ${todasMarcas.length} marcas...');

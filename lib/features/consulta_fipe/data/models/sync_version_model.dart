@@ -9,6 +9,7 @@ class SyncVersionModel extends SyncVersionEntity {
     super.totalMarcas,
     super.totalModelos,
     super.totalValores,
+    super.cargaConcluida,
   });
 
   /// Cria um model a partir de JSON do Supabase
@@ -20,6 +21,7 @@ class SyncVersionModel extends SyncVersionEntity {
       totalMarcas: (json['total_marcas'] as int?) ?? 0,
       totalModelos: (json['total_modelos'] as int?) ?? 0,
       totalValores: (json['total_valores'] as int?) ?? 0,
+      cargaConcluida: (json['carga_concluida'] as bool?) ?? false,
     );
   }
 
@@ -32,6 +34,7 @@ class SyncVersionModel extends SyncVersionEntity {
       'total_marcas': totalMarcas,
       'total_modelos': totalModelos,
       'total_valores': totalValores,
+      'carga_concluida': cargaConcluida,
     };
   }
 
@@ -43,6 +46,7 @@ class SyncVersionModel extends SyncVersionEntity {
     int? totalMarcas,
     int? totalModelos,
     int? totalValores,
+    bool? cargaConcluida,
   }) {
     return SyncVersionModel(
       version: version ?? this.version,
@@ -51,6 +55,7 @@ class SyncVersionModel extends SyncVersionEntity {
       totalMarcas: totalMarcas ?? this.totalMarcas,
       totalModelos: totalModelos ?? this.totalModelos,
       totalValores: totalValores ?? this.totalValores,
+      cargaConcluida: cargaConcluida ?? this.cargaConcluida,
     );
   }
 }

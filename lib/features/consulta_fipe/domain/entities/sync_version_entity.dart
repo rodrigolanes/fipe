@@ -23,6 +23,9 @@ class SyncVersionEntity extends Equatable {
   /// Total de valores FIPE sincronizados
   final int totalValores;
 
+  /// Indica se a carga de dados foi concluída com sucesso
+  final bool cargaConcluida;
+
   const SyncVersionEntity({
     required this.version,
     required this.mesReferencia,
@@ -30,6 +33,7 @@ class SyncVersionEntity extends Equatable {
     this.totalMarcas = 0,
     this.totalModelos = 0,
     this.totalValores = 0,
+    this.cargaConcluida = false,
   });
 
   @override
@@ -40,6 +44,7 @@ class SyncVersionEntity extends Equatable {
         totalMarcas,
         totalModelos,
         totalValores,
+        cargaConcluida,
       ];
 
   /// Verifica se esta versão é mais recente que outra

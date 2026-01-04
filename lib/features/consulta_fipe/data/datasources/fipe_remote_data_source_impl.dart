@@ -449,18 +449,21 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       final response = await client
           .from('sync_version')
           .select(
-              'version, mes_referencia, data_atualizacao, total_marcas, total_modelos, total_valores')
+              'version, mes_referencia, data_atualizacao, total_marcas, total_modelos, total_valores, carga_concluida')
+          .eq('carga_concluida', true)
+          .order('version', ascending: false)
           .limit(1)
           .maybeSingle();
 
       if (response == null) {
         throw ServerException(
-          'Nenhuma versão de sincronização encontrada no servidor',
+          'Nenhuma versão de sincronização concluída encontrada no servidor',
         );
       }
 
       final syncVersion = SyncVersionModel.fromJson(response);
-      AppLogger.i('Versão de sincronização: ${syncVersion.version}');
+      AppLogger.i(
+          'Versão de sincronização: ${syncVersion.version} (concluída)');
 
       return syncVersion;
     } catch (e) {
@@ -497,8 +500,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
               tipo_veiculo,
               codigo_marca,
               codigo_modelo,
-              codigo_combustivel,
-              sigla_combustivel
+              codigo_combustivel
             ''').order('codigo_marca').range(offset, offset + batchSize - 1);
 
         if ((response as List).isEmpty) {

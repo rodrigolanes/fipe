@@ -60,4 +60,8 @@ abstract class FipeLocalDataSource {
     required int codigoCombustivel,
     required int tipoVeiculo,
   });
+
+  /// Limpa TODOS os dados locais (marcas, modelos, valores, cache times)
+  /// Usado antes de sincronizar nova versão para garantir dados limpos
+  Future<void> clearAllLocalData();
 }

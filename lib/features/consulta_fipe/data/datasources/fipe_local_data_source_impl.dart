@@ -186,6 +186,33 @@ class FipeLocalDataSourceImpl implements FipeLocalDataSource {
   }
 
   @override
+  Future<void> clearAllLocalData() async {
+    try {
+      // Limpa box de marcas
+      final marcasBox = await Hive.openBox<List<dynamic>>(marcasBoxName);
+      await marcasBox.clear();
+
+      // Limpa box de modelos
+      final modelosBox = await Hive.openBox<List<dynamic>>(modelosBoxName);
+      await modelosBox.clear();
+
+      // Limpa box de valores
+      final valoresBox = await Hive.openBox<ValorFipeModel>(valoresBoxName);
+      await valoresBox.clear();
+
+      // Limpa box de cache times
+      final timesBox = await Hive.openBox<int>(cacheTimesBoxName);
+      await timesBox.clear();
+
+      // NÃO limpa mes_referencia e sync_version - esses são sobrescritos
+    } catch (e) {
+      throw CacheException(
+        'Erro ao limpar dados locais: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
   Future<void> saveAllMarcas(List<MarcaModel> marcas) async {
     try {
       // Agrupa marcas por tipo
