@@ -9,6 +9,7 @@ import '../../../../injection_container.dart';
 import '../bloc/valor_fipe_bloc.dart';
 import '../bloc/valor_fipe_event.dart';
 import '../bloc/valor_fipe_state.dart';
+import '../widgets/data_freshness_indicator.dart';
 import '../widgets/error_widget.dart' as custom;
 import '../widgets/loading_widget.dart';
 import '../widgets/valor_card_widget.dart';
@@ -68,6 +69,15 @@ class ValorDetalhesPage extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              // Indicador de frescor dos dados
+                              Center(
+                                child: DataFreshnessIndicator(
+                                  timestamp: state.valorFipe.dataConsulta,
+                                  isFromCache: _isFromCache(
+                                      state.valorFipe.dataConsulta),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
                               ValorCardWidget(valorFipe: state.valorFipe),
                               const SizedBox(height: 24),
                               _buildInfoCard(context, state),
@@ -216,6 +226,16 @@ class ValorDetalhesPage extends StatelessWidget {
     return '${date.day.toString().padLeft(2, '0')}/'
         '${date.month.toString().padLeft(2, '0')}/'
         '${date.year}';
+  }
+
+  /// Verifica se o dado veio do cache baseado no timestamp.
+  ///
+  /// Considera cache se o dado tem mais de 10 segundos (tempo de uma requisição típica).
+  bool _isFromCache(DateTime dataConsulta) {
+    final agora = DateTime.now();
+    final diferenca = agora.difference(dataConsulta);
+    // Se foi consultado há mais de 10 segundos, provavelmente veio do cache
+    return diferenca.inSeconds > 10;
   }
 
   void _shareValue(BuildContext context) async {
