@@ -5,12 +5,14 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../models/marca_model.dart';
 import '../models/modelo_model.dart';
+import '../models/valor_fipe_model.dart';
 import 'fipe_local_data_source.dart';
 
 /// Implementação SQLite do Local Data Source
 ///
-/// Cache leve apenas para marcas e modelos (dados estáveis).
-/// Valores FIPE são buscados sempre online para garantir atualização.
+/// Cache leve:
+/// - Marcas e modelos: cache longo (1 hora) - dados estáveis
+/// - Valores FIPE: cache curto (5 minutos) - dados que mudam mensalmente
 class FipeLocalDataSourceSqliteImpl implements FipeLocalDataSource {
   static const String _databaseName = 'fipe_local.db';
   static const int _databaseVersion = 1;
@@ -72,6 +74,30 @@ class FipeLocalDataSourceSqliteImpl implements FipeLocalDataSource {
         key TEXT PRIMARY KEY,
         timestamp INTEGER NOT NULL
       )
+    ''');
+
+    // Tabela de cache temporário de valores FIPE (TTL curto: 5 minutos)
+    await db.execute('''
+      CREATE TABLE valores_fipe_cache (
+        codigo_marca INTEGER NOT NULL,
+        codigo_modelo INTEGER NOT NULL,
+        ano_modelo INTEGER NOT NULL,
+        codigo_combustivel INTEGER NOT NULL,
+        tipo_veiculo INTEGER NOT NULL,
+        mes_referencia TEXT NOT NULL,
+        marca TEXT NOT NULL,
+        modelo TEXT NOT NULL,
+        combustivel TEXT NOT NULL,
+        codigo_fipe TEXT NOT NULL,
+        valor TEXT NOT NULL,
+        timestamp INTEGER NOT NULL,
+        PRIMARY KEY (codigo_marca, codigo_modelo, ano_modelo, codigo_combustivel, tipo_veiculo)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_valores_cache_lookup 
+      ON valores_fipe_cache(codigo_marca, codigo_modelo, ano_modelo, codigo_combustivel, tipo_veiculo)
     ''');
   }
 
@@ -224,9 +250,134 @@ class FipeLocalDataSourceSqliteImpl implements FipeLocalDataSource {
         await txn.delete('marcas_cache');
         await txn.delete('modelos_cache');
         await txn.delete('cache_times');
+        await txn.delete('valores_fipe_cache');
       });
     } catch (e) {
       throw CacheException('Erro ao limpar cache: ${e.toString()}');
     }
+  }
+
+  @override
+  Future<void> cacheValorFipeTemp(
+    ValorFipeModel valor,
+    String mesReferencia,
+  ) async {
+    try {
+      final db = await database;
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      // Mapeia combustível para código
+      final codigoCombustivel = _getCombustivelCodigo(valor.combustivel);
+
+      await db.insert(
+        'valores_fipe_cache',
+        {
+          'codigo_marca': valor.codigoMarca ?? 0,
+          'codigo_modelo': valor.codigoModelo ?? 0,
+          'ano_modelo': valor.anoModelo,
+          'codigo_combustivel': codigoCombustivel,
+          'tipo_veiculo': valor.tipoVeiculo ?? 0,
+          'mes_referencia': mesReferencia,
+          'marca': valor.marca,
+          'modelo': valor.modelo,
+          'combustivel': valor.combustivel,
+          'codigo_fipe': valor.codigoFipe,
+          'valor': valor.valor,
+          'timestamp': timestamp,
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      throw CacheException('Erro ao cachear valor FIPE: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<ValorFipeModel?> getValorFipeFromCache({
+    required int marcaId,
+    required int modeloId,
+    required int anoModelo,
+    required int codigoCombustivel,
+    required int tipoVeiculo,
+    required String mesReferencia,
+  }) async {
+    try {
+      final db = await database;
+      final List<Map<String, dynamic>> result = await db.query(
+        'valores_fipe_cache',
+        where: '''
+          codigo_marca = ? AND 
+          codigo_modelo = ? AND 
+          ano_modelo = ? AND 
+          codigo_combustivel = ? AND 
+          tipo_veiculo = ? AND
+          mes_referencia = ?
+        ''',
+        whereArgs: [
+          marcaId,
+          modeloId,
+          anoModelo,
+          codigoCombustivel,
+          tipoVeiculo,
+          mesReferencia,
+        ],
+        limit: 1,
+      );
+
+      if (result.isEmpty) return null;
+
+      final cached = result.first;
+      final timestamp = cached['timestamp'] as int;
+      final cacheTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      final now = DateTime.now();
+
+      // Verifica se cache está expirado (5 minutos)
+      if (now.difference(cacheTime).inSeconds >
+          AppConstants.valorFipeCacheTimeout) {
+        return null;
+      }
+
+      // Retorna valor do cache
+      return ValorFipeModel.fromJson({
+        'codigo_marca': cached['codigo_marca'].toString(),
+        'codigo_modelo': cached['codigo_modelo'],
+        'ano_modelo': cached['ano_modelo'],
+        'tipo_veiculo': cached['tipo_veiculo'],
+        'marca': cached['marca'],
+        'modelo': cached['modelo'],
+        'combustivel': cached['combustivel'],
+        'codigo_fipe': cached['codigo_fipe'],
+        'mes_referencia': cached['mes_referencia'],
+        'valor': cached['valor'],
+        'data_consulta':
+            DateTime.fromMillisecondsSinceEpoch(timestamp).toIso8601String(),
+      });
+    } catch (e) {
+      return null; // Em caso de erro, retorna null para buscar remotamente
+    }
+  }
+
+  /// Mapeia nome do combustível para código numérico
+  int _getCombustivelCodigo(String combustivel) {
+    final combustivelLower = combustivel.toLowerCase();
+    if (combustivelLower.contains('gasolina')) return 1;
+    if (combustivelLower.contains('álcool') ||
+        combustivelLower.contains('etanol')) {
+      return 2;
+    }
+    if (combustivelLower.contains('diesel')) return 3;
+    if (combustivelLower.contains('elétrico') ||
+        combustivelLower.contains('eletrico')) {
+      return 4;
+    }
+    if (combustivelLower.contains('flex')) return 5;
+    if (combustivelLower.contains('híbrido') ||
+        combustivelLower.contains('hibrido')) {
+      return 6;
+    }
+    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv')) {
+      return 7;
+    }
+    return 1; // Default: Gasolina
   }
 }

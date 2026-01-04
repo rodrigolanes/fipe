@@ -14,26 +14,19 @@ import 'package:fipe/features/consulta_fipe/domain/usecases/get_valor_fipe_useca
 /// Gerador de mocks usando Mockito
 ///
 /// Execute: dart run build_runner build --delete-conflicting-outputs
-@GenerateMocks([
-  // External dependencies
-  SupabaseClient,
-  SupabaseQueryBuilder,
-  PostgrestFilterBuilder,
-  PostgrestTransformBuilder,
-  SharedPreferences,
-
-  // Data sources
-  FipeRemoteDataSource,
-  FipeLocalDataSource,
-
-  // Repositories
-  FipeRepository,
-
-  // Use cases
-  GetMarcasPorTipoUseCase,
-  GetModelosPorMarcaUseCase,
-  GetAnosCombustiveisPorModeloUseCase,
-  GetAnosPorMarcaUseCase,
-  GetValorFipeUseCase,
+@GenerateNiceMocks([
+  MockSpec<SupabaseClient>(),
+  MockSpec<SupabaseQueryBuilder>(),
+  MockSpec<PostgrestFilterBuilder>(),
+  MockSpec<PostgrestTransformBuilder>(),
+  MockSpec<SharedPreferences>(),
+  MockSpec<FipeRemoteDataSource>(),
+  MockSpec<FipeLocalDataSource>(),
+  MockSpec<FipeRepository>(),
+  MockSpec<GetMarcasPorTipoUseCase>(),
+  MockSpec<GetModelosPorMarcaUseCase>(),
+  MockSpec<GetAnosCombustiveisPorModeloUseCase>(),
+  MockSpec<GetAnosPorMarcaUseCase>(),
+  MockSpec<GetValorFipeUseCase>(),
 ])
 void main() {}

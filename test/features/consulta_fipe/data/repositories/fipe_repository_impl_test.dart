@@ -273,9 +273,13 @@ void main() {
     const ano = '2024';
     const combustivel = 'Gasolina';
     const tipo = TipoVeiculo.carro;
+    const mesReferencia = '202601';
 
-    test('deve buscar valor FIPE remotamente (online-first)', () async {
+    test('deve buscar valor FIPE com cache temporário', () async {
       // Arrange
+      when(mockRemoteDataSource.getUltimoMesReferencia())
+          .thenAnswer((_) async => mesReferencia);
+      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -283,6 +287,7 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       )).thenAnswer((_) async => ValorFipeFixture.valorFipeModel);
+      // cacheValorFipeTemp não precisa ser mockado (método void)
 
       // Act
       final result = await repository.getValorFipe(
@@ -295,6 +300,7 @@ void main() {
 
       // Assert
       expect(result, equals(Right(ValorFipeFixture.valorFipeModel)));
+      verify(mockRemoteDataSource.getUltimoMesReferencia());
       verify(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -302,12 +308,18 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       ));
-      verifyNoMoreInteractions(mockLocalDataSource);
+      verify(mockLocalDataSource.cacheValorFipeTemp(
+        ValorFipeFixture.valorFipeModel,
+        mesReferencia,
+      ));
     });
 
     test('deve retornar ServerFailure quando remoto lança ServerException',
         () async {
       // Arrange
+      when(mockRemoteDataSource.getUltimoMesReferencia())
+          .thenAnswer((_) async => mesReferencia);
+      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -332,6 +344,9 @@ void main() {
     test('deve retornar NetworkFailure quando remoto lança NetworkException',
         () async {
       // Arrange
+      when(mockRemoteDataSource.getUltimoMesReferencia())
+          .thenAnswer((_) async => mesReferencia);
+      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -355,6 +370,9 @@ void main() {
 
     test('deve retornar ServerFailure para erros genéricos', () async {
       // Arrange
+      when(mockRemoteDataSource.getUltimoMesReferencia())
+          .thenAnswer((_) async => mesReferencia);
+      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,

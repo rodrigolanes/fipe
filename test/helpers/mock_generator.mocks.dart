@@ -267,14 +267,14 @@ class _FakeFipeRepository_18 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
-  MockSupabaseClient() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i2.FunctionsClient get functions => (super.noSuchMethod(
         Invocation.getter(#functions),
         returnValue: _FakeFunctionsClient_0(
+          this,
+          Invocation.getter(#functions),
+        ),
+        returnValueForMissingStub: _FakeFunctionsClient_0(
           this,
           Invocation.getter(#functions),
         ),
@@ -296,6 +296,10 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           this,
           Invocation.getter(#storage),
         ),
+        returnValueForMissingStub: _FakeSupabaseStorageClient_1(
+          this,
+          Invocation.getter(#storage),
+        ),
       ) as _i2.SupabaseStorageClient);
 
   @override
@@ -311,6 +315,10 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
   _i2.RealtimeClient get realtime => (super.noSuchMethod(
         Invocation.getter(#realtime),
         returnValue: _FakeRealtimeClient_2(
+          this,
+          Invocation.getter(#realtime),
+        ),
+        returnValueForMissingStub: _FakeRealtimeClient_2(
           this,
           Invocation.getter(#realtime),
         ),
@@ -332,6 +340,10 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           this,
           Invocation.getter(#rest),
         ),
+        returnValueForMissingStub: _FakePostgrestClient_3(
+          this,
+          Invocation.getter(#rest),
+        ),
       ) as _i2.PostgrestClient);
 
   @override
@@ -347,6 +359,7 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
   Map<String, String> get headers => (super.noSuchMethod(
         Invocation.getter(#headers),
         returnValue: <String, String>{},
+        returnValueForMissingStub: <String, String>{},
       ) as Map<String, String>);
 
   @override
@@ -365,6 +378,10 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           this,
           Invocation.getter(#auth),
         ),
+        returnValueForMissingStub: _FakeGoTrueClient_4(
+          this,
+          Invocation.getter(#auth),
+        ),
       ) as _i2.GoTrueClient);
 
   @override
@@ -380,6 +397,13 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
             [table],
           ),
         ),
+        returnValueForMissingStub: _FakeSupabaseQueryBuilder_5(
+          this,
+          Invocation.method(
+            #from,
+            [table],
+          ),
+        ),
       ) as _i2.SupabaseQueryBuilder);
 
   @override
@@ -389,6 +413,13 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           [schema],
         ),
         returnValue: _FakeSupabaseQuerySchema_6(
+          this,
+          Invocation.method(
+            #schema,
+            [schema],
+          ),
+        ),
+        returnValueForMissingStub: _FakeSupabaseQuerySchema_6(
           this,
           Invocation.method(
             #schema,
@@ -423,6 +454,17 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
             },
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #rpc,
+            [fn],
+            {
+              #params: params,
+              #get: get,
+            },
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -444,6 +486,14 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
             {#opts: opts},
           ),
         ),
+        returnValueForMissingStub: _FakeRealtimeChannel_8(
+          this,
+          Invocation.method(
+            #channel,
+            [name],
+            {#opts: opts},
+          ),
+        ),
       ) as _i2.RealtimeChannel);
 
   @override
@@ -453,6 +503,7 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           [],
         ),
         returnValue: <_i2.RealtimeChannel>[],
+        returnValueForMissingStub: <_i2.RealtimeChannel>[],
       ) as List<_i2.RealtimeChannel>);
 
   @override
@@ -469,6 +520,14 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
             [channel],
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #removeChannel,
+            [channel],
+          ),
+        )),
       ) as _i3.Future<String>);
 
   @override
@@ -478,6 +537,7 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
           [],
         ),
         returnValue: _i3.Future<List<String>>.value(<String>[]),
+        returnValueForMissingStub: _i3.Future<List<String>>.value(<String>[]),
       ) as _i3.Future<List<String>>);
 
   @override
@@ -496,10 +556,6 @@ class MockSupabaseClient extends _i1.Mock implements _i2.SupabaseClient {
 /// See the documentation for Mockito's code generation for more information.
 class MockSupabaseQueryBuilder extends _i1.Mock
     implements _i2.SupabaseQueryBuilder {
-  MockSupabaseQueryBuilder() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i2.SupabaseStreamFilterBuilder stream({required List<String>? primaryKey}) =>
       (super.noSuchMethod(
@@ -509,6 +565,14 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           {#primaryKey: primaryKey},
         ),
         returnValue: _FakeSupabaseStreamFilterBuilder_9(
+          this,
+          Invocation.method(
+            #stream,
+            [],
+            {#primaryKey: primaryKey},
+          ),
+        ),
+        returnValueForMissingStub: _FakeSupabaseStreamFilterBuilder_9(
           this,
           Invocation.method(
             #stream,
@@ -533,6 +597,14 @@ class MockSupabaseQueryBuilder extends _i1.Mock
             [columns],
           ),
         ),
+        returnValueForMissingStub:
+            _FakePostgrestFilterBuilder_7<List<Map<String, dynamic>>>(
+          this,
+          Invocation.method(
+            #select,
+            [columns],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<List<Map<String, dynamic>>>);
 
   @override
@@ -547,6 +619,14 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           {#defaultToNull: defaultToNull},
         ),
         returnValue: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #insert,
+            [values],
+            {#defaultToNull: defaultToNull},
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
           this,
           Invocation.method(
             #insert,
@@ -585,6 +665,18 @@ class MockSupabaseQueryBuilder extends _i1.Mock
             },
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #upsert,
+            [values],
+            {
+              #onConflict: onConflict,
+              #ignoreDuplicates: ignoreDuplicates,
+              #defaultToNull: defaultToNull,
+            },
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<dynamic>);
 
   @override
@@ -595,6 +687,13 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           [values],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #update,
+            [values],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
           this,
           Invocation.method(
             #update,
@@ -616,6 +715,13 @@ class MockSupabaseQueryBuilder extends _i1.Mock
             [],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #delete,
+            [],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<dynamic>);
 
   @override
@@ -627,6 +733,13 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           [option],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<int>(
+          this,
+          Invocation.method(
+            #count,
+            [option],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<int>(
           this,
           Invocation.method(
             #count,
@@ -658,6 +771,16 @@ class MockSupabaseQueryBuilder extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestQueryBuilder_10<dynamic>(
+          this,
+          Invocation.method(
+            #setHeader,
+            [
+              key,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestQueryBuilder<dynamic>);
 
   @override
@@ -669,6 +792,13 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           [converter],
         ),
         returnValue: _FakePostgrestBuilder_11<U, U, dynamic>(
+          this,
+          Invocation.method(
+            #withConverter,
+            [converter],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestBuilder_11<U, U, dynamic>(
           this,
           Invocation.method(
             #withConverter,
@@ -693,6 +823,17 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           ],
         ),
         returnValue: _FakeUri_12(
+          this,
+          Invocation.method(
+            #appendSearchParams,
+            [
+              key,
+              value,
+              url,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeUri_12(
           this,
           Invocation.method(
             #appendSearchParams,
@@ -728,6 +869,16 @@ class MockSupabaseQueryBuilder extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakeUri_12(
+          this,
+          Invocation.method(
+            #overrideSearchParams,
+            [
+              key,
+              value,
+            ],
+          ),
+        ),
       ) as Uri);
 
   @override
@@ -737,6 +888,7 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           [],
         ),
         returnValue: _i3.Stream<dynamic>.empty(),
+        returnValueForMissingStub: _i3.Stream<dynamic>.empty(),
       ) as _i3.Stream<dynamic>);
 
   @override
@@ -751,6 +903,7 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           {#test: test},
         ),
         returnValue: _i3.Future<dynamic>.value(),
+        returnValueForMissingStub: _i3.Future<dynamic>.value(),
       ) as _i3.Future<dynamic>);
 
   @override
@@ -783,6 +936,25 @@ class MockSupabaseQueryBuilder extends _i1.Mock
                 {#onError: onError},
               ),
             ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<U>(
+                this,
+                Invocation.method(
+                  #then,
+                  [onValue],
+                  {#onError: onError},
+                ),
+              ),
+              (U v) => _i3.Future<U>.value(v),
+            ) ??
+            _FakeFuture_13<U>(
+              this,
+              Invocation.method(
+                #then,
+                [onValue],
+                {#onError: onError},
+              ),
+            ),
       ) as _i3.Future<U>);
 
   @override
@@ -797,6 +969,7 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           {#onTimeout: onTimeout},
         ),
         returnValue: _i3.Future<dynamic>.value(),
+        returnValueForMissingStub: _i3.Future<dynamic>.value(),
       ) as _i3.Future<dynamic>);
 
   @override
@@ -807,6 +980,7 @@ class MockSupabaseQueryBuilder extends _i1.Mock
           [action],
         ),
         returnValue: _i3.Future<dynamic>.value(),
+        returnValueForMissingStub: _i3.Future<dynamic>.value(),
       ) as _i3.Future<dynamic>);
 }
 
@@ -815,10 +989,6 @@ class MockSupabaseQueryBuilder extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockPostgrestFilterBuilder<T> extends _i1.Mock
     implements _i2.PostgrestFilterBuilder<T> {
-  MockPostgrestFilterBuilder() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i2.PostgrestFilterBuilder<T> copyWithUrl(Uri? url) => (super.noSuchMethod(
         Invocation.method(
@@ -826,6 +996,13 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [url],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #copyWithUrl,
+            [url],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #copyWithUrl,
@@ -860,6 +1037,17 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #not,
+            [
+              column,
+              operator,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -874,6 +1062,14 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           {#referencedTable: referencedTable},
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #or,
+            [filters],
+            {#referencedTable: referencedTable},
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #or,
@@ -897,6 +1093,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #eq,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #eq,
@@ -931,6 +1137,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #neq,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -947,6 +1163,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #gt,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #gt,
@@ -981,6 +1207,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #gte,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -997,6 +1233,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #lt,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #lt,
@@ -1031,6 +1277,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #lte,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1047,6 +1303,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #like,
+            [
+              column,
+              pattern,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #like,
@@ -1081,6 +1347,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #likeAllOf,
+            [
+              column,
+              patterns,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<dynamic>);
 
   @override
@@ -1097,6 +1373,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #likeAnyOf,
+            [
+              column,
+              patterns,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
           this,
           Invocation.method(
             #likeAnyOf,
@@ -1131,6 +1417,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #ilike,
+            [
+              column,
+              pattern,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1147,6 +1443,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #ilikeAllOf,
+            [
+              column,
+              patterns,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
           this,
           Invocation.method(
             #ilikeAllOf,
@@ -1181,6 +1487,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<dynamic>(
+          this,
+          Invocation.method(
+            #ilikeAnyOf,
+            [
+              column,
+              patterns,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<dynamic>);
 
   @override
@@ -1197,6 +1513,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #isFilter,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #isFilter,
@@ -1231,6 +1557,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #inFilter,
+            [
+              column,
+              values,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1247,6 +1583,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #contains,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #contains,
@@ -1281,6 +1627,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #containedBy,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1297,6 +1653,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #rangeLt,
+            [
+              column,
+              range,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #rangeLt,
@@ -1331,6 +1697,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #rangeGt,
+            [
+              column,
+              range,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1347,6 +1723,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #rangeGte,
+            [
+              column,
+              range,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #rangeGte,
@@ -1381,6 +1767,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #rangeLte,
+            [
+              column,
+              range,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1406,6 +1802,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #rangeAdjacent,
+            [
+              column,
+              range,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1422,6 +1828,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #overlaps,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #overlaps,
@@ -1466,6 +1882,20 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             },
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #textSearch,
+            [
+              column,
+              query,
+            ],
+            {
+              #config: config,
+              #type: type,
+            },
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1494,6 +1924,17 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #filter,
+            [
+              column,
+              operator,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1504,6 +1945,13 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [query],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #match,
+            [query],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #match,
@@ -1526,6 +1974,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #matchRegex,
+            [
+              column,
+              pattern,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #matchRegex,
@@ -1560,6 +2018,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #imatchRegex,
+            [
+              column,
+              pattern,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1576,6 +2044,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #isDistinct,
+            [
+              column,
+              value,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
           this,
           Invocation.method(
             #isDistinct,
@@ -1610,6 +2088,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestFilterBuilder_7<T>(
+          this,
+          Invocation.method(
+            #setHeader,
+            [
+              key,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestFilterBuilder<T>);
 
   @override
@@ -1621,6 +2109,14 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [columns],
         ),
         returnValue:
+            _FakePostgrestTransformBuilder_14<List<Map<String, dynamic>>>(
+          this,
+          Invocation.method(
+            #select,
+            [columns],
+          ),
+        ),
+        returnValueForMissingStub:
             _FakePostgrestTransformBuilder_14<List<Map<String, dynamic>>>(
           this,
           Invocation.method(
@@ -1659,6 +2155,18 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             },
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #order,
+            [column],
+            {
+              #ascending: ascending,
+              #nullsFirst: nullsFirst,
+              #referencedTable: referencedTable,
+            },
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<T>);
 
   @override
@@ -1673,6 +2181,14 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           {#referencedTable: referencedTable},
         ),
         returnValue: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #limit,
+            [count],
+            {#referencedTable: referencedTable},
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
           this,
           Invocation.method(
             #limit,
@@ -1708,6 +2224,17 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             {#referencedTable: referencedTable},
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #range,
+            [
+              from,
+              to,
+            ],
+            {#referencedTable: referencedTable},
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<T>);
 
   @override
@@ -1718,6 +2245,14 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<Map<String, dynamic>>(
+          this,
+          Invocation.method(
+            #single,
+            [],
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakePostgrestTransformBuilder_14<Map<String, dynamic>>(
           this,
           Invocation.method(
             #single,
@@ -1740,6 +2275,14 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             [],
           ),
         ),
+        returnValueForMissingStub:
+            _FakePostgrestTransformBuilder_14<Map<String, dynamic>?>(
+          this,
+          Invocation.method(
+            #maybeSingle,
+            [],
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<Map<String, dynamic>?>);
 
   @override
@@ -1749,6 +2292,13 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<String>(
+          this,
+          Invocation.method(
+            #csv,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<String>(
           this,
           Invocation.method(
             #csv,
@@ -1773,6 +2323,14 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             [count],
           ),
         ),
+        returnValueForMissingStub:
+            _FakeResponsePostgrestBuilder_15<_i2.PostgrestResponse<T>, T, T>(
+          this,
+          Invocation.method(
+            #count,
+            [count],
+          ),
+        ),
       ) as _i2.ResponsePostgrestBuilder<_i2.PostgrestResponse<T>, T, T>);
 
   @override
@@ -1782,6 +2340,13 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _FakePostgrestBuilder_11<void, void, void>(
+          this,
+          Invocation.method(
+            #head,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestBuilder_11<void, void, void>(
           this,
           Invocation.method(
             #head,
@@ -1806,6 +2371,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
                 [],
               ),
             ),
+            returnValueForMissingStub: _FakeResponsePostgrestBuilder_15<
+                Map<String, dynamic>,
+                Map<String, dynamic>,
+                Map<String, dynamic>>(
+              this,
+              Invocation.method(
+                #geojson,
+                [],
+              ),
+            ),
           ) as _i2.ResponsePostgrestBuilder<Map<String, dynamic>,
               Map<String, dynamic>, Map<String, dynamic>>);
 
@@ -1817,6 +2392,13 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [value],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #maxAffected,
+            [value],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
           this,
           Invocation.method(
             #maxAffected,
@@ -1859,6 +2441,21 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             },
           ),
         ),
+        returnValueForMissingStub:
+            _FakePostgrestBuilder_11<String, String, String>(
+          this,
+          Invocation.method(
+            #explain,
+            [],
+            {
+              #analyze: analyze,
+              #verbose: verbose,
+              #settings: settings,
+              #buffers: buffers,
+              #wal: wal,
+            },
+          ),
+        ),
       ) as _i2.PostgrestBuilder<String, String, String>);
 
   @override
@@ -1870,6 +2467,13 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [converter],
         ),
         returnValue: _FakePostgrestBuilder_11<U, U, T>(
+          this,
+          Invocation.method(
+            #withConverter,
+            [converter],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestBuilder_11<U, U, T>(
           this,
           Invocation.method(
             #withConverter,
@@ -1894,6 +2498,17 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakeUri_12(
+          this,
+          Invocation.method(
+            #appendSearchParams,
+            [
+              key,
+              value,
+              url,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeUri_12(
           this,
           Invocation.method(
             #appendSearchParams,
@@ -1929,6 +2544,16 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakeUri_12(
+          this,
+          Invocation.method(
+            #overrideSearchParams,
+            [
+              key,
+              value,
+            ],
+          ),
+        ),
       ) as Uri);
 
   @override
@@ -1938,6 +2563,7 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _i3.Stream<T>.empty(),
+        returnValueForMissingStub: _i3.Stream<T>.empty(),
       ) as _i3.Stream<T>);
 
   @override
@@ -1952,6 +2578,25 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           {#test: test},
         ),
         returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #catchError,
+                  [onError],
+                  {#test: test},
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_13<T>(
+              this,
+              Invocation.method(
+                #catchError,
+                [onError],
+                {#test: test},
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
               _i7.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
@@ -2002,6 +2647,25 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
                 {#onError: onError},
               ),
             ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<U>(
+                this,
+                Invocation.method(
+                  #then,
+                  [onValue],
+                  {#onError: onError},
+                ),
+              ),
+              (U v) => _i3.Future<U>.value(v),
+            ) ??
+            _FakeFuture_13<U>(
+              this,
+              Invocation.method(
+                #then,
+                [onValue],
+                {#onError: onError},
+              ),
+            ),
       ) as _i3.Future<U>);
 
   @override
@@ -2016,6 +2680,25 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
           {#onTimeout: onTimeout},
         ),
         returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #timeout,
+                  [timeLimit],
+                  {#onTimeout: onTimeout},
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_13<T>(
+              this,
+              Invocation.method(
+                #timeout,
+                [timeLimit],
+                {#onTimeout: onTimeout},
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
               _i7.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
@@ -2060,6 +2743,23 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
                 [action],
               ),
             ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #whenComplete,
+                  [action],
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_13<T>(
+              this,
+              Invocation.method(
+                #whenComplete,
+                [action],
+              ),
+            ),
       ) as _i3.Future<T>);
 }
 
@@ -2068,10 +2768,6 @@ class MockPostgrestFilterBuilder<T> extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockPostgrestTransformBuilder<T> extends _i1.Mock
     implements _i2.PostgrestTransformBuilder<T> {
-  MockPostgrestTransformBuilder() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i2.PostgrestTransformBuilder<T> copyWithUrl(Uri? url) => (super.noSuchMethod(
         Invocation.method(
@@ -2079,6 +2775,13 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [url],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #copyWithUrl,
+            [url],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
           this,
           Invocation.method(
             #copyWithUrl,
@@ -2110,6 +2813,16 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #setHeader,
+            [
+              key,
+              value,
+            ],
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<T>);
 
   @override
@@ -2121,6 +2834,14 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [columns],
         ),
         returnValue:
+            _FakePostgrestTransformBuilder_14<List<Map<String, dynamic>>>(
+          this,
+          Invocation.method(
+            #select,
+            [columns],
+          ),
+        ),
+        returnValueForMissingStub:
             _FakePostgrestTransformBuilder_14<List<Map<String, dynamic>>>(
           this,
           Invocation.method(
@@ -2159,6 +2880,18 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             },
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #order,
+            [column],
+            {
+              #ascending: ascending,
+              #nullsFirst: nullsFirst,
+              #referencedTable: referencedTable,
+            },
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<T>);
 
   @override
@@ -2173,6 +2906,14 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           {#referencedTable: referencedTable},
         ),
         returnValue: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #limit,
+            [count],
+            {#referencedTable: referencedTable},
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
           this,
           Invocation.method(
             #limit,
@@ -2208,6 +2949,17 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             {#referencedTable: referencedTable},
           ),
         ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #range,
+            [
+              from,
+              to,
+            ],
+            {#referencedTable: referencedTable},
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<T>);
 
   @override
@@ -2218,6 +2970,14 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<Map<String, dynamic>>(
+          this,
+          Invocation.method(
+            #single,
+            [],
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakePostgrestTransformBuilder_14<Map<String, dynamic>>(
           this,
           Invocation.method(
             #single,
@@ -2240,6 +3000,14 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             [],
           ),
         ),
+        returnValueForMissingStub:
+            _FakePostgrestTransformBuilder_14<Map<String, dynamic>?>(
+          this,
+          Invocation.method(
+            #maybeSingle,
+            [],
+          ),
+        ),
       ) as _i2.PostgrestTransformBuilder<Map<String, dynamic>?>);
 
   @override
@@ -2249,6 +3017,13 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<String>(
+          this,
+          Invocation.method(
+            #csv,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<String>(
           this,
           Invocation.method(
             #csv,
@@ -2273,6 +3048,14 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             [count],
           ),
         ),
+        returnValueForMissingStub:
+            _FakeResponsePostgrestBuilder_15<_i2.PostgrestResponse<T>, T, T>(
+          this,
+          Invocation.method(
+            #count,
+            [count],
+          ),
+        ),
       ) as _i2.ResponsePostgrestBuilder<_i2.PostgrestResponse<T>, T, T>);
 
   @override
@@ -2282,6 +3065,13 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _FakePostgrestBuilder_11<void, void, void>(
+          this,
+          Invocation.method(
+            #head,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestBuilder_11<void, void, void>(
           this,
           Invocation.method(
             #head,
@@ -2306,6 +3096,16 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
                 [],
               ),
             ),
+            returnValueForMissingStub: _FakeResponsePostgrestBuilder_15<
+                Map<String, dynamic>,
+                Map<String, dynamic>,
+                Map<String, dynamic>>(
+              this,
+              Invocation.method(
+                #geojson,
+                [],
+              ),
+            ),
           ) as _i2.ResponsePostgrestBuilder<Map<String, dynamic>,
               Map<String, dynamic>, Map<String, dynamic>>);
 
@@ -2317,6 +3117,13 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [value],
         ),
         returnValue: _FakePostgrestTransformBuilder_14<T>(
+          this,
+          Invocation.method(
+            #maxAffected,
+            [value],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestTransformBuilder_14<T>(
           this,
           Invocation.method(
             #maxAffected,
@@ -2359,6 +3166,21 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             },
           ),
         ),
+        returnValueForMissingStub:
+            _FakePostgrestBuilder_11<String, String, String>(
+          this,
+          Invocation.method(
+            #explain,
+            [],
+            {
+              #analyze: analyze,
+              #verbose: verbose,
+              #settings: settings,
+              #buffers: buffers,
+              #wal: wal,
+            },
+          ),
+        ),
       ) as _i2.PostgrestBuilder<String, String, String>);
 
   @override
@@ -2370,6 +3192,13 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [converter],
         ),
         returnValue: _FakePostgrestBuilder_11<U, U, T>(
+          this,
+          Invocation.method(
+            #withConverter,
+            [converter],
+          ),
+        ),
+        returnValueForMissingStub: _FakePostgrestBuilder_11<U, U, T>(
           this,
           Invocation.method(
             #withConverter,
@@ -2394,6 +3223,17 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           ],
         ),
         returnValue: _FakeUri_12(
+          this,
+          Invocation.method(
+            #appendSearchParams,
+            [
+              key,
+              value,
+              url,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeUri_12(
           this,
           Invocation.method(
             #appendSearchParams,
@@ -2429,6 +3269,16 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
             ],
           ),
         ),
+        returnValueForMissingStub: _FakeUri_12(
+          this,
+          Invocation.method(
+            #overrideSearchParams,
+            [
+              key,
+              value,
+            ],
+          ),
+        ),
       ) as Uri);
 
   @override
@@ -2438,6 +3288,7 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           [],
         ),
         returnValue: _i3.Stream<T>.empty(),
+        returnValueForMissingStub: _i3.Stream<T>.empty(),
       ) as _i3.Stream<T>);
 
   @override
@@ -2452,6 +3303,25 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           {#test: test},
         ),
         returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #catchError,
+                  [onError],
+                  {#test: test},
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_13<T>(
+              this,
+              Invocation.method(
+                #catchError,
+                [onError],
+                {#test: test},
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
               _i7.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
@@ -2502,6 +3372,25 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
                 {#onError: onError},
               ),
             ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<U>(
+                this,
+                Invocation.method(
+                  #then,
+                  [onValue],
+                  {#onError: onError},
+                ),
+              ),
+              (U v) => _i3.Future<U>.value(v),
+            ) ??
+            _FakeFuture_13<U>(
+              this,
+              Invocation.method(
+                #then,
+                [onValue],
+                {#onError: onError},
+              ),
+            ),
       ) as _i3.Future<U>);
 
   @override
@@ -2516,6 +3405,25 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
           {#onTimeout: onTimeout},
         ),
         returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #timeout,
+                  [timeLimit],
+                  {#onTimeout: onTimeout},
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_13<T>(
+              this,
+              Invocation.method(
+                #timeout,
+                [timeLimit],
+                {#onTimeout: onTimeout},
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
               _i7.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
@@ -2560,6 +3468,23 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
                 [action],
               ),
             ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #whenComplete,
+                  [action],
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_13<T>(
+              this,
+              Invocation.method(
+                #whenComplete,
+                [action],
+              ),
+            ),
       ) as _i3.Future<T>);
 }
 
@@ -2567,10 +3492,6 @@ class MockPostgrestTransformBuilder<T> extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
-  MockSharedPreferences() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   Set<String> getKeys() => (super.noSuchMethod(
         Invocation.method(
@@ -2578,37 +3499,53 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           [],
         ),
         returnValue: <String>{},
+        returnValueForMissingStub: <String>{},
       ) as Set<String>);
 
   @override
-  Object? get(String? key) => (super.noSuchMethod(Invocation.method(
-        #get,
-        [key],
-      )) as Object?);
+  Object? get(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as Object?);
 
   @override
-  bool? getBool(String? key) => (super.noSuchMethod(Invocation.method(
-        #getBool,
-        [key],
-      )) as bool?);
+  bool? getBool(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getBool,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as bool?);
 
   @override
-  int? getInt(String? key) => (super.noSuchMethod(Invocation.method(
-        #getInt,
-        [key],
-      )) as int?);
+  int? getInt(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getInt,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as int?);
 
   @override
-  double? getDouble(String? key) => (super.noSuchMethod(Invocation.method(
-        #getDouble,
-        [key],
-      )) as double?);
+  double? getDouble(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getDouble,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as double?);
 
   @override
-  String? getString(String? key) => (super.noSuchMethod(Invocation.method(
-        #getString,
-        [key],
-      )) as String?);
+  String? getString(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getString,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as String?);
 
   @override
   bool containsKey(String? key) => (super.noSuchMethod(
@@ -2617,14 +3554,17 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           [key],
         ),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
 
   @override
-  List<String>? getStringList(String? key) =>
-      (super.noSuchMethod(Invocation.method(
-        #getStringList,
-        [key],
-      )) as List<String>?);
+  List<String>? getStringList(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getStringList,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as List<String>?);
 
   @override
   _i3.Future<bool> setBool(
@@ -2640,6 +3580,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           ],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2656,6 +3597,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           ],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2672,6 +3614,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           ],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2688,6 +3631,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           ],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2704,6 +3648,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           ],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2713,6 +3658,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           [key],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2722,6 +3668,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           [],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2731,6 +3678,7 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
           [],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2749,10 +3697,6 @@ class MockSharedPreferences extends _i1.Mock implements _i8.SharedPreferences {
 /// See the documentation for Mockito's code generation for more information.
 class MockFipeRemoteDataSource extends _i1.Mock
     implements _i9.FipeRemoteDataSource {
-  MockFipeRemoteDataSource() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i3.Future<List<_i10.MarcaModel>> getMarcasByTipo(_i11.TipoVeiculo? tipo) =>
       (super.noSuchMethod(
@@ -2761,6 +3705,8 @@ class MockFipeRemoteDataSource extends _i1.Mock
           [tipo],
         ),
         returnValue:
+            _i3.Future<List<_i10.MarcaModel>>.value(<_i10.MarcaModel>[]),
+        returnValueForMissingStub:
             _i3.Future<List<_i10.MarcaModel>>.value(<_i10.MarcaModel>[]),
       ) as _i3.Future<List<_i10.MarcaModel>>);
 
@@ -2781,6 +3727,8 @@ class MockFipeRemoteDataSource extends _i1.Mock
         ),
         returnValue:
             _i3.Future<List<_i12.ModeloModel>>.value(<_i12.ModeloModel>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i12.ModeloModel>>.value(<_i12.ModeloModel>[]),
       ) as _i3.Future<List<_i12.ModeloModel>>);
 
   @override
@@ -2798,6 +3746,9 @@ class MockFipeRemoteDataSource extends _i1.Mock
         ),
         returnValue: _i3.Future<List<_i13.AnoCombustivelModel>>.value(
             <_i13.AnoCombustivelModel>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i13.AnoCombustivelModel>>.value(
+                <_i13.AnoCombustivelModel>[]),
       ) as _i3.Future<List<_i13.AnoCombustivelModel>>);
 
   @override
@@ -2815,6 +3766,9 @@ class MockFipeRemoteDataSource extends _i1.Mock
         ),
         returnValue: _i3.Future<List<_i13.AnoCombustivelModel>>.value(
             <_i13.AnoCombustivelModel>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i13.AnoCombustivelModel>>.value(
+                <_i13.AnoCombustivelModel>[]),
       ) as _i3.Future<List<_i13.AnoCombustivelModel>>);
 
   @override
@@ -2852,6 +3806,21 @@ class MockFipeRemoteDataSource extends _i1.Mock
             },
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<_i4.ValorFipeModel>.value(_FakeValorFipeModel_16(
+          this,
+          Invocation.method(
+            #getValorFipe,
+            [],
+            {
+              #marcaId: marcaId,
+              #modeloId: modeloId,
+              #ano: ano,
+              #combustivel: combustivel,
+              #tipo: tipo,
+            },
+          ),
+        )),
       ) as _i3.Future<_i4.ValorFipeModel>);
 
   @override
@@ -2867,6 +3836,14 @@ class MockFipeRemoteDataSource extends _i1.Mock
             [],
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getUltimoMesReferencia,
+            [],
+          ),
+        )),
       ) as _i3.Future<String>);
 }
 
@@ -2875,10 +3852,6 @@ class MockFipeRemoteDataSource extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockFipeLocalDataSource extends _i1.Mock
     implements _i14.FipeLocalDataSource {
-  MockFipeLocalDataSource() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i3.Future<void> cacheMarcas(
     List<_i10.MarcaModel>? marcas,
@@ -2904,6 +3877,8 @@ class MockFipeLocalDataSource extends _i1.Mock
           [tipo],
         ),
         returnValue:
+            _i3.Future<List<_i10.MarcaModel>>.value(<_i10.MarcaModel>[]),
+        returnValueForMissingStub:
             _i3.Future<List<_i10.MarcaModel>>.value(<_i10.MarcaModel>[]),
       ) as _i3.Future<List<_i10.MarcaModel>>);
 
@@ -2933,6 +3908,8 @@ class MockFipeLocalDataSource extends _i1.Mock
         ),
         returnValue:
             _i3.Future<List<_i12.ModeloModel>>.value(<_i12.ModeloModel>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i12.ModeloModel>>.value(<_i12.ModeloModel>[]),
       ) as _i3.Future<List<_i12.ModeloModel>>);
 
   @override
@@ -2942,6 +3919,7 @@ class MockFipeLocalDataSource extends _i1.Mock
           [key],
         ),
         returnValue: _i3.Future<bool>.value(false),
+        returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
 
   @override
@@ -2953,16 +3931,55 @@ class MockFipeLocalDataSource extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> cacheValorFipeTemp(
+    _i4.ValorFipeModel? valor,
+    String? mesReferencia,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheValorFipeTemp,
+          [
+            valor,
+            mesReferencia,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i4.ValorFipeModel?> getValorFipeFromCache({
+    required int? marcaId,
+    required int? modeloId,
+    required int? anoModelo,
+    required int? codigoCombustivel,
+    required int? tipoVeiculo,
+    required String? mesReferencia,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getValorFipeFromCache,
+          [],
+          {
+            #marcaId: marcaId,
+            #modeloId: modeloId,
+            #anoModelo: anoModelo,
+            #codigoCombustivel: codigoCombustivel,
+            #tipoVeiculo: tipoVeiculo,
+            #mesReferencia: mesReferencia,
+          },
+        ),
+        returnValue: _i3.Future<_i4.ValorFipeModel?>.value(),
+        returnValueForMissingStub: _i3.Future<_i4.ValorFipeModel?>.value(),
+      ) as _i3.Future<_i4.ValorFipeModel?>);
 }
 
 /// A class which mocks [FipeRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
-  MockFipeRepository() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i3.Future<_i5.Either<_i15.Failure, List<_i16.MarcaEntity>>> getMarcasPorTipo(
           _i11.TipoVeiculo? tipo) =>
@@ -2972,6 +3989,15 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
           [tipo],
         ),
         returnValue:
+            _i3.Future<_i5.Either<_i15.Failure, List<_i16.MarcaEntity>>>.value(
+                _FakeEither_17<_i15.Failure, List<_i16.MarcaEntity>>(
+          this,
+          Invocation.method(
+            #getMarcasPorTipo,
+            [tipo],
+          ),
+        )),
+        returnValueForMissingStub:
             _i3.Future<_i5.Either<_i15.Failure, List<_i16.MarcaEntity>>>.value(
                 _FakeEither_17<_i15.Failure, List<_i16.MarcaEntity>>(
           this,
@@ -2999,6 +4025,19 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
           {#ano: ano},
         ),
         returnValue:
+            _i3.Future<_i5.Either<_i15.Failure, List<_i17.ModeloEntity>>>.value(
+                _FakeEither_17<_i15.Failure, List<_i17.ModeloEntity>>(
+          this,
+          Invocation.method(
+            #getModelosPorMarca,
+            [
+              marcaId,
+              tipo,
+            ],
+            {#ano: ano},
+          ),
+        )),
+        returnValueForMissingStub:
             _i3.Future<_i5.Either<_i15.Failure, List<_i17.ModeloEntity>>>.value(
                 _FakeEither_17<_i15.Failure, List<_i17.ModeloEntity>>(
           this,
@@ -3040,38 +4079,65 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
                 ],
               ),
             )),
-          ) as _i3.Future<
-              _i5.Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>);
-
-  @override
-  _i3.Future<_i5.Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>
-      getAnosPorMarca(
-    int? marcaId,
-    _i11.TipoVeiculo? tipo,
-  ) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getAnosPorMarca,
-              [
-                marcaId,
-                tipo,
-              ],
-            ),
-            returnValue: _i3.Future<
+            returnValueForMissingStub: _i3.Future<
                     _i5.Either<_i15.Failure,
                         List<_i18.AnoCombustivelEntity>>>.value(
                 _FakeEither_17<_i15.Failure, List<_i18.AnoCombustivelEntity>>(
               this,
               Invocation.method(
-                #getAnosPorMarca,
+                #getAnosCombustiveisPorModelo,
                 [
-                  marcaId,
+                  modeloId,
                   tipo,
                 ],
               ),
             )),
           ) as _i3.Future<
               _i5.Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>);
+
+  @override
+  _i3.Future<
+      _i5
+      .Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>> getAnosPorMarca(
+    int? marcaId,
+    _i11.TipoVeiculo? tipo,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAnosPorMarca,
+          [
+            marcaId,
+            tipo,
+          ],
+        ),
+        returnValue: _i3.Future<
+                _i5
+                .Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>.value(
+            _FakeEither_17<_i15.Failure, List<_i18.AnoCombustivelEntity>>(
+          this,
+          Invocation.method(
+            #getAnosPorMarca,
+            [
+              marcaId,
+              tipo,
+            ],
+          ),
+        )),
+        returnValueForMissingStub: _i3.Future<
+                _i5
+                .Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>.value(
+            _FakeEither_17<_i15.Failure, List<_i18.AnoCombustivelEntity>>(
+          this,
+          Invocation.method(
+            #getAnosPorMarca,
+            [
+              marcaId,
+              tipo,
+            ],
+          ),
+        )),
+      ) as _i3
+          .Future<_i5.Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>);
 
   @override
   _i3.Future<_i5.Either<_i15.Failure, _i19.ValorFipeEntity>> getValorFipe({
@@ -3109,6 +4175,22 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
             },
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<_i5.Either<_i15.Failure, _i19.ValorFipeEntity>>.value(
+                _FakeEither_17<_i15.Failure, _i19.ValorFipeEntity>(
+          this,
+          Invocation.method(
+            #getValorFipe,
+            [],
+            {
+              #marcaId: marcaId,
+              #modeloId: modeloId,
+              #ano: ano,
+              #combustivel: combustivel,
+              #tipo: tipo,
+            },
+          ),
+        )),
       ) as _i3.Future<_i5.Either<_i15.Failure, _i19.ValorFipeEntity>>);
 }
 
@@ -3117,14 +4199,14 @@ class MockFipeRepository extends _i1.Mock implements _i6.FipeRepository {
 /// See the documentation for Mockito's code generation for more information.
 class MockGetMarcasPorTipoUseCase extends _i1.Mock
     implements _i20.GetMarcasPorTipoUseCase {
-  MockGetMarcasPorTipoUseCase() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i6.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
         returnValue: _FakeFipeRepository_18(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeFipeRepository_18(
           this,
           Invocation.getter(#repository),
         ),
@@ -3147,6 +4229,15 @@ class MockGetMarcasPorTipoUseCase extends _i1.Mock
             [params],
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<_i5.Either<_i15.Failure, List<_i16.MarcaEntity>>>.value(
+                _FakeEither_17<_i15.Failure, List<_i16.MarcaEntity>>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
       ) as _i3.Future<_i5.Either<_i15.Failure, List<_i16.MarcaEntity>>>);
 }
 
@@ -3155,14 +4246,14 @@ class MockGetMarcasPorTipoUseCase extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockGetModelosPorMarcaUseCase extends _i1.Mock
     implements _i21.GetModelosPorMarcaUseCase {
-  MockGetModelosPorMarcaUseCase() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i6.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
         returnValue: _FakeFipeRepository_18(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeFipeRepository_18(
           this,
           Invocation.getter(#repository),
         ),
@@ -3185,6 +4276,15 @@ class MockGetModelosPorMarcaUseCase extends _i1.Mock
             [params],
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<_i5.Either<_i15.Failure, List<_i17.ModeloEntity>>>.value(
+                _FakeEither_17<_i15.Failure, List<_i17.ModeloEntity>>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
       ) as _i3.Future<_i5.Either<_i15.Failure, List<_i17.ModeloEntity>>>);
 }
 
@@ -3193,14 +4293,14 @@ class MockGetModelosPorMarcaUseCase extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockGetAnosCombustiveisPorModeloUseCase extends _i1.Mock
     implements _i22.GetAnosCombustiveisPorModeloUseCase {
-  MockGetAnosCombustiveisPorModeloUseCase() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i6.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
         returnValue: _FakeFipeRepository_18(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeFipeRepository_18(
           this,
           Invocation.getter(#repository),
         ),
@@ -3224,6 +4324,16 @@ class MockGetAnosCombustiveisPorModeloUseCase extends _i1.Mock
             [params],
           ),
         )),
+        returnValueForMissingStub: _i3.Future<
+                _i5
+                .Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>.value(
+            _FakeEither_17<_i15.Failure, List<_i18.AnoCombustivelEntity>>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
       ) as _i3
           .Future<_i5.Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>);
 }
@@ -3233,14 +4343,14 @@ class MockGetAnosCombustiveisPorModeloUseCase extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockGetAnosPorMarcaUseCase extends _i1.Mock
     implements _i23.GetAnosPorMarcaUseCase {
-  MockGetAnosPorMarcaUseCase() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i6.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
         returnValue: _FakeFipeRepository_18(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeFipeRepository_18(
           this,
           Invocation.getter(#repository),
         ),
@@ -3264,6 +4374,16 @@ class MockGetAnosPorMarcaUseCase extends _i1.Mock
             [params],
           ),
         )),
+        returnValueForMissingStub: _i3.Future<
+                _i5
+                .Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>.value(
+            _FakeEither_17<_i15.Failure, List<_i18.AnoCombustivelEntity>>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
       ) as _i3
           .Future<_i5.Either<_i15.Failure, List<_i18.AnoCombustivelEntity>>>);
 }
@@ -3273,14 +4393,14 @@ class MockGetAnosPorMarcaUseCase extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockGetValorFipeUseCase extends _i1.Mock
     implements _i24.GetValorFipeUseCase {
-  MockGetValorFipeUseCase() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i6.FipeRepository get repository => (super.noSuchMethod(
         Invocation.getter(#repository),
         returnValue: _FakeFipeRepository_18(
+          this,
+          Invocation.getter(#repository),
+        ),
+        returnValueForMissingStub: _FakeFipeRepository_18(
           this,
           Invocation.getter(#repository),
         ),
@@ -3295,6 +4415,15 @@ class MockGetValorFipeUseCase extends _i1.Mock
           [params],
         ),
         returnValue:
+            _i3.Future<_i5.Either<_i15.Failure, _i19.ValorFipeEntity>>.value(
+                _FakeEither_17<_i15.Failure, _i19.ValorFipeEntity>(
+          this,
+          Invocation.method(
+            #call,
+            [params],
+          ),
+        )),
+        returnValueForMissingStub:
             _i3.Future<_i5.Either<_i15.Failure, _i19.ValorFipeEntity>>.value(
                 _FakeEither_17<_i15.Failure, _i19.ValorFipeEntity>(
           this,

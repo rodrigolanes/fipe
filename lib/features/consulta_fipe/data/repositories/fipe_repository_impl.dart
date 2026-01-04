@@ -164,8 +164,29 @@ class FipeRepositoryImpl implements FipeRepository {
     required TipoVeiculo tipo,
   }) async {
     try {
-      // ESTRATÉGIA ONLINE-FIRST: Sempre busca do servidor
-      // Garante dados sempre atualizados
+      // Busca mês de referência atual do servidor
+      final mesReferencia = await remoteDataSource.getUltimoMesReferencia();
+
+      // Mapeia combustível para código
+      final codigoCombustivel = _getCombustivelCodigo(combustivel);
+      final anoModelo = int.parse(ano);
+
+      // ESTRATÉGIA: Cache temporário (5 min) com validação de mês
+      // 1. Verifica cache local (válido + mesmo mês)
+      final valorCache = await localDataSource.getValorFipeFromCache(
+        marcaId: marcaId,
+        modeloId: modeloId,
+        anoModelo: anoModelo,
+        codigoCombustivel: codigoCombustivel,
+        tipoVeiculo: tipo.codigo,
+        mesReferencia: mesReferencia,
+      );
+
+      if (valorCache != null) {
+        return Right(valorCache);
+      }
+
+      // 2. Se cache inválido/expirado, busca do servidor
       final valor = await remoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -173,6 +194,13 @@ class FipeRepositoryImpl implements FipeRepository {
         combustivel: combustivel,
         tipo: tipo,
       );
+
+      // 3. Salva no cache temporário
+      try {
+        await localDataSource.cacheValorFipeTemp(valor, mesReferencia);
+      } catch (e) {
+        // Não falha se cache falhar
+      }
 
       return Right(valor);
     } on ServerException catch (e) {
@@ -182,5 +210,29 @@ class FipeRepositoryImpl implements FipeRepository {
     } catch (e) {
       return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
     }
+  }
+
+  /// Mapeia nome do combustível para código numérico
+  int _getCombustivelCodigo(String combustivel) {
+    final combustivelLower = combustivel.toLowerCase();
+    if (combustivelLower.contains('gasolina')) return 1;
+    if (combustivelLower.contains('álcool') ||
+        combustivelLower.contains('etanol')) {
+      return 2;
+    }
+    if (combustivelLower.contains('diesel')) return 3;
+    if (combustivelLower.contains('elétrico') ||
+        combustivelLower.contains('eletrico')) {
+      return 4;
+    }
+    if (combustivelLower.contains('flex')) return 5;
+    if (combustivelLower.contains('híbrido') ||
+        combustivelLower.contains('hibrido')) {
+      return 6;
+    }
+    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv')) {
+      return 7;
+    }
+    return 1; // Default: Gasolina
   }
 }

@@ -8,8 +8,12 @@ class AppConstants {
   /// Versão da aplicação
   static const String appVersion = '1.0.0';
 
-  /// Timeout de cache em segundos (1 hora)
+  /// Timeout de cache em segundos (1 hora) - para marcas e modelos
   static const int cacheTimeout = 3600;
+
+  /// Timeout de cache de valores FIPE em segundos (5 minutos)
+  /// Cache curto para garantir valores atualizados mas reduzir requisições
+  static const int valorFipeCacheTimeout = 300;
 
   /// Limite de paginação
   static const int paginationLimit = 50;
