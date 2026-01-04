@@ -5,7 +5,6 @@ import '../../features/consulta_fipe/presentation/pages/ano_selecao_page.dart';
 import '../../features/consulta_fipe/presentation/pages/home_page.dart';
 import '../../features/consulta_fipe/presentation/pages/marca_list_page.dart';
 import '../../features/consulta_fipe/presentation/pages/modelo_list_page.dart';
-import '../../features/consulta_fipe/presentation/pages/splash_screen.dart';
 import '../../features/consulta_fipe/presentation/pages/valor_detalhes_page.dart';
 import '../theme/theme_manager.dart';
 
@@ -24,9 +23,8 @@ class AppRoutes {
     ThemeManager themeManager,
   ) {
     switch (settings.name) {
+      // Iniciar direto na home (sem splash)
       case splash:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
-
       case home:
         return MaterialPageRoute(
           builder: (_) => HomePage(themeManager: themeManager),
