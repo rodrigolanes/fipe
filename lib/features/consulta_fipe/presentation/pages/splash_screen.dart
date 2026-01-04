@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (!mounted) return;
 
-    // Cria o SyncBloc
+    // Obtém o SyncBloc (Singleton)
     final syncBloc = di.sl<SyncBloc>();
 
     // Verifica se há atualizações
@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
       }
     }
 
-    syncBloc.close();
+    // SyncBloc é singleton, não fechamos aqui (continua rodando na HomePage)
 
     // Navega para home
     if (mounted) {
@@ -130,7 +130,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             const SizedBox(height: 8),
             const Text(
-              'Isso permitirá que você consulte preços mesmo offline.',
+              'Você pode navegar online enquanto o download acontece em segundo plano.',
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
@@ -138,11 +138,11 @@ class _SplashScreenState extends State<SplashScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Agora Não'),
+            child: const Text('Depois'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Atualizar'),
+            child: const Text('Baixar Agora'),
           ),
         ],
       ),
@@ -150,9 +150,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _showSyncDialog(SyncBloc syncBloc) async {
-    syncBloc.add(const StartSyncEvent());
-
-    return showDialog(
+    // Mostra o dialog PRIMEIRO (UI responsiva imediatamente)
+    showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => BlocProvider<SyncBloc>.value(
@@ -161,12 +160,25 @@ class _SplashScreenState extends State<SplashScreen>
           listener: (context, state) {
             if (state is SyncCompleted) {
               Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                      '✅ Sincronização concluída! App pronto para uso offline.'),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 3),
+                ),
+              );
             } else if (state is SyncError) {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Erro: ${state.message}'),
+                  content: Text('Erro na sincronização: ${state.message}'),
                   backgroundColor: Colors.red,
+                  action: SnackBarAction(
+                    label: 'OK',
+                    textColor: Colors.white,
+                    onPressed: () {},
+                  ),
                 ),
               );
             }
@@ -180,7 +192,11 @@ class _SplashScreenState extends State<SplashScreen>
             return AlertDialog(
               title: const Row(
                 children: [
-                  CircularProgressIndicator(),
+                  SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
                   SizedBox(width: 16),
                   Text('Sincronizando'),
                 ],
@@ -192,15 +208,19 @@ class _SplashScreenState extends State<SplashScreen>
                   Text(message),
                   const SizedBox(height: 16),
                   const LinearProgressIndicator(),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Você pode usar o app normalmente enquanto isso.',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                 ],
               ),
               actions: [
                 TextButton(
                   onPressed: () {
-                    syncBloc.add(const CancelSyncEvent());
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancelar'),
+                  child: const Text('Continuar em Background'),
                 ),
               ],
             );
@@ -208,6 +228,10 @@ class _SplashScreenState extends State<SplashScreen>
         ),
       ),
     );
+
+    // Dispara o evento DEPOIS que o dialog estiver visível
+    // Usa Future.microtask para executar na próxima microtask (após rebuild)
+    Future.microtask(() => syncBloc.add(const StartSyncEvent()));
   }
 
   @override

@@ -1,32 +1,21 @@
-import 'package:hive/hive.dart';
-
 import '../../domain/entities/marca_entity.dart';
 
-part 'marca_model.g.dart';
-
-@HiveType(typeId: 0)
 class MarcaModel extends MarcaEntity {
-  @HiveField(0)
   @override
   final int id;
 
-  @HiveField(1)
   @override
   final String nome;
 
-  @HiveField(2)
   @override
   final String tipo;
 
-  @HiveField(3)
   @override
   final int? totalModelos;
 
-  @HiveField(4)
   @override
   final int? primeiroAno;
 
-  @HiveField(5)
   @override
   final int? ultimoAno;
 

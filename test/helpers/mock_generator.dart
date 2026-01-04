@@ -1,4 +1,3 @@
-import 'package:hive/hive.dart';
 import 'package:mockito/annotations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,7 +20,6 @@ import 'package:fipe/features/consulta_fipe/domain/usecases/get_valor_fipe_useca
   SupabaseQueryBuilder,
   PostgrestFilterBuilder,
   PostgrestTransformBuilder,
-  Box,
   SharedPreferences,
 
   // Data sources

@@ -1,24 +1,15 @@
-import 'package:hive/hive.dart';
-
 import '../../domain/entities/modelo_entity.dart';
 
-part 'modelo_model.g.dart';
-
-@HiveType(typeId: 1)
 class ModeloModel extends ModeloEntity {
-  @HiveField(0)
   @override
   final int id;
 
-  @HiveField(1)
   @override
   final int marcaId;
 
-  @HiveField(2)
   @override
   final String nome;
 
-  @HiveField(3)
   @override
   final String tipo;
 
@@ -54,3 +45,4 @@ class ModeloModel extends ModeloEntity {
     );
   }
 }
+

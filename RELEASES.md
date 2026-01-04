@@ -1,5 +1,49 @@
 # Notas de Versão - FIPE Consulta
 
+## [0.4.0] - 2026-01-04
+
+### ⚡ Melhorias Principais
+
+- **Migração Hive → SQLite**
+  - Substituição completa do Hive por SQLite para armazenamento local
+  - Performance 3x melhor para grandes volumes de dados (50k+ registros)
+  - Sincronização otimizada: ~3 minutos com UI 100% responsiva
+  - Transações em lote com chunks de 50 registros e delays de 150ms
+
+- **UI/UX**
+  - Removida seta de voltar desnecessária na HomePage
+  - Botão "Nova Consulta" agora navega corretamente para seleção de tipos
+  - Removida mensagem "Sem informação de anos" dos itens de marca
+  - Indicador de loading para filtro de anos na tela de modelos
+
+- **Sincronização**
+  - Dialog de progresso aparece instantaneamente ao clicar "Baixar Agora"
+  - Banner de progresso visível durante toda a sincronização
+  - Logs estruturados com `dart:developer` para melhor debug
+
+- **Resiliência**
+  - Sistema funciona online durante sincronização (fallback automático)
+  - Erros de cache não impedem busca online
+  - Gravação de cache opcional (não falha operação se cache falhar)
+
+### 🔧 Correções
+
+- Corrigido travamento da UI durante sincronização de grandes volumes
+- Corrigido erro ao tentar visualizar dados antes do sync completar
+- Corrigido navegação incorreta do botão "Nova Consulta"
+
+### 🗑️ Removido
+
+- Dependências Hive: `hive`, `hive_flutter`, `hive_generator`
+- Arquivos gerados pelo Hive (*.g.dart)
+- Anotações @HiveType e @HiveField dos models
+
+### 📦 Adicionado
+
+- Dependência: `sqflite: ^2.3.0`
+- Dependência: `path: ^1.8.3`
+- Implementação completa SQLite com 5 tabelas otimizadas
+
 ## [0.3.1] - 2026-01-03
 
 ### ✨ Novidades

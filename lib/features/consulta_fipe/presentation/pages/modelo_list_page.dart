@@ -58,7 +58,26 @@ class _ModeloListPageState extends State<ModeloListPage> {
               // Filtro de ano
               BlocBuilder<AnoCombustivelBloc, AnoCombustivelState>(
                 builder: (context, state) {
-                  if (state is AnoCombustivelLoaded) {
+                  if (state is AnoCombustivelLoading) {
+                    // Mostra loading enquanto busca anos
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'Carregando anos disponíveis...',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is AnoCombustivelLoaded) {
                     // Extrair anos únicos
                     final anos = state.anosCombustiveis
                         .map((ac) => ac.ano)

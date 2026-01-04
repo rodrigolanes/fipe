@@ -1,53 +1,36 @@
-import 'package:hive/hive.dart';
-
 import '../../domain/entities/valor_fipe_entity.dart';
 
-part 'valor_fipe_model.g.dart';
-
-@HiveType(typeId: 3)
 class ValorFipeModel extends ValorFipeEntity {
-  @HiveField(0)
   @override
   final String marca;
 
-  @HiveField(1)
   @override
   final String modelo;
 
-  @HiveField(2)
   @override
   final int anoModelo;
 
-  @HiveField(3)
   @override
   final String combustivel;
 
-  @HiveField(4)
   @override
   final String codigoFipe;
 
-  @HiveField(5)
   @override
   final String mesReferencia;
 
-  @HiveField(6)
   @override
   final String valor;
 
-  @HiveField(7)
   @override
   final DateTime dataConsulta;
 
-  @HiveField(8)
   final int? tipoVeiculo;
 
-  @HiveField(9)
   final int? codigoMarca;
 
-  @HiveField(10)
   final int? codigoModelo;
 
-  @HiveField(11)
   final int? codigoCombustivel;
 
   const ValorFipeModel({
@@ -128,3 +111,4 @@ class ValorFipeModel extends ValorFipeEntity {
     );
   }
 }
+

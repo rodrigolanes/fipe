@@ -1,20 +1,12 @@
-import 'package:hive/hive.dart';
-
 import '../../domain/entities/ano_combustivel_entity.dart';
 
-part 'ano_combustivel_model.g.dart';
-
-@HiveType(typeId: 2)
 class AnoCombustivelModel extends AnoCombustivelEntity {
-  @HiveField(0)
   @override
   final String ano;
 
-  @HiveField(1)
   @override
   final String combustivel;
 
-  @HiveField(2)
   @override
   final String codigoFipe;
 
@@ -51,3 +43,4 @@ class AnoCombustivelModel extends AnoCombustivelEntity {
     );
   }
 }
+

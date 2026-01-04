@@ -75,9 +75,13 @@ class ValorDetalhesPage extends StatelessWidget {
                               _buildDisclaimerCard(context),
                               const SizedBox(height: 24),
                               ElevatedButton.icon(
-                                onPressed: () => Navigator.of(
-                                  context,
-                                ).popUntil((route) => route.isFirst),
+                                onPressed: () {
+                                  // Volta para a HomePage (tela de seleção de tipos)
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/home',
+                                    (route) => false,
+                                  );
+                                },
                                 icon: const Icon(Icons.home),
                                 label: const Text('Nova Consulta'),
                                 style: ElevatedButton.styleFrom(

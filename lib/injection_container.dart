@@ -1,16 +1,11 @@
 import 'package:get_it/get_it.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'config/supabase_config.dart';
 import 'features/consulta_fipe/data/datasources/fipe_local_data_source.dart';
-import 'features/consulta_fipe/data/datasources/fipe_local_data_source_impl.dart';
+import 'features/consulta_fipe/data/datasources/fipe_local_data_source_sqlite_impl.dart';
 import 'features/consulta_fipe/data/datasources/fipe_remote_data_source.dart';
 import 'features/consulta_fipe/data/datasources/fipe_remote_data_source_impl.dart';
-import 'features/consulta_fipe/data/models/ano_combustivel_model.dart';
-import 'features/consulta_fipe/data/models/marca_model.dart';
-import 'features/consulta_fipe/data/models/modelo_model.dart';
-import 'features/consulta_fipe/data/models/valor_fipe_model.dart';
 import 'features/consulta_fipe/data/repositories/fipe_repository_impl.dart';
 import 'features/consulta_fipe/domain/repositories/fipe_repository.dart';
 import 'features/consulta_fipe/domain/usecases/check_for_updates_usecase.dart';
@@ -37,13 +32,6 @@ Future<void> initDependencies() async {
   // =========================================================================
   // External Dependencies
   // =========================================================================
-
-  // Hive - Inicialização e registro de adapters
-  await Hive.initFlutter();
-  Hive.registerAdapter(MarcaModelAdapter());
-  Hive.registerAdapter(ModeloModelAdapter());
-  Hive.registerAdapter(AnoCombustivelModelAdapter());
-  Hive.registerAdapter(ValorFipeModelAdapter());
 
   // Supabase
   final supabase = await Supabase.initialize(
@@ -72,7 +60,9 @@ Future<void> initDependencies() async {
     ),
   );
   sl.registerFactory(() => ValorFipeBloc(getValorFipe: sl()));
-  sl.registerFactory(
+
+  // SyncBloc como Singleton para manter estado entre telas
+  sl.registerLazySingleton(
     () => SyncBloc(
       checkForUpdates: sl(),
       syncAllData: sl(),
@@ -100,6 +90,6 @@ Future<void> initDependencies() async {
     () => FipeRemoteDataSourceImpl(client: sl()),
   );
   sl.registerLazySingleton<FipeLocalDataSource>(
-    () => FipeLocalDataSourceImpl(),
+    () => FipeLocalDataSourceSqliteImpl(),
   );
 }

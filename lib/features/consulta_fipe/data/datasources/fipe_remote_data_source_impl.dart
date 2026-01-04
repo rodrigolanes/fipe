@@ -475,11 +475,16 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
   }
 
   @override
-  Future<List<ValorFipeModel>> getAllValoresFipe() async {
+  Future<List<ValorFipeModel>> getAllValoresFipe({String? version}) async {
     try {
-      AppLogger.d('Buscando TODOS os valores FIPE para sincronização offline');
+      if (version != null) {
+        AppLogger.d(
+            'Buscando valores FIPE da versão $version para sincronização offline');
+      } else {
+        AppLogger.d('Buscando TODOS os valores FIPE (sem filtro de versão)');
+      }
 
-      // Busca todos os valores em lotes para não sobrecarregar
+      // Busca valores em lotes para não sobrecarregar
       final List<ValorFipeModel> todosValores = [];
       const int batchSize = 1000;
       int offset = 0;
@@ -488,7 +493,7 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       while (hasMore) {
         AppLogger.d('Buscando lote offset=$offset, limit=$batchSize');
 
-        final response = await client.from('valores_fipe').select('''
+        var query = client.from('valores_fipe').select('''
               marca,
               modelo,
               ano_modelo,
@@ -501,7 +506,16 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
               codigo_marca,
               codigo_modelo,
               codigo_combustivel
-            ''').order('codigo_marca').range(offset, offset + batchSize - 1);
+            ''');
+
+        // Filtrar por versão se fornecida
+        if (version != null) {
+          query = query.eq('mes_referencia', version);
+        }
+
+        final response = await query
+            .order('codigo_marca')
+            .range(offset, offset + batchSize - 1);
 
         if ((response as List).isEmpty) {
           hasMore = false;
@@ -518,6 +532,9 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
         AppLogger.d(
           'Total acumulado: ${todosValores.length} valores',
         );
+
+        // Delay curto para dar respiro à UI (evita travamento)
+        await Future.delayed(const Duration(milliseconds: 100));
 
         // Limita para não ficar infinito
         if (valores.length < batchSize) {
@@ -538,6 +555,102 @@ class FipeRemoteDataSourceImpl implements FipeRemoteDataSource {
       return todosValores;
     } catch (e) {
       AppLogger.e('Erro ao buscar todos os valores FIPE', e);
+      throw ServerException(
+        'Erro ao buscar valores FIPE: ${e.toString()}',
+      );
+    }
+  }
+
+  @override
+  Future<List<ValorFipeModel>> getAllValoresFipeComProgresso({
+    String? version,
+    Function(int total)? onProgress,
+  }) async {
+    try {
+      if (version != null) {
+        AppLogger.d(
+            'Buscando valores FIPE da versão $version para sincronização offline (com progresso)');
+      } else {
+        AppLogger.d(
+            'Buscando TODOS os valores FIPE (sem filtro de versão, com progresso)');
+      }
+
+      // Busca valores em lotes para não sobrecarregar
+      final List<ValorFipeModel> todosValores = [];
+      const int batchSize = 1000;
+      int offset = 0;
+      bool hasMore = true;
+
+      while (hasMore) {
+        AppLogger.d('Buscando lote offset=$offset, limit=$batchSize');
+
+        var query = client.from('valores_fipe').select('''
+              marca,
+              modelo,
+              ano_modelo,
+              combustivel,
+              codigo_fipe,
+              mes_referencia,
+              valor,
+              data_consulta,
+              tipo_veiculo,
+              codigo_marca,
+              codigo_modelo,
+              codigo_combustivel
+            ''');
+
+        // Filtrar por versão se fornecida
+        if (version != null) {
+          query = query.eq('mes_referencia', version);
+        }
+
+        final response = await query
+            .order('codigo_marca')
+            .range(offset, offset + batchSize - 1);
+
+        if ((response as List).isEmpty) {
+          hasMore = false;
+          break;
+        }
+
+        final valores = (response as List)
+            .map((json) => ValorFipeModel.fromJson(json))
+            .toList();
+
+        todosValores.addAll(valores);
+        offset += batchSize;
+
+        // Notifica progresso à UI
+        if (onProgress != null) {
+          onProgress(todosValores.length);
+        }
+
+        AppLogger.d(
+          'Total acumulado: ${todosValores.length} valores',
+        );
+
+        // Delay curto para dar respiro à UI (evita travamento)
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        // Limita para não ficar infinito
+        if (valores.length < batchSize) {
+          hasMore = false;
+        }
+
+        // Limite de segurança (100mil valores)
+        if (todosValores.length >= 100000) {
+          AppLogger.w('Limite de segurança atingido: 100.000 valores');
+          hasMore = false;
+        }
+      }
+
+      AppLogger.i(
+        'Total de valores FIPE sincronizados: ${todosValores.length}',
+      );
+
+      return todosValores;
+    } catch (e) {
+      AppLogger.e('Erro ao buscar valores FIPE com progresso', e);
       throw ServerException(
         'Erro ao buscar valores FIPE: ${e.toString()}',
       );

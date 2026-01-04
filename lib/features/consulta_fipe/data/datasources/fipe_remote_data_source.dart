@@ -54,6 +54,13 @@ abstract class FipeRemoteDataSource {
   /// Busca a versão atual de sincronização do servidor
   Future<SyncVersionModel> getSyncVersion();
 
-  /// Busca TODOS os valores FIPE do mês atual para sincronização offline
-  Future<List<ValorFipeModel>> getAllValoresFipe();
+  /// Busca valores FIPE para sincronização offline
+  /// Se [version] for fornecido, filtra pela versão específica
+  Future<List<ValorFipeModel>> getAllValoresFipe({String? version});
+
+  /// Busca valores FIPE com callback de progresso para atualizar UI
+  Future<List<ValorFipeModel>> getAllValoresFipeComProgresso({
+    String? version,
+    Function(int total)? onProgress,
+  });
 }

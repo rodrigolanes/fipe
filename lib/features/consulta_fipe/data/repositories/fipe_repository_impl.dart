@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
@@ -12,6 +15,9 @@ import '../../domain/entities/valor_fipe_entity.dart';
 import '../../domain/repositories/fipe_repository.dart';
 import '../datasources/fipe_local_data_source.dart';
 import '../datasources/fipe_remote_data_source.dart';
+import '../models/marca_model.dart';
+import '../models/sync_version_model.dart';
+import '../models/valor_fipe_model.dart';
 
 class FipeRepositoryImpl implements FipeRepository {
   final FipeRemoteDataSource remoteDataSource;
@@ -43,8 +49,13 @@ class FipeRepositoryImpl implements FipeRepository {
       // Busca remota
       final marcas = await remoteDataSource.getMarcasByTipo(tipo);
 
-      // Salva em cache
-      await localDataSource.cacheMarcas(marcas, tipo);
+      // Tenta salvar em cache (opcional - não deve falhar a operação)
+      try {
+        await localDataSource.cacheMarcas(marcas, tipo);
+      } catch (e) {
+        // ignore: avoid_print
+        print('⚠️ Aviso: Não foi possível cachear marcas: $e');
+      }
 
       return Right(marcas);
     } on ServerException catch (e) {
@@ -87,9 +98,14 @@ class FipeRepositoryImpl implements FipeRepository {
         ano: ano,
       );
 
-      // Salva em cache (apenas se não houver filtro de ano)
+      // Tenta salvar em cache (apenas se não houver filtro de ano)
       if (ano == null) {
-        await localDataSource.cacheModelos(modelos, marcaId);
+        try {
+          await localDataSource.cacheModelos(modelos, marcaId);
+        } catch (e) {
+          // ignore: avoid_print
+          print('⚠️ Aviso: Não foi possível cachear modelos: $e');
+        }
       }
 
       return Right(modelos);
@@ -181,8 +197,14 @@ class FipeRepositoryImpl implements FipeRepository {
         tipo: tipo,
       );
 
-      // Salva em cache com a chave customizada
-      await localDataSource.cacheValorFipe(valor, codigoFipeKey);
+      // Tenta salvar em cache (opcional - não deve falhar a operação)
+      try {
+        await localDataSource.cacheValorFipe(valor, codigoFipeKey);
+      } catch (e) {
+        // Se falhar ao cachear, apenas loga mas retorna o valor obtido online
+        // ignore: avoid_print
+        print('⚠️ Aviso: Não foi possível cachear valor FIPE: $e');
+      }
 
       return Right(valor);
     } on ServerException catch (e) {
@@ -234,8 +256,14 @@ class FipeRepositoryImpl implements FipeRepository {
         return const Right(true);
       }
 
-      // Compara se a versão remota é mais recente que a local
-      final hasUpdate = versaoRemota.isNewerThan(versaoLocal);
+      // Se a versão local não foi concluída, precisa sincronizar
+      if (!versaoLocal.cargaConcluida) {
+        return const Right(true);
+      }
+
+      // Compara se a versão remota é mais recente E diferente da local
+      final hasUpdate = versaoRemota.isNewerThan(versaoLocal) &&
+          !versaoRemota.isSameVersion(versaoLocal);
 
       return Right(hasUpdate);
     } on ServerException catch (e) {
@@ -272,10 +300,15 @@ class FipeRepositoryImpl implements FipeRepository {
       // Salva todas as marcas localmente
       await localDataSource.saveAllMarcas(todasMarcas);
 
-      onProgress('Baixando TODOS os valores FIPE...');
+      onProgress('Baixando valores FIPE da versão ${syncVersion.version}...');
 
-      // Busca TODOS os valores FIPE para sincronização completa offline
-      final todosValores = await remoteDataSource.getAllValoresFipe();
+      // Busca valores FIPE da versão específica com progresso (não histórico completo)
+      final todosValores = await remoteDataSource.getAllValoresFipeComProgresso(
+        version: syncVersion.version,
+        onProgress: (total) {
+          onProgress('Baixando valores FIPE: $total registros...');
+        },
+      );
 
       onProgress('Salvando ${todosValores.length} preços FIPE...');
 
