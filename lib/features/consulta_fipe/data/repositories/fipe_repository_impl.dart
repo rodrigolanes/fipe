@@ -28,31 +28,8 @@ class FipeRepositoryImpl implements FipeRepository {
     TipoVeiculo tipo,
   ) async {
     try {
-      // Tenta buscar do cache primeiro (marcas são dados estáveis)
-      final cacheKey = 'marcas_${tipo.nome}';
-      final isCacheValid = await localDataSource.isCacheValid(cacheKey);
-
-      if (isCacheValid) {
-        try {
-          final cachedMarcas = await localDataSource.getCachedMarcas(tipo);
-          if (cachedMarcas.isNotEmpty) {
-            return Right(cachedMarcas);
-          }
-        } on CacheException {
-          // Se falhar, continua para buscar remotamente
-        }
-      }
-
-      // Busca remota
+      // Busca sempre remotamente (sem cache)
       final marcas = await remoteDataSource.getMarcasByTipo(tipo);
-
-      // Tenta salvar em cache (opcional - não deve falhar a operação)
-      try {
-        await localDataSource.cacheMarcas(marcas, tipo);
-      } catch (e) {
-        // Não falha se cache falhar
-      }
-
       return Right(marcas);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -70,41 +47,12 @@ class FipeRepositoryImpl implements FipeRepository {
     String? ano,
   }) async {
     try {
-      // Tenta buscar do cache primeiro (apenas se não houver filtro de ano)
-      if (ano == null) {
-        final cacheKey = 'modelos_$marcaId';
-        final isCacheValid = await localDataSource.isCacheValid(cacheKey);
-
-        if (isCacheValid) {
-          try {
-            final cachedModelos = await localDataSource.getCachedModelos(
-              marcaId,
-            );
-            if (cachedModelos.isNotEmpty) {
-              return Right(cachedModelos);
-            }
-          } on CacheException {
-            // Se falhar, continua para buscar remotamente
-          }
-        }
-      }
-
-      // Busca remota
+      // Busca sempre remotamente (sem cache)
       final modelos = await remoteDataSource.getModelosByMarca(
         marcaId,
         tipo,
         ano: ano,
       );
-
-      // Tenta salvar em cache (apenas se não houver filtro de ano)
-      if (ano == null) {
-        try {
-          await localDataSource.cacheModelos(modelos, marcaId);
-        } catch (e) {
-          // Não falha se cache falhar
-        }
-      }
-
       return Right(modelos);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -164,29 +112,7 @@ class FipeRepositoryImpl implements FipeRepository {
     required TipoVeiculo tipo,
   }) async {
     try {
-      // Busca mês de referência atual do servidor
-      final mesReferencia = await remoteDataSource.getUltimoMesReferencia();
-
-      // Mapeia combustível para código
-      final codigoCombustivel = _getCombustivelCodigo(combustivel);
-      final anoModelo = int.parse(ano);
-
-      // ESTRATÉGIA: Cache temporário (5 min) com validação de mês
-      // 1. Verifica cache local (válido + mesmo mês)
-      final valorCache = await localDataSource.getValorFipeFromCache(
-        marcaId: marcaId,
-        modeloId: modeloId,
-        anoModelo: anoModelo,
-        codigoCombustivel: codigoCombustivel,
-        tipoVeiculo: tipo.codigo,
-        mesReferencia: mesReferencia,
-      );
-
-      if (valorCache != null) {
-        return Right(valorCache);
-      }
-
-      // 2. Se cache inválido/expirado, busca do servidor
+      // Busca sempre remotamente (sem cache)
       final valor = await remoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -194,14 +120,6 @@ class FipeRepositoryImpl implements FipeRepository {
         combustivel: combustivel,
         tipo: tipo,
       );
-
-      // 3. Salva no cache temporário
-      try {
-        await localDataSource.cacheValorFipeTemp(valor, mesReferencia);
-      } catch (e) {
-        // Não falha se cache falhar
-      }
-
       return Right(valor);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
