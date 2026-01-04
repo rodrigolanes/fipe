@@ -129,28 +129,4 @@ class FipeRepositoryImpl implements FipeRepository {
       return Left(ServerFailure('Erro desconhecido: ${e.toString()}'));
     }
   }
-
-  /// Mapeia nome do combustível para código numérico
-  int _getCombustivelCodigo(String combustivel) {
-    final combustivelLower = combustivel.toLowerCase();
-    if (combustivelLower.contains('gasolina')) return 1;
-    if (combustivelLower.contains('álcool') ||
-        combustivelLower.contains('etanol')) {
-      return 2;
-    }
-    if (combustivelLower.contains('diesel')) return 3;
-    if (combustivelLower.contains('elétrico') ||
-        combustivelLower.contains('eletrico')) {
-      return 4;
-    }
-    if (combustivelLower.contains('flex')) return 5;
-    if (combustivelLower.contains('híbrido') ||
-        combustivelLower.contains('hibrido')) {
-      return 6;
-    }
-    if (combustivelLower.contains('gás') || combustivelLower.contains('gnv')) {
-      return 7;
-    }
-    return 1; // Default: Gasolina
-  }
 }
