@@ -337,7 +337,7 @@ class FipeLocalDataSourceSqliteImpl implements FipeLocalDataSource {
         return null;
       }
 
-      // Retorna valor do cache
+      // Retorna valor do cache com timestamp atual (momento da consulta)
       return ValorFipeModel.fromJson({
         'codigo_marca': cached['codigo_marca'].toString(),
         'codigo_modelo': cached['codigo_modelo'],
@@ -349,8 +349,7 @@ class FipeLocalDataSourceSqliteImpl implements FipeLocalDataSource {
         'codigo_fipe': cached['codigo_fipe'],
         'mes_referencia': cached['mes_referencia'],
         'valor': cached['valor'],
-        'data_consulta':
-            DateTime.fromMillisecondsSinceEpoch(timestamp).toIso8601String(),
+        'data_consulta': DateTime.now().toIso8601String(),
       });
     } catch (e) {
       return null; // Em caso de erro, retorna null para buscar remotamente
