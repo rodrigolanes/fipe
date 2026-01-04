@@ -30,31 +30,10 @@ void main() {
   group('getMarcasPorTipo', () {
     const tipo = TipoVeiculo.carro;
 
-    test('deve retornar marcas do cache quando disponível e válido', () async {
+    test('deve buscar marcas remotamente sempre (sem cache)', () async {
       // Arrange
-      when(mockLocalDataSource.isCacheValid('marcas_${tipo.nome}'))
-          .thenAnswer((_) async => true);
-      when(mockLocalDataSource.getCachedMarcas(tipo))
-          .thenAnswer((_) async => MarcaFixture.marcasModelList);
-
-      // Act
-      final result = await repository.getMarcasPorTipo(tipo);
-
-      // Assert
-      expect(result, equals(Right(MarcaFixture.marcasModelList)));
-      verify(mockLocalDataSource.isCacheValid('marcas_${tipo.nome}'));
-      verify(mockLocalDataSource.getCachedMarcas(tipo));
-      verifyNever(mockRemoteDataSource.getMarcasByTipo(any));
-    });
-
-    test('deve buscar remotamente quando cache inválido', () async {
-      // Arrange
-      when(mockLocalDataSource.isCacheValid('marcas_${tipo.nome}'))
-          .thenAnswer((_) async => false);
       when(mockRemoteDataSource.getMarcasByTipo(tipo))
           .thenAnswer((_) async => MarcaFixture.marcasModelList);
-      when(mockLocalDataSource.cacheMarcas(any, any))
-          .thenAnswer((_) async => {});
 
       // Act
       final result = await repository.getMarcasPorTipo(tipo);
@@ -62,36 +41,13 @@ void main() {
       // Assert
       expect(result, equals(Right(MarcaFixture.marcasModelList)));
       verify(mockRemoteDataSource.getMarcasByTipo(tipo));
-      verify(mockLocalDataSource.cacheMarcas(
-        MarcaFixture.marcasModelList,
-        tipo,
-      ));
-    });
-
-    test('deve buscar remotamente quando cache lança CacheException', () async {
-      // Arrange
-      when(mockLocalDataSource.isCacheValid('marcas_${tipo.nome}'))
-          .thenAnswer((_) async => true);
-      when(mockLocalDataSource.getCachedMarcas(tipo))
-          .thenThrow(CacheException('Cache error'));
-      when(mockRemoteDataSource.getMarcasByTipo(tipo))
-          .thenAnswer((_) async => MarcaFixture.marcasModelList);
-      when(mockLocalDataSource.cacheMarcas(any, any))
-          .thenAnswer((_) async => {});
-
-      // Act
-      final result = await repository.getMarcasPorTipo(tipo);
-
-      // Assert
-      expect(result, equals(Right(MarcaFixture.marcasModelList)));
-      verify(mockRemoteDataSource.getMarcasByTipo(tipo));
+      verifyNever(mockLocalDataSource.isCacheValid(any));
+      verifyNever(mockLocalDataSource.getCachedMarcas(any));
     });
 
     test('deve retornar ServerFailure quando remoto lança ServerException',
         () async {
       // Arrange
-      when(mockLocalDataSource.isCacheValid('marcas_${tipo.nome}'))
-          .thenAnswer((_) async => false);
       when(mockRemoteDataSource.getMarcasByTipo(tipo))
           .thenThrow(ServerException('Server error'));
 
@@ -105,8 +61,6 @@ void main() {
     test('deve retornar NetworkFailure quando remoto lança NetworkException',
         () async {
       // Arrange
-      when(mockLocalDataSource.isCacheValid('marcas_${tipo.nome}'))
-          .thenAnswer((_) async => false);
       when(mockRemoteDataSource.getMarcasByTipo(tipo))
           .thenThrow(NetworkException('Network error'));
 
@@ -122,12 +76,9 @@ void main() {
     const marcaId = 1;
     const tipo = TipoVeiculo.carro;
 
-    test('deve retornar modelos do cache quando disponível e sem filtro de ano',
-        () async {
+    test('deve buscar modelos remotamente sempre (sem cache)', () async {
       // Arrange
-      when(mockLocalDataSource.isCacheValid('modelos_$marcaId'))
-          .thenAnswer((_) async => true);
-      when(mockLocalDataSource.getCachedModelos(marcaId))
+      when(mockRemoteDataSource.getModelosByMarca(marcaId, tipo, ano: null))
           .thenAnswer((_) async => ModeloFixture.modelosModelList);
 
       // Act
@@ -135,13 +86,12 @@ void main() {
 
       // Assert
       expect(result, equals(Right(ModeloFixture.modelosModelList)));
-      verify(mockLocalDataSource.isCacheValid('modelos_$marcaId'));
-      verify(mockLocalDataSource.getCachedModelos(marcaId));
-      verifyNever(mockRemoteDataSource.getModelosByMarca(any, any,
-          ano: anyNamed('ano')));
+      verify(mockRemoteDataSource.getModelosByMarca(marcaId, tipo, ano: null));
+      verifyNever(mockLocalDataSource.isCacheValid(any));
+      verifyNever(mockLocalDataSource.getCachedModelos(any));
     });
 
-    test('deve buscar remotamente quando há filtro de ano', () async {
+    test('deve buscar remotamente com filtro de ano', () async {
       // Arrange
       const ano = '2024';
       when(mockRemoteDataSource.getModelosByMarca(marcaId, tipo, ano: ano))
@@ -158,32 +108,9 @@ void main() {
       verifyNever(mockLocalDataSource.cacheModelos(any, any));
     });
 
-    test('deve buscar remotamente quando cache inválido', () async {
-      // Arrange
-      when(mockLocalDataSource.isCacheValid('modelos_$marcaId'))
-          .thenAnswer((_) async => false);
-      when(mockRemoteDataSource.getModelosByMarca(marcaId, tipo, ano: null))
-          .thenAnswer((_) async => ModeloFixture.modelosModelList);
-      when(mockLocalDataSource.cacheModelos(any, any))
-          .thenAnswer((_) async => {});
-
-      // Act
-      final result = await repository.getModelosPorMarca(marcaId, tipo);
-
-      // Assert
-      expect(result, equals(Right(ModeloFixture.modelosModelList)));
-      verify(mockRemoteDataSource.getModelosByMarca(marcaId, tipo, ano: null));
-      verify(mockLocalDataSource.cacheModelos(
-        ModeloFixture.modelosModelList,
-        marcaId,
-      ));
-    });
-
     test('deve retornar ServerFailure quando remoto lança ServerException',
         () async {
       // Arrange
-      when(mockLocalDataSource.isCacheValid('modelos_$marcaId'))
-          .thenAnswer((_) async => false);
       when(mockRemoteDataSource.getModelosByMarca(marcaId, tipo, ano: null))
           .thenThrow(ServerException('Server error'));
 
@@ -275,11 +202,8 @@ void main() {
     const tipo = TipoVeiculo.carro;
     const mesReferencia = '202601';
 
-    test('deve buscar valor FIPE com cache temporário', () async {
+    test('deve buscar valor FIPE remotamente sempre (sem cache)', () async {
       // Arrange
-      when(mockRemoteDataSource.getUltimoMesReferencia())
-          .thenAnswer((_) async => mesReferencia);
-      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -287,7 +211,6 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       )).thenAnswer((_) async => ValorFipeFixture.valorFipeModel);
-      // cacheValorFipeTemp não precisa ser mockado (método void)
 
       // Act
       final result = await repository.getValorFipe(
@@ -300,7 +223,6 @@ void main() {
 
       // Assert
       expect(result, equals(Right(ValorFipeFixture.valorFipeModel)));
-      verify(mockRemoteDataSource.getUltimoMesReferencia());
       verify(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -308,18 +230,13 @@ void main() {
         combustivel: combustivel,
         tipo: tipo,
       ));
-      verify(mockLocalDataSource.cacheValorFipeTemp(
-        ValorFipeFixture.valorFipeModel,
-        mesReferencia,
-      ));
+      verifyNever(mockRemoteDataSource.getUltimoMesReferencia());
+      verifyNever(mockLocalDataSource.cacheValorFipeTemp(any, any));
     });
 
     test('deve retornar ServerFailure quando remoto lança ServerException',
         () async {
       // Arrange
-      when(mockRemoteDataSource.getUltimoMesReferencia())
-          .thenAnswer((_) async => mesReferencia);
-      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -344,9 +261,6 @@ void main() {
     test('deve retornar NetworkFailure quando remoto lança NetworkException',
         () async {
       // Arrange
-      when(mockRemoteDataSource.getUltimoMesReferencia())
-          .thenAnswer((_) async => mesReferencia);
-      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
@@ -370,9 +284,6 @@ void main() {
 
     test('deve retornar ServerFailure para erros genéricos', () async {
       // Arrange
-      when(mockRemoteDataSource.getUltimoMesReferencia())
-          .thenAnswer((_) async => mesReferencia);
-      // getValorFipeFromCache não mockado retorna null por padrão
       when(mockRemoteDataSource.getValorFipe(
         marcaId: marcaId,
         modeloId: modeloId,
